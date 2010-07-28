@@ -1,0 +1,92 @@
+[ ca ]
+
+default_ca              = ca
+
+#
+# Trusted CA options
+#
+
+[ ca ]
+
+dir                     = ca
+new_certs_dir           = $dir/certs
+
+certificate             = $dir/ca.cer               # CA certificate
+private_key             = $dir/ca.key               # CA private key
+database                = $dir/index
+serial                  = $dir/serial
+
+default_days            = 1000 
+default_md              = sha1                      # use SHA1 for signing certificates
+
+x509_extensions         = cert_extensions           # extensions added to signed certificates
+copy_extensions         = none                      # don't copy any of the extensions from the CSR
+preserve                = yes                       # preserve DN ordering
+
+policy                  = csr_policy                # required CSR attributes
+unique_subject			= no						# don't require unique subject names
+
+name_opt				= ca_default				# use the new format to display the CSR
+cert_opt				= ca_default
+
+#
+# Policy for the certificate signing request attributes
+#
+
+[ csr_policy ]
+
+countryName             = optional
+organizationName        = optional
+organizationalUnitName  = optional
+commonName              = supplied
+
+#
+# Extensions added to the certificates we sign
+#
+
+[ cert_extensions]
+
+keyUsage                = critical, digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid:always
+extendedKeyUsage		= serverAuth, clientAuth
+basicConstraints        = critical, CA:FALSE
+
+#
+# Options for the CA private key and self-signed certificate
+#
+
+[ req ]
+
+default_bits            = 2048
+default_keyfile         = ca/ca.key
+encrypt_key             = no
+default_md              = sha1
+string_mask             = nombstr                   # don't allow UTF8String and BMPString types
+
+x509_extensions         = ca_extensions             # extensions added to the self-signed CA certificate
+
+prompt                  = no                        # do not prompt the user for certificate attributes
+distinguished_name      = ca_distinguished_name     # DN for the self-signed CA certificate
+
+#
+# Extensions added to the self-signed CA certificate
+#
+
+[ ca_extensions ]
+
+nsCertType              = sslCA, emailCA, objCA
+basicConstraints        = critical, CA:TRUE
+
+authorityKeyIdentifier  = keyid
+subjectKeyIdentifier    = hash
+
+#
+# CA distinguished name
+#
+
+[ ca_distinguished_name ]
+
+countryName             = US
+organizationName        = Nobody Really Looks At This Anyway Inc.
+commonName              = Demo Certificate Authority

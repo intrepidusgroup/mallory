@@ -1,0 +1,74 @@
+Requirements:
+768 MB Recommended for optional dev packages
+512 MB RAM recommended for GUI
+256 MB RAM without GUI
+
+
+1.) Install Ubuntu 10.04 Desktop (32 or 64 bit)
+
+
+2.) Optional, setup FreeNX: 
+sudo apt-get install python-software-properties && sudo add-apt-repository ppa:freenx-team
+sudo apt-get update
+sudo apt-get install neatx-server
+# Terminator is not required, but I like it :)
+sudo apt-get install terminator
+
+3.) Install Mercurial
+sudo apt-get install mercurial
+
+3.) CD to your desired installation directory
+mkdir mallory
+cd mallory
+
+4.) Clone the bitbucket repository
+hg clone https://jallen@bitbucket.org/diablokev87/mallory .
+
+5.) Setup Mallory Dependencies
+sudo apt-get install python-pyasn1
+sudo apt-get install python-netfilter 
+sudo apt-get install libnetfilter-conntrack-dev
+sudo apt-get install python2.6-dev
+sudo apt-get install python-setuptools
+sudo easy_install pynetfilter_conntrack
+sudo apt-get install  netfilter-extensions-source
+sudo apt-get install  libnetfilter-conntrack3-dbg
+
+# 32 bit
+wget http://ubuntu.cs.utah.edu/ubuntu/pool/universe/libn/libnetfilter-conntrack/libnetfilter-conntrack1_0.0.99-1_i386.deb
+sudo dpkg -i libnetfilter-conntrack1_0.0.99-1_i386.deb 
+
+OR
+
+# 64 bit
+wget http://ubuntu.cs.utah.edu/ubuntu/pool/universe/libn/libnetfilter-conntrack/libnetfilter-conntrack1_0.0.99-1_amd64.deb
+sudo dpkg -i libnetfilter-conntrack1_0.0.99-1_amd64.deb 
+
+
+sudo dpkg -i libnetfilter-conntrack1_0.0.99-1_i386.deb 
+sudo apt-get install python-paramiko
+sudo apt-get install python-imaging
+
+# Development Tools
+6.) Install Eclipse                                                                                    
+sudo apt-get install eclipse
+
+7.) Install Qt4 Designer (115 MB)
+apt-get install qt4-designer
+
+8.) Install KDiff3 (for visual merging)
+apt-get install kdiff3 
+
+
+Folder Structure:
+* ca - certificate authority files including Mallory's private key
+* certs - MiTM certs that are created on the fly
+* db - directory where mallory stores all database files
+* mallory - empty directory
+* src - where the code lives
+* scripts - scripts used to configure mallory enviorment
+
+run mallory:
+
+cd into the src directory
+sudo python mallory.py

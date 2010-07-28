@@ -1,0 +1,8 @@
+INTRO
+============
+Mallory is an extensible TCP/UDP man in the middle proxy that is designed to be run as a gateway.
+
+
+CONFIGURATION
+============
+The goal is to man in the middle traffic for testing purposes. The ideal setup for Mallory is to have a "LAN" or "Victim" network that mallory acts as the gateway for. This can be configured within a virtal machine environment using host only network interfaces. The victim virtual machines then configures the Mallory machine as the gateway by manually setting its gateway. The gateway machine will have at least one WAN interface that grants Internet access. The victim network then uses the Mallory gateway to route traffic. 

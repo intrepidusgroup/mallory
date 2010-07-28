@@ -1,0 +1,18 @@
+#
+# Options for the certificate signing request
+#
+
+[ req ]
+
+default_md              = sha1
+string_mask             = nombstr                   # don't allow UTF8String and BMPString types
+
+prompt                  = no                        # do not prompt the user for certificate attributes
+distinguished_name      = cert_distinguished_name   # DN for the certificate
+
+#
+# Distinguished name of the certificate
+#
+
+[ cert_distinguished_name ]
+
