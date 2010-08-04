@@ -20,10 +20,13 @@ class RuleEdit(object):
     
     def handle_ruleadd(self):
         rules = self.main.listrules
-        selected = rules.selectedIndexes()[0]        
-        selrow = selected.row()
+        row = 0 
+        if len(rules.selectedIndexes())>0:
+            selected = rules.selectedIndexes()[0]        
+            row = selected.row()
+
         newrule = rule.Rule(name="new_rule")   
-        self.rulemod.addRuleBefore(0, newrule)
+        self.rulemod.addRuleBefore(row, newrule)
         
         
     def handle_ruledel(self):
@@ -210,9 +213,12 @@ class RuleList(QtCore.QAbstractListModel):
         return len(self.rules)
     
     def addRuleBefore(self, index, rule):
-        if index < 0 or index >= self.rowCount():
+        if index == 0:
+            self.rules.insert(index, rule)
+        elif index < 0 or index >= self.rowCount():
             return
-        self.rules.insert(index, rule)
+        else:
+            self.rules.insert(index, rule)
         self.reset()
         
     def delRule(self, index):
