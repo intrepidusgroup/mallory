@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>913</width>
+    <width>879</width>
     <height>807</height>
    </rect>
   </property>
@@ -14,14 +14,14 @@
    <string>TCP Debugger</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="toolTip">
        <string>An IP address to match. Blank for wildcard match.</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_streams">
        <attribute name="title">
@@ -30,12 +30,6 @@
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <widget class="QWidget" name="widget_3" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>300</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="maximumSize">
            <size>
             <width>400</width>
@@ -66,8 +60,17 @@
              <property name="sortingEnabled">
               <bool>true</bool>
              </property>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
              <attribute name="verticalHeaderVisible">
               <bool>false</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
              </attribute>
             </widget>
            </item>
@@ -81,12 +84,6 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>550</width>
-            <height>0</height>
-           </size>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
@@ -145,7 +142,7 @@
               <string>Save changes made during text editing</string>
              </property>
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="tabtext">
               <attribute name="title">
@@ -193,9 +190,156 @@
                </item>
                <item>
                 <widget class="QTableWidget" name="tablehex">
+                 <property name="font">
+                  <font>
+                   <family>Courier 10 Pitch</family>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
                  <property name="selectionMode">
                   <enum>QAbstractItemView::ContiguousSelection</enum>
                  </property>
+                 <property name="textElideMode">
+                  <enum>Qt::ElideNone</enum>
+                 </property>
+                 <property name="rowCount">
+                  <number>10</number>
+                 </property>
+                 <attribute name="horizontalHeaderDefaultSectionSize">
+                  <number>22</number>
+                 </attribute>
+                 <attribute name="horizontalHeaderMinimumSectionSize">
+                  <number>22</number>
+                 </attribute>
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>true</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderDefaultSectionSize">
+                  <number>18</number>
+                 </attribute>
+                 <attribute name="verticalHeaderMinimumSectionSize">
+                  <number>12</number>
+                 </attribute>
+                 <attribute name="verticalHeaderDefaultSectionSize">
+                  <number>18</number>
+                 </attribute>
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>true</bool>
+                 </attribute>
+                 <attribute name="horizontalHeaderMinimumSectionSize">
+                  <number>22</number>
+                 </attribute>
+                 <attribute name="verticalHeaderMinimumSectionSize">
+                  <number>12</number>
+                 </attribute>
+                 <attribute name="horizontalHeaderDefaultSectionSize">
+                  <number>22</number>
+                 </attribute>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <column>
+                  <property name="text">
+                   <string>00</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>2</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>3</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>4</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>5</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>6</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>7</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>8</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>9</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>A</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>B</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>C</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>D</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>E</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Text</string>
+                  </property>
+                 </column>
+                 <item row="0" column="0">
+                  <property name="text">
+                   <string>AA</string>
+                  </property>
+                 </item>
+                 <item row="0" column="1">
+                  <property name="text">
+                   <string>01</string>
+                  </property>
+                 </item>
+                 <item row="1" column="2">
+                  <property name="text">
+                   <string>0C</string>
+                  </property>
+                 </item>
                 </widget>
                </item>
               </layout>
@@ -211,234 +355,357 @@
        <attribute name="title">
         <string>Rules</string>
        </attribute>
-       <widget class="QListView" name="listrules">
-        <property name="geometry">
-         <rect>
-          <x>9</x>
-          <y>43</y>
-          <width>250</width>
-          <height>611</height>
-         </rect>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>250</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="dragEnabled">
-         <bool>true</bool>
-        </property>
-        <property name="dragDropMode">
-         <enum>QAbstractItemView::DragDrop</enum>
-        </property>
-        <property name="movement">
-         <enum>QListView::Free</enum>
-        </property>
-        <property name="viewMode">
-         <enum>QListView::ListMode</enum>
-        </property>
-       </widget>
-       <widget class="QGroupBox" name="groupBox">
-        <property name="geometry">
-         <rect>
-          <x>270</x>
-          <y>10</y>
-          <width>347</width>
-          <height>529</height>
-         </rect>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="title">
-         <string>Rule Specification</string>
-        </property>
-        <layout class="QFormLayout" name="formLayout">
-         <property name="fieldGrowthPolicy">
-          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-         </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="toolTip">
-            <string>This is the name of the rule. Anything that is a valid python name is valid here. Stick with numbers, letters and lower case letters to make the python style deities happy.</string>
-           </property>
-           <property name="text">
-            <string>Name</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="linename">
-           <property name="inputMask">
-            <string/>
-           </property>
-           <property name="text">
-            <string>default</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="toolTip">
-            <string>The direction the rule should match on. Server 2 Client (S2C) rules will only match. Any may be selected to match both directions.</string>
-           </property>
-           <property name="text">
-            <string>Direction</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QWidget" name="widget_4" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <property name="spacing">
-             <number>10</number>
-            </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
             <item>
-             <widget class="QRadioButton" name="radio_dir_s2c">
-              <property name="text">
-               <string>S2C</string>
-              </property>
+             <widget class="QWidget" name="widget_5" native="true">
+              <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <property name="margin">
+                <number>2</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_7">
+                 <property name="font">
+                  <font>
+                   <family>Sans Serif</family>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="toolTip">
+                  <string>Listing of current rules</string>
+                 </property>
+                 <property name="text">
+                  <string>Rule List</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="buttondelrule">
+                 <property name="maximumSize">
+                  <size>
+                   <width>30</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="buttonaddrule">
+                 <property name="maximumSize">
+                  <size>
+                   <width>30</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>+</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="buttondown">
+                 <property name="maximumSize">
+                  <size>
+                   <width>30</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Move the selected rule down one level in precedence</string>
+                 </property>
+                 <property name="text">
+                  <string>\/</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="buttonup">
+                 <property name="maximumSize">
+                  <size>
+                   <width>30</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Move the selected rule up one level in precedence</string>
+                 </property>
+                 <property name="text">
+                  <string>/\</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
             <item>
-             <widget class="QRadioButton" name="radio_dir_c2s">
-              <property name="text">
-               <string>C2S</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radio_dir_both">
-              <property name="text">
-               <string>Both</string>
-              </property>
-              <property name="checked">
+             <widget class="QListView" name="listrules">
+              <property name="dragEnabled">
                <bool>true</bool>
+              </property>
+              <property name="dragDropMode">
+               <enum>QAbstractItemView::DragDrop</enum>
+              </property>
+              <property name="movement">
+               <enum>QListView::Free</enum>
+              </property>
+              <property name="viewMode">
+               <enum>QListView::ListMode</enum>
               </property>
              </widget>
             </item>
            </layout>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Address</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="lineaddr">
-           <property name="toolTip">
-            <string>The IP address that should be matched.</string>
-           </property>
-           <property name="inputMask">
-            <string>000.000.000.000;_</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>Port</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QLineEdit" name="lineport">
-           <property name="maximumSize">
-            <size>
-             <width>60</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="baseSize">
-            <size>
-             <width>150</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>The port to match. 0 for wildcard match.</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="maxLength">
-            <number>6</number>
-           </property>
-           <property name="frame">
-            <bool>true</bool>
-           </property>
-           <property name="cursorPosition">
-            <number>0</number>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string>Type</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QWidget" name="widget_6" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <property name="topMargin">
-             <number>0</number>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox">
+            <property name="toolTip">
+             <string/>
             </property>
-            <property name="bottomMargin">
-             <number>0</number>
+            <property name="title">
+             <string>Rule Specification</string>
             </property>
-            <item>
-             <widget class="QRadioButton" name="radio_type_nothing">
-              <property name="text">
-               <string>Nothing</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radio_type_debug">
-              <property name="text">
-               <string>Debug</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radio_type_muck">
-              <property name="text">
-               <string>Muck</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_9">
-           <property name="toolTip">
-            <string>Specify a string in the payload field. Any time that string is encountered in the payload/stream it will cause the rule to match the packet.</string>
-           </property>
-           <property name="text">
-            <string>Payload</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QLineEdit" name="linepayload"/>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="label_6">
-           <property name="toolTip">
-            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <layout class="QFormLayout" name="formLayout">
+               <property name="fieldGrowthPolicy">
+                <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+               </property>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_2">
+                 <property name="toolTip">
+                  <string>This is the name of the rule. Anything that is a valid python name is valid here. Stick with numbers, letters and lower case letters to make the python style deities happy.</string>
+                 </property>
+                 <property name="text">
+                  <string>Name</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="linename">
+                 <property name="inputMask">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string>default</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_3">
+                 <property name="toolTip">
+                  <string>The direction the rule should match on. Server 2 Client (S2C) rules will only match. Any may be selected to match both directions.</string>
+                 </property>
+                 <property name="text">
+                  <string>Direction</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QWidget" name="widget_4" native="true">
+                 <layout class="QHBoxLayout" name="horizontalLayout_4">
+                  <property name="spacing">
+                   <number>10</number>
+                  </property>
+                  <property name="margin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QRadioButton" name="radio_dir_s2c">
+                    <property name="text">
+                     <string>S2C</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radio_dir_c2s">
+                    <property name="text">
+                     <string>C2S</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radio_dir_both">
+                    <property name="text">
+                     <string>Both</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_3">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_4">
+                 <property name="text">
+                  <string>Address</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <item>
+                  <widget class="QLineEdit" name="lineaddr">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>120</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>The IP address that should be matched.</string>
+                   </property>
+                   <property name="inputMask">
+                    <string>000.000.000.000;_</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_5">
+                   <property name="text">
+                    <string>Port</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="lineport">
+                   <property name="maximumSize">
+                    <size>
+                     <width>60</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="baseSize">
+                    <size>
+                     <width>150</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>The port to match. 0 for wildcard match.</string>
+                   </property>
+                   <property name="maxLength">
+                    <number>6</number>
+                   </property>
+                   <property name="cursorPosition">
+                    <number>0</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_8">
+                 <property name="text">
+                  <string>Type</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QWidget" name="widget_6" native="true">
+                 <layout class="QHBoxLayout" name="horizontalLayout_6">
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QRadioButton" name="radio_type_nothing">
+                    <property name="text">
+                     <string>Nothing</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radio_type_debug">
+                    <property name="text">
+                     <string>Debug</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radio_type_muck">
+                    <property name="text">
+                     <string>Muck</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_4">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_9">
+                 <property name="toolTip">
+                  <string>Specify a string in the payload field. Any time that string is encountered in the payload/stream it will cause the rule to match the packet.</string>
+                 </property>
+                 <property name="text">
+                  <string>Payload</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QLineEdit" name="linepayload"/>
+               </item>
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_6">
+                 <property name="toolTip">
+                  <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -451,208 +718,143 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Here are a few examples of valid Muck rules:&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#780000;&quot;&gt;&quot;gzip,deflate/ /1&quot;&lt;/span&gt;,&lt;span style=&quot; color:#780000;&quot;&gt;&quot;deflate/ /1&quot;&lt;/span&gt;,&lt;span style=&quot; color:#780000;&quot;&gt;&quot;gzip/ /1&quot;&lt;/span&gt;. This rule replaced the strings gzip, deflate, deflate and gzip with a space. Another example would be to replace all upper case characters with the letter 'a', &lt;span style=&quot; color:#780000;&quot;&gt;&quot;[A-Z]/a/g&quot;&lt;/span&gt;, Muck rules are created by the following syntax: [python regex]/replacement/[number of occurences] where g can be used in number of occurences for infinity (and beyond).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Muck</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QPlainTextEdit" name="textruleobj">
-           <property name="plainText">
-            <string>&quot;search/replace/g&quot;
+                 </property>
+                 <property name="text">
+                  <string>Muck</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="1">
+                <widget class="QPlainTextEdit" name="textruleobj">
+                 <property name="plainText">
+                  <string>&quot;search/replace/g&quot;
 &quot;search/replace/3&quot;
 &quot;search/replace/g&quot;</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="label_10">
-           <property name="text">
-            <string>Passthru</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="0" colspan="2">
-          <widget class="QPushButton" name="buttonpreviewrule">
-           <property name="text">
-            <string>Preview Rule</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="0" colspan="2">
-          <widget class="QPushButton" name="saverule">
-           <property name="text">
-            <string>Save Rule</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="1">
-          <widget class="QWidget" name="widget_7" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QRadioButton" name="radio_passthru_yes">
-              <property name="text">
-               <string>Yes</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radio_passthru_no">
-              <property name="text">
-               <string>No</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QPlainTextEdit" name="textrulepreview">
-        <property name="geometry">
-         <rect>
-          <x>290</x>
-          <y>580</y>
-          <width>321</width>
-          <height>111</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="labelrulepreview">
-        <property name="geometry">
-         <rect>
-          <x>290</x>
-          <y>550</y>
-          <width>111</width>
-          <height>18</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Sans Serif</family>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="toolTip">
-         <string>This preview can also be pasted directly into the ruleconfig.py static rule configuation. Remember to pay attention to the ordering of the rules in ruleconfig.py.</string>
-        </property>
-        <property name="text">
-         <string>Rule Preview</string>
-        </property>
-       </widget>
-       <widget class="QWidget" name="widget_5" native="true">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>0</y>
-          <width>251</width>
-          <height>46</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <property name="margin">
-          <number>2</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="label_7">
-           <property name="font">
-            <font>
-             <family>Sans Serif</family>
-             <weight>75</weight>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Listing of current rules</string>
-           </property>
-           <property name="text">
-            <string>Rule List</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="buttondelrule">
-           <property name="maximumSize">
-            <size>
-             <width>30</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>-</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="buttonaddrule">
-           <property name="maximumSize">
-            <size>
-             <width>30</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>+</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="buttondown">
-           <property name="maximumSize">
-            <size>
-             <width>30</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Move the selected rule down one level in precedence</string>
-           </property>
-           <property name="text">
-            <string>\/</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="buttonup">
-           <property name="maximumSize">
-            <size>
-             <width>30</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Move the selected rule up one level in precedence</string>
-           </property>
-           <property name="text">
-            <string>/\</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="QLabel" name="label_10">
+                 <property name="text">
+                  <string>Passthru</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="1">
+                <widget class="QWidget" name="widget_7" native="true">
+                 <layout class="QHBoxLayout" name="horizontalLayout_7">
+                  <property name="spacing">
+                   <number>2</number>
+                  </property>
+                  <property name="margin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QRadioButton" name="radio_passthru_yes">
+                    <property name="text">
+                     <string>Yes</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radio_passthru_no">
+                    <property name="text">
+                     <string>No</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_2">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_8">
+               <item>
+                <widget class="QPushButton" name="buttonpreviewrule">
+                 <property name="text">
+                  <string>Preview Rule</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="saverule">
+                 <property name="text">
+                  <string>Save Rule</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_5">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QLabel" name="labelrulepreview">
+               <property name="font">
+                <font>
+                 <family>Sans Serif</family>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="toolTip">
+                <string>This preview can also be pasted directly into the ruleconfig.py static rule configuation. Remember to pay attention to the ordering of the rules in ruleconfig.py.</string>
+               </property>
+               <property name="text">
+                <string>Rule Preview</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPlainTextEdit" name="textrulepreview"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
    </layout>
+   <zorder>tabWidget_2</zorder>
+   <zorder>widget_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>913</width>
-     <height>25</height>
+     <width>879</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMallory">
