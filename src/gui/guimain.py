@@ -48,14 +48,14 @@ class MalloryGui(QtGui.QMainWindow):
         self.main.buttonup.clicked.connect(self.handle_ruleup)
         self.main.buttonaddrule.clicked.connect(self.handle_ruleadd)
         self.main.buttondelrule.clicked.connect(self.handle_ruledel)        
-        
+        self.main.btnauto.clicked.connect(self.updateStatusBar)
     def setUp(self):
         self.hexedit = HexEdit.HexEdit(self.main.tablehex, self.app, self.statusBar())
         self.hexedit.ready = True 
         self.hexedit.setupTable()
         self.hexedit.loadData("QWERTYUDFGVBHNJDFGHJ")
-        status = self.statusBar()
-        
+        #status = self.statusBar()
+        self.updateStatusBar()
         # Rules come in base64 encoded and pickled
         rules = pickle.loads(base64.b64decode(self.proxy.getrules()))
         
@@ -77,7 +77,11 @@ class MalloryGui(QtGui.QMainWindow):
             self.proxy.setdebug(True)     
         else:
             self.proxy.setdebug(False)
-
+        self.updateStatusBar()
+        
+    def updateStatusBar(self):
+        self.main.statusbar.showMessage("Intercept: %s     Autosend: %s" % (str(self.main.btnicept.isChecked()), str(self.main.btnauto.isChecked())))
+                                        
     def keyPressEvent(self, event):
         if int(event.key()) == ord('S'):
             self.handle_send()
