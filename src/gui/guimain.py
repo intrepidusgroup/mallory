@@ -11,7 +11,7 @@ import muckpipe
 import base64
 import pickle
 import Queue
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui, QtCore, Qt
 from TCPEdit import Ui_MainWindow
 from debug import DebugEvent
 from binascii import hexlify, unhexlify
@@ -304,8 +304,31 @@ class StreamTable(QtCore.QAbstractTableModel):
         
     def setData(self, index, value):
         pass
-             
-    def data(self, index, role):                        
+    
+    statusColors = {"U": Qt.QColor(0xFF0000), "S":Qt.QColor(0x00FF00)}
+    c2sColor = Qt.QColor(0xFBEDED)
+    s2cColor = Qt.QColor(0xEDEDFB)
+    
+    def data(self, index, role):
+        if not index.isValid():
+            return QtCore.QVariant()
+        
+        if role == QtCore.Qt.BackgroundRole:
+            data = self.getrowdata(index.row())
+            direction = data["direction"]
+            col = self.c2sColor;
+            if direction == "s2c":
+                col = self.s2cColor
+            return QtCore.QVariant(col)
+        
+        if role == QtCore.Qt.ForegroundRole and index.column() == 5:
+            data = self.getrowdata(index.row())
+            if "status" in data.keys():
+                status = data["status"]
+                if status in self.statusColors.keys():
+                    col = self.statusColors[status]
+                    return QtCore.QVariant(col)
+                             
         if role == QtCore.Qt.DisplayRole and index.isValid():
             data = self.getrowdata(index.row())
 
