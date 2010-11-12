@@ -234,8 +234,8 @@ class Mallory(Subject):
             # Setup bi-directional pub/sub setup for debugger events. This
             # is a very important step. Without it the debugging client and or
             # mallory will not know when an event has occured
-#            self.debugger.attach(udp)
-#            udp.attach(self.debugger)
+            #self.debugger.attach(udp)
+            #udp.attach(self.debugger)
             
             thread.start_new_thread(udp.forward_any, ())
                     
@@ -377,8 +377,8 @@ if __name__ == '__main__':
     # And now mallory will treat traffic on port 987 as SSL protocol traffic.
     
     mallory.configure_protocol(sslproto.SSLProtocol(None, None, None), "add")    
-    mallory.configure_protocol(http.HTTP(None, None, None), "add")
-    mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager ())
+    #mallory.configure_protocol(http.HTTP(None, None, None), "add")
+    #mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager ())
 #    
     #mallory.configure_protocol(https.HTTPS(None, None, None), "add")
     mallory.configure_protocol(dnsp.DNS(None, None, None), "add")

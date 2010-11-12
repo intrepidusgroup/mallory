@@ -306,8 +306,26 @@ class StreamTable(QtCore.QAbstractTableModel):
         pass
     
     statusColors = {"U": Qt.QColor(0xFF0000), "S":Qt.QColor(0x00FF00)}
-    c2sColor = Qt.QColor(0xFBEDED)
-    s2cColor = Qt.QColor(0xEDEDFB)
+    
+    
+    bgCol_c2sSent = Qt.QColor(0xFBEDED)
+    
+    bgCol_s2cSent = Qt.QColor(0xEDEDFB)
+
+    fgCol_unsent = Qt.QColor(0)
+    fgCol_sent = Qt.QColor(0x555555)
+    
+    def saturate(self, color, amount = 40):
+        """ Returns a color that is saturated wit the specified amount. If the amount is 
+        negative, the color is desaturated"""
+        # Get hue, saturation, value and alpha
+        (h,s,v,a) = color.getHsv();
+        s = s + amount
+        if s > 255:
+            s = 255
+        if s < 0:
+            s = 0
+        return Qt.QColor.fromHsv(h, s, v, a)
     
     def data(self, index, role):
         if not index.isValid():
@@ -315,20 +333,23 @@ class StreamTable(QtCore.QAbstractTableModel):
         
         if role == QtCore.Qt.BackgroundRole:
             data = self.getrowdata(index.row())
-            direction = data["direction"]
-            col = self.c2sColor;
-            if direction == "s2c":
-                col = self.s2cColor
+            col = self.bgCol_c2sSent
+            if data["direction"] == "s2c":
+                col = self.bgCol_s2cSent
+
+            if "status" in data.keys() and data["status"] == 'U':
+                col = self.saturate(col)
             return QtCore.QVariant(col)
+                    
         
-        if role == QtCore.Qt.ForegroundRole and index.column() == 5:
+        # Sent are greyed out a bit
+        if role == QtCore.Qt.ForegroundRole:
             data = self.getrowdata(index.row())
-            if "status" in data.keys():
-                status = data["status"]
-                if status in self.statusColors.keys():
-                    col = self.statusColors[status]
-                    return QtCore.QVariant(col)
-                             
+            col = self.fgCol_unsent
+            if "status" in data.keys() and data["status"] == 'S':
+                col = self.fgCol_sent
+            return QtCore.QVariant(col)
+                            
         if role == QtCore.Qt.DisplayRole and index.isValid():
             data = self.getrowdata(index.row())
 
