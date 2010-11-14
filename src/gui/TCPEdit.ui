@@ -832,13 +832,13 @@ p, li { white-space: pre-wrap; }
        <attribute name="title">
         <string>Objects</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_12">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
          <widget class="QSplitter" name="splitter_4">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <widget class="QListView" name="listView_objects"/>
+          <widget class="QListWidget" name="listWidget_objects"/>
           <widget class="QSplitter" name="splitter_3">
            <property name="orientation">
             <enum>Qt::Vertical</enum>

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'TCPEdit.ui'
 #
-# Created: Sun Nov 14 20:50:24 2010
+# Created: Sun Nov 14 21:57:12 2010
 #      by: PyQt4 UI code generator 4.7.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -338,13 +338,13 @@ class Ui_MainWindow(object):
         self.tabWidget_2.addTab(self.tab_rules, "")
         self.tab = QtGui.QWidget()
         self.tab.setObjectName("tab")
-        self.horizontalLayout_12 = QtGui.QHBoxLayout(self.tab)
-        self.horizontalLayout_12.setObjectName("horizontalLayout_12")
+        self.verticalLayout_4 = QtGui.QVBoxLayout(self.tab)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.splitter_4 = QtGui.QSplitter(self.tab)
         self.splitter_4.setOrientation(QtCore.Qt.Horizontal)
         self.splitter_4.setObjectName("splitter_4")
-        self.listView_objects = QtGui.QListView(self.splitter_4)
-        self.listView_objects.setObjectName("listView_objects")
+        self.listWidget_objects = QtGui.QListWidget(self.splitter_4)
+        self.listWidget_objects.setObjectName("listWidget_objects")
         self.splitter_3 = QtGui.QSplitter(self.splitter_4)
         self.splitter_3.setOrientation(QtCore.Qt.Vertical)
         self.splitter_3.setObjectName("splitter_3")
@@ -355,7 +355,7 @@ class Ui_MainWindow(object):
         self.treeWidget_objectinspector.headerItem().setText(1, "2")
         self.plainTextEdit_objectInspector = QtGui.QPlainTextEdit(self.splitter_3)
         self.plainTextEdit_objectInspector.setObjectName("plainTextEdit_objectInspector")
-        self.horizontalLayout_12.addWidget(self.splitter_4)
+        self.verticalLayout_4.addWidget(self.splitter_4)
         self.tabWidget_2.addTab(self.tab, "")
         self.horizontalLayout_9.addWidget(self.tabWidget_2)
         MainWindow.setCentralWidget(self.centralwidget)

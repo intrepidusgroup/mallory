@@ -16,23 +16,37 @@ from TCPEdit import Ui_MainWindow
 from debug import DebugEvent
 from binascii import hexlify, unhexlify
 from threading import Lock
+from SimpleXMLRPCServer import SimpleXMLRPCServer
+import logging
+from config import Config
 
 class ObjectInspectorHandler():
     """This is a little handler for the object inspector tab. This in moved outside of MalloryGui to
     make less cluttering. MalloryGui sends in the relevant graphical compontents in init."""
     
-    def __init__(self, treewidget, textedit):
+    def __init__(self, treewidget, textedit, listwidget):
         self.treeWidget = treewidget
         self.textEdit = textedit
+        self.listwidget = listwidget
         self.connectHandlers()
         object = {"foo":{"bar":"gazonk"}}
         self.setObject(object)
+        self.objects= []
+        listwidget.currentRowChanged.connect(self.changeRow)
+
+    def changeRow(self, row):
+        if row  > -1:
+            self.setObject(self.objects[row])
         
     def setObject(self, object):
         self.object = object
         self.treeWidget.clear()
         root = QtGui.QTreeWidgetItem(self.treeWidget,["<Object>","Smells like HTTP!"])
         self._recurse(self.object, root)
+
+    def addObject(self, object):
+        self.objects.append(object)
+        self.listwidget.addItem("HTTP object %d" % len(self.objects))
         
     def connectHandlers(self):
         self.treeWidget.currentItemChanged.connect(self.updateDisplay)
@@ -42,6 +56,7 @@ class ObjectInspectorHandler():
         if self.object is None: return
         
         item = self.treeWidget.currentItem()
+        if item is None: return
         path = [str(item.text(0))]
         while item.parent() is not None:
             item = item.parent()
@@ -74,7 +89,32 @@ class ObjectInspectorHandler():
             else:
                 child = Qt.QTreeWidgetItem(root,[ str(k)])
                 self._recurse(v, child)
-
+class XMLRPCGuiServer(Qt.QThread):
+    """The XMLRPCGuiServer is a server for the GUI where the mallory application
+    can push events"""
+    
+    #This signal is emitted when objects are received
+    objectReceived = Qt.SIGNAL("objectReceived")
+    
+    def __init__(self, objectReceiver):
+        Qt.QThread.__init__(self)
+        self.objectReceiver = objectReceiver
+        self.log = logging.getLogger("mallorygui")
+        
+    def run(self):
+        try:
+            self.log.info("GUI: starting XML RPC Server")            
+            server = SimpleXMLRPCServer(addr=("localhost", 20759), logRequests=False, allow_none=1)
+            server.register_function(self.pushObject, "pushObject")
+            server.serve_forever()
+        except:
+            self.log.error("GUI: rpcserver: error connecting to remote")
+            self.log.error(sys.exc_info())
+    
+    def pushObject(self, object):
+        """Objects are pushed here form the object editor implementation """
+        self.objectReceiver.addObject(object)
+        #self.emit(self.objectReceived)
 
 class MalloryGui(QtGui.QMainWindow):
     
@@ -90,6 +130,10 @@ class MalloryGui(QtGui.QMainWindow):
         self.proxy = xmlrpclib.ServerProxy("http://localhost:20757")
         self.objectproxy = xmlrpclib.ServerProxy("http://localhost:20758")
         self.curdebugevent = ""
+
+        self.log = logging.getLogger("mallorygui")
+        config = Config()
+        config.logsetup(self.log)
 
         
     def connecthandlers(self):
@@ -108,6 +152,7 @@ class MalloryGui(QtGui.QMainWindow):
         self.main.buttonaddrule.clicked.connect(self.handle_ruleadd)
         self.main.buttondelrule.clicked.connect(self.handle_ruledel)        
         self.main.btnauto.clicked.connect(self.updateStatusBar)
+        
     def setUp(self):
         self.hexedit = HexEdit.HexEdit(self.main.tablehex, self.app, self.statusBar())
         self.hexedit.ready = True 
@@ -126,7 +171,17 @@ class MalloryGui(QtGui.QMainWindow):
         
         self.ruleedit = RuleGui.RuleEdit(self.main, self.rulemod) 
         #Create the object inspector
-        self.objectInspector = ObjectInspectorHandler(self.main.treeWidget_objectinspector, self.main.plainTextEdit_objectInspector)
+        self.objectInspector = ObjectInspectorHandler(self.main.treeWidget_objectinspector, self.main.plainTextEdit_objectInspector, self.main.listWidget_objects)
+
+        # Start the gui server
+        self.server = XMLRPCGuiServer(self.objectInspector)
+        self.server.start()
+        
+        #Let mallory know we are connected
+        self.objectproxy.connect()
+        
+        #Connect signals
+        #self.server.objectReceived.connect(self.objectInspector.objectReceived)
                 
     def setupModels(self):
         self.main.tablestreams.setModel(self.streammod)
@@ -284,12 +339,6 @@ class MalloryGui(QtGui.QMainWindow):
                     #self.curdebugevent = next_unsent
                     self.send_cur_de(next_unsent)
                 
-                #Now, also check the object list
-                print "[*] MalloryGui: fetching object queue"
-                objectlist = self.objectproxy.getobjectqueue()
-                if len(objectlist) > 0:
-                    print "[*] MalloryGui: setting object to display"
-                    self.objectInspector.setObject(objectlist[0])
             except:
                 print "[*] MalloryGui: check_for_de: exception in de check loop"
                 print sys.exc_info()
