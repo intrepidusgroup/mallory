@@ -17,6 +17,64 @@ from debug import DebugEvent
 from binascii import hexlify, unhexlify
 from threading import Lock
 
+class ObjectInspectorHandler():
+    """This is a little handler for the object inspector tab. This in moved outside of MalloryGui to
+    make less cluttering. MalloryGui sends in the relevant graphical compontents in init."""
+    
+    def __init__(self, treewidget, textedit):
+        self.treeWidget = treewidget
+        self.textEdit = textedit
+        self.connectHandlers()
+        object = {"foo":{"bar":"gazonk"}}
+        self.setObject(object)
+        
+    def setObject(self, object):
+        self.object = object
+        self.treeWidget.clear()
+        root = QtGui.QTreeWidgetItem(self.treeWidget,["<Object>","Smells like HTTP!"])
+        self._recurse(self.object, root)
+        
+    def connectHandlers(self):
+        self.treeWidget.currentItemChanged.connect(self.updateDisplay)
+        
+    def updateDisplay(self):
+        self.textEdit.setPlainText("")
+        if self.object is None: return
+        
+        item = self.treeWidget.currentItem()
+        path = [str(item.text(0))]
+        while item.parent() is not None:
+            item = item.parent()
+            print item
+            path.append(str(item.text(0)))
+            
+        path.reverse()
+        #Remove the root node, that is the object itself
+        path = path[1:]
+        
+#        print("Path: %s" % path)
+        obj = self.object
+        for x in path:
+            obj=obj[x]
+        self.textEdit.setPlainText(str(obj))
+
+    def _recurse(self, object, root):
+        """Recurses through the given object and fills the qtreeview
+        with data"""
+        # It may be an object or a dict
+        if type(object).__name__ == 'instance':
+            object = object.__dict__
+        #Now we are dealing with a dict    
+        for (k,v) in object.items():
+            if type(v).__name__ <> 'instance' and type(v).__name__ <> 'dict':
+                _v = str(v)
+                if len(_v) > 50 :
+                    _v = _v[:50]+ "..."
+                Qt.QTreeWidgetItem(root, [str(k), _v])
+            else:
+                child = Qt.QTreeWidgetItem(root,[ str(k)])
+                self._recurse(v, child)
+
 
 class MalloryGui(QtGui.QMainWindow):
     
@@ -30,6 +88,7 @@ class MalloryGui(QtGui.QMainWindow):
         self.streammod = StreamTable(self)
         self.rulemod = RuleGui.RuleList(self)
         self.proxy = xmlrpclib.ServerProxy("http://localhost:20757")
+        self.objectproxy = xmlrpclib.ServerProxy("http://localhost:20758")
         self.curdebugevent = ""
 
         
@@ -66,7 +125,8 @@ class MalloryGui(QtGui.QMainWindow):
         self.rulemod.rules = rules
         
         self.ruleedit = RuleGui.RuleEdit(self.main, self.rulemod) 
-        
+        #Create the object inspector
+        self.objectInspector = ObjectInspectorHandler(self.main.treeWidget_objectinspector, self.main.plainTextEdit_objectInspector)
                 
     def setupModels(self):
         self.main.tablestreams.setModel(self.streammod)
@@ -81,7 +141,7 @@ class MalloryGui(QtGui.QMainWindow):
         
     def updateStatusBar(self):
         self.main.statusbar.showMessage("Intercept: %s     Autosend: %s" % (str(self.main.btnicept.isChecked()), str(self.main.btnauto.isChecked())))
-                                        
+    
     def keyPressEvent(self, event):
         if int(event.key()) == ord('S'):
             self.handle_send()
@@ -223,7 +283,13 @@ class MalloryGui(QtGui.QMainWindow):
                         break
                     #self.curdebugevent = next_unsent
                     self.send_cur_de(next_unsent)
-
+                
+                #Now, also check the object list
+                print "[*] MalloryGui: fetching object queue"
+                objectlist = self.objectproxy.getobjectqueue()
+                if len(objectlist) > 0:
+                    print "[*] MalloryGui: setting object to display"
+                    self.objectInspector.setObject(objectlist[0])
             except:
                 print "[*] MalloryGui: check_for_de: exception in de check loop"
                 print sys.exc_info()
@@ -305,13 +371,9 @@ class StreamTable(QtCore.QAbstractTableModel):
     def setData(self, index, value):
         pass
     
-    statusColors = {"U": Qt.QColor(0xFF0000), "S":Qt.QColor(0x00FF00)}
-    
-    
+    # Colors used in the table        
     bgCol_c2sSent = Qt.QColor(0xFBEDED)
-    
     bgCol_s2cSent = Qt.QColor(0xEDEDFB)
-
     fgCol_unsent = Qt.QColor(0)
     fgCol_sent = Qt.QColor(0x555555)
     

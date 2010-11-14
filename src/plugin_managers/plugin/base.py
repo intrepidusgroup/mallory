@@ -1,3 +1,4 @@
+import logging
 class Base ():
     """
     This is the base class for all plugins. Note that all plugins should assign
@@ -12,7 +13,7 @@ class Base ():
     """
     def __init__(self):
         self.persistent = 0
-        
+        self.log = logging.getLogger("mallorymain.plugins")
     def do(self, **kwargs):
         """
         The I{self.do} function expects name value list that hold an event and data element.

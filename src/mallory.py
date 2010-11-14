@@ -377,8 +377,8 @@ if __name__ == '__main__':
     # And now mallory will treat traffic on port 987 as SSL protocol traffic.
     
     mallory.configure_protocol(sslproto.SSLProtocol(None, None, None), "add")    
-    #mallory.configure_protocol(http.HTTP(None, None, None), "add")
-    #mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager ())
+    mallory.configure_protocol(http.HTTP(None, None, None), "add")
+    mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager ())
 #    
     #mallory.configure_protocol(https.HTTPS(None, None, None), "add")
     mallory.configure_protocol(dnsp.DNS(None, None, None), "add")
