@@ -361,7 +361,8 @@ class HTTPRequest:
             
         return request
     def toDict(self):
-        return {"command" : self.command, "path":self.path, "request_version": self.request_version, "headers":self.headers.dict, "body": self.body}
+        return {"command" : self.command, "path":self.path, "request_version":
+        self.request_version, "headers":self.headers.dict, "body": self.body}
     
     def _quote_html(self, html):
         return html.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
@@ -802,7 +803,9 @@ class HTTPResponse:
         return self.msg.items()
   
     def toDict(self):
-        return {"status" : self.status, "reason":self.reason, "version": self.version, "msg":self.msg.dict, "body":self.body}
+        return {"status" : self.status, "reason":self.reason, 
+                "version": self.version, "msg":self.msg.dict, 
+                "body":self.body, "clean_body":self.clean_body, "TEST":"TEST"}
  
 class LineAndFileWrapper:
     """A limited file-like object for HTTP/0.9 responses."""

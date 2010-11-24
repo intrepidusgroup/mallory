@@ -103,7 +103,7 @@ try:
 except ImportError:
     print "ImportError: Trouble importing protocols with dependencies. " \
             "Proceeding with minimal protocol support."
-    
+
 
 # Config object is global. Buyer beware.
 config = config.Config()
@@ -181,19 +181,19 @@ class Mallory(Subject):
             protoinst.forward_s2c(conndata)
         elif malloryevt.STARTC2S in protoinst.supports and conndata.direction == "c2s":
             protoinst.forward_c2s(conndata)
-        else:        
-            protoinst.forward_any(conndata)        
-        
-                   
+        else:
+            protoinst.forward_any(conndata)
+
+
     def update(self, publisher, **kwargs):
         pass
-                        
-    def main(self):        
+
+    def main(self):
         dbConn = TrafficDb(self.dbname)
-        
+
         # Kick off a thread for the debugger
         thread.start_new_thread(self.debugger.rpcserver, ())
-        
+
         try:
             # Create proxy and wait for connections
             proxy = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -202,23 +202,23 @@ class Mallory(Subject):
 
             if self.opts.listen:
                 bindaddr = ('', int(self.opts.listen))
-                
+
             self.log.info("Binding mallory to: %s:%d" \
                           % (bindaddr[0], bindaddr[1]))
-            
+
             proxy.bind(bindaddr)
             udpproxy.bind(bindaddr)
-            
+
             proxy.listen(5)
-            
+
             if config.debug == 1:
                 self.log.debug("main: Waiting for connection")
-                
+
             connCount = 0
-            
+
             # This thread puts data in the database. 
             thread.start_new_thread(dbConn.fillDB, ())
-            
+
             try:
                 # Not a standard part of mallory. For ssh ownage only.
                 sshshellpwn = ssh.SSHProtocol(None, None, None)
@@ -376,13 +376,13 @@ if __name__ == '__main__':
     #
     # And now mallory will treat traffic on port 987 as SSL protocol traffic.
     
-    mallory.configure_protocol(sslproto.SSLProtocol(None, None, None), "add")    
+#    mallory.configure_protocol(sslproto.SSLProtocol(None, None, None), "add")    
     mallory.configure_protocol(http.HTTP(None, None, None), "add")
     mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager ())
 #    
     #mallory.configure_protocol(https.HTTPS(None, None, None), "add")
-    mallory.configure_protocol(dnsp.DNS(None, None, None), "add")
-    mallory.configure_protocol(ssh.SSHProtocol(None, None, None), "add")
+#    mallory.configure_protocol(dnsp.DNS(None, None, None), "add")
+#    mallory.configure_protocol(ssh.SSHProtocol(None, None, None), "add")
     
     # Pull in the protocol configured on the command line for use with the
     # no-transparent option when the proxy is not being used transparently

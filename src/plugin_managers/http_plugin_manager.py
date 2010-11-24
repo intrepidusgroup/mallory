@@ -7,8 +7,15 @@ from plugin_managers import base
 from plugin.session_hijack import SessionHijack
 from plugin.image_flip import ImageFlip
 from plugin.image_invert import ImageInvert
-from plugin_managers.plugin.edit_object import ObjectEditor
-        
+
+try:
+    from plugin_managers.plugin.edit_object import ObjectEditor
+    oedit_imported = True
+except ImportError:
+    print "ImportError: Trouble importing object editor. Check for twisted" \
+        " dependency (did it get installed?)"
+    oedit_imported = False
+
 class HttpPluginManager (base.Base):
     def __init__(self, rules = [], config = config.Config()):
         base.Base.__init__(self)
@@ -23,7 +30,9 @@ class HttpPluginManager (base.Base):
         plugs.append(SessionHijack ())
         plugs.append(ImageFlip())
         plugs.append(ImageInvert())
-        plugs.append(ObjectEditor())
+
+        if oedit_imported:
+            plugs.append(ObjectEditor())
         #plugs.append(edit_object.ObjectEditor())
         for plug in plugs:
                 if plug.persistent == 1:

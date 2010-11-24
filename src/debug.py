@@ -22,14 +22,14 @@ class DebugEvent(UserDict.UserDict):
             if key in dict:
                 self.__dict__[key] = dict[key]                    
         return self
-    
+
     def __str__(self):
         s = "eventid=%s,event=%s,source=%s,destination=%s,data=%s,dir=%s,crc=%08x" % \
         (self.eventid, self.event, self.source, self.destination, 
          repr(self.data[:24]),self.direction, self.crc)
         return s
 
-class Debugger(Subject):        
+class Debugger(Subject):
     def __init__(self, rules = []):
         Subject.__init__(self)
         self.debugq = Queue.Queue()
@@ -41,22 +41,22 @@ class Debugger(Subject):
         """
         rpcserver is intended to be launched as a separate thread. This class
         will launch an RPC server that can pass and receive debugging events
-        to debugging clients. 
-        """      
+        to debugging clients.
+        """
         try:
-            self.log.info("Debugger: starting XML RPC Server")            
+            self.log.info("Debugger: starting XML RPC Server")
             server = SimpleXMLRPCServer(addr=("localhost", 20757), logRequests=False)
             server.register_function(self.setdebug, "setdebug")
             server.register_function(self.getdebugq, "getdebugq")
             server.register_function(self.send_de, "send_de")
             server.register_function(self.getrules, "getrules")
             server.register_function(self.updaterules, "updaterules")
-            
+
             server.serve_forever()
         except:
             self.log.error("Debugger: rpcserver: error connecting to remote")
             self.log.error(sys.exc_info())
-            
+
 
     def setdebug(self, state):
         self.log.debug("Debugger: self.debugon being set to: %s" % state)       
