@@ -50,8 +50,6 @@ class ObjectInspectorHandler():
     def addObject(self, object):
         self.objects.append(object)
 
-        print "%s" % (object)
-
         objdesc = "Object %d" % (len(self.objects))
         if "command" in object and "path" in object:
             objdesc = "HTTP[%d]: %s %s" % (len(self.objects),
@@ -126,7 +124,6 @@ class XMLRPCGuiServer(Qt.QThread):
             self.log.error(sys.exc_info())
 
     def pushObject(self, object):
-        print "Received object %s" % object
         """Objects are pushed here form the object editor implementation """
         self.objectReceiver.addObject(object)
         #self.emit(self.objectReceived)
