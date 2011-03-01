@@ -127,6 +127,20 @@ class ConnData():
     def __init__(self, data={'clientip':'', 'clientport':0, \
                                  'serverip':'', 'serverport':0, \
                                  'conncount':'', 'direction':''}):
+        """
+        Initialize the connection data.
+
+        @param data: This is the data associated with the connection.
+        clientip: the client's (victim's) ip address).
+        clientport: the victim's source port.
+        serverip: the destination IP address.
+        serverport: the destination port.
+        conncount: Used to track connections in the data store.
+        direction: C2S or S2C (client to server or server to client).
+
+        @return: No return value
+
+        """        
         self.clientip = data['clientip']
         self.clientport = data['clientport']
         self.serverip = data['serverip']
@@ -141,7 +155,12 @@ class ConnData():
         
 
 class Mallory(Subject):
-    def __init__(self, options):
+    """
+    The main Mallory class used to instantiate and start the proxy. Protocols
+    can be configured through methods in the main Mallory class. This is
+    where it all starts.
+    """    
+    def __init__(self, options):        
         Subject.__init__(self)
         self.configured_protos = []
         self.configured_plugin_managers = []
@@ -155,13 +174,41 @@ class Mallory(Subject):
         config.logsetup(self.log)
                         
     def configure_protocol(self, protocol, action):
+        """
+        Configure a protocol. Use this method to configure Mallory protocols.
+
+        @param protocol: The Mallory protocol, from the protocol module, to
+        be configured.
+
+        @param action: when the value is "add" the protocol will be added to the
+        protocol classes Mallory uses to decode protocols
+
+        @type action: string
+
+        @return: No return value
+        """        
         if action == "add":
             self.configured_protos.append(protocol)
             
     def add_plugin_manager(self, pluginManager):
+        """
+        Add a new plugin manager to Mallory's configured plugin managers.
+
+        @param plugin_manager: The plugin manager to be added.
+        @type plugin_manager:
+        plugin_managers.plugin_managers_base.PluginManagerBase.
+        """        
         self.configured_plugin_managers.append (pluginManager)    
 
     def configure_socket(self, mevt, **kwargs):
+        """
+        Private method to configure a socket.
+
+        @param mevt: This is a mallory event from module malloryevt
+        @param kwargs: keyworded arguments. Currently expects one named
+        argument, protoinst. The protoinst must be a protocol instance.
+        @type kwargs: protoinst=L{Protocol<src.protocol.base.Protocol>}
+        """        
         protoinst = kwargs["protoinst"]
         
         if not protoinst:
@@ -176,7 +223,15 @@ class Mallory(Subject):
                         protoinst.configure_server_socket()
                           
                                     
-    def forward(self, protoinst, conndata):                 
+    def forward(self, protoinst, conndata): 
+        """
+        Internal method for setting up data pumps for sockets.
+
+        @param protoinst: A protocol instance to set up.
+        @type protoinst: L{Protocol <src.protocol.base.Protocol>}
+
+
+        """
         if malloryevt.STARTS2C in protoinst.supports and conndata.direction == "s2c":
             protoinst.forward_s2c(conndata)
         elif malloryevt.STARTC2S in protoinst.supports and conndata.direction == "c2s":
@@ -186,9 +241,23 @@ class Mallory(Subject):
 
 
     def update(self, publisher, **kwargs):
+        """
+        Does nothing. Internal method.
+        """        
         pass
 
     def main(self):
+        """
+        Mallory's main method. When this is called the following activities
+        occur.
+
+            - A new traffic database is created
+            - A new thread for debugger RPC is created
+            - a listening socket for the proxy is created
+            - A UDP socket is created
+            - A new thread for processing the DB Queue is created
+            - The proxy begins listening for incoming connections
+        """        
         dbConn = TrafficDb(self.dbname)
 
         # Kick off a thread for the debugger
