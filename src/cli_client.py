@@ -13,9 +13,14 @@ from binascii import hexlify, unhexlify, crc32
 #mode = "m"
 
 
-
 class CLIDebug(object):
-    def __init__(self):        
+    """
+    CLIDebug Documentation
+    """
+    def __init__(self): 
+        """
+        Most important init method
+        """       
         self.events = []
         self.mode = "m"
         self.proxy = xmlrpclib.ServerProxy("http://localhost:20757") 
@@ -138,13 +143,15 @@ class CLIDebug(object):
             
             time.sleep(.1)
             
-                      
-argh = CLIDebug()
-
-argh.start_threads()
+        
+        
+if __name__ == '__main__':              
+    argh = CLIDebug()
     
-while True:
-    time.sleep(1)
+    argh.start_threads()
+        
+    while True:
+        time.sleep(1)
 
 #client.cli_input_thread()
 

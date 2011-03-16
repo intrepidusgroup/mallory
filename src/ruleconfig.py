@@ -24,18 +24,12 @@ userrules = [
  "name":"default",  
  "action":rule.Debug()
 },
-{
- "name":"http_muck_mangle_c2s", 
- "port":80, 
- "action":rule.Muck(["gzip,deflate/ /1","deflate/ /1","gzip/ /1"]),
- "direction":"c2s"
-},
-{
- "name":"http_muck_mangle_s2c", 
- "port":80, 
- "action":rule.Muck(["Google/OOOGLE/g"]),
- "direction":"s2c"
-},
+#{
+# "name":"http_muck_mangle_c2s", 
+# "port":"80", 
+# "action":rule.Muck(["gzip,deflate/ /1","deflate/ /1","gzip/ /1"]),
+# "direction":"c2s"
+#},
 #{
 # "name":"https_debug", 
 # "port":443, 
@@ -56,23 +50,23 @@ userrules = [
 #{
 # "action":rule.Debug()
 #},
-{
- "name":"c2s_vnc", 
- "direction":"c2s",
- "port":"5900",
- "action":rule.Muck(["\x04\x01\x00\x00\x00\x00\x00\x41/\x04\x01\x00\x00\x00\x00\x00\x42/g"]),
- "passthru":"true"
-},
-{
- "name":"s2c_debug",
- "direction":"s2c",
- "action":rule.Debug()
-},
-{
- "name":"c2s_debug",
- "direction":"c2s",
- "action":rule.Debug()
-},
+#{
+# "name":"c2s_vnc", 
+# "direction":"c2s",
+# "port":"5900",
+# "action":rule.Muck(["\x04\x01\x00\x00\x00\x00\x00\x41/\x04\x01\x00\x00\x00\x00\x00\x42/g"]),
+# "passthru":"true"
+#},
+#{
+# "name":"s2c_debug",
+# "direction":"s2c",
+# "action":rule.Debug()
+#},
+#{
+# "name":"c2s_debug",
+# "direction":"c2s",
+# "action":rule.Debug()
+#},
 #{
 # "name":"s2c_nothing", 
 # "direction":"s2c", 
