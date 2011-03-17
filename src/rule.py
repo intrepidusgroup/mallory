@@ -241,6 +241,7 @@ class Rule(object):
         self.direction = self.make_str(direction)
         self.update_matching_crit()
         self.action = action
+        self.passthru = False
         
     def match(self, **kargs):#addr="", port="", direction="",payload=""):
         #print "kargs: ",kargs
@@ -294,11 +295,9 @@ class Rule(object):
         return x
     
     def __getstate__(self):
-       odict = self.__dict__.copy()
-       del odict['matching_funcs']
-       # there is a way to serialize functions, but i
-       # dont remember this
-       return odict
+        odict = self.__dict__.copy()
+        del odict['matching_funcs']
+        return odict
     
     def __setstate__(self, mdict):
         self.init_invariants()
@@ -307,12 +306,11 @@ class Rule(object):
        
 
     def __str__(self):
-        addr = self.addr
-        port = self.port
-        direction = self.direction
         crit = []
         for i in self.matching_crit:
             crit.append( "%s:%s"%(i, self.__dict__.get(i,"*")))
+        
+        crit.append("passthru:%s" % (str(self.passthru)))
         
         return "<class Rule %s -- %s >" % \
             (self.name, " ".join(crit))

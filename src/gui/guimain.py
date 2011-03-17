@@ -11,15 +11,16 @@ import muckpipe
 import base64
 import pickle
 import Queue
+import traceback
 from PyQt4 import QtGui, QtCore, Qt
 from TCPEdit import Ui_MainWindow
 from debug import DebugEvent
 from binascii import hexlify, unhexlify
 from threading import Lock
-from SimpleXMLRPCServer import SimpleXMLRPCServer
+import Pyro.core
 import logging
 from config import Config
-
+# Pyro imports go here
 
 #TODO: Refactor into separate class
 class ObjectInspectorHandler():
@@ -101,32 +102,34 @@ class ObjectInspectorHandler():
                 child = Qt.QTreeWidgetItem(root,[ str(k)])
                 self.treeWidget.expandItem(child)
                 self._recurse(v, child)
-class XMLRPCGuiServer(Qt.QThread):
-    """The XMLRPCGuiServer is a server for the GUI where the mallory application
-    can push events"""
 
-    #This signal is emitted when objects are received
-    objectReceived = Qt.SIGNAL("objectReceived")
-
-    def __init__(self, objectReceiver):
-        Qt.QThread.__init__(self)
-        self.objectReceiver = objectReceiver
-        self.log = logging.getLogger("mallorygui")
-
-    def run(self):
-        try:
-            self.log.info("GUI: starting XML RPC Server")
-            server = SimpleXMLRPCServer(addr=("localhost", 20759), logRequests=False, allow_none=1)
-            server.register_function(self.pushObject, "push")
-            server.serve_forever()
-        except:
-            self.log.error("GUI: rpcserver: error connecting to remote")
-            self.log.error(sys.exc_info())
-
-    def pushObject(self, object):
-        """Objects are pushed here form the object editor implementation """
-        self.objectReceiver.addObject(object)
-        #self.emit(self.objectReceived)
+# RPCF - This method will have to be replaced to use Pyro             
+#class XMLRPCGuiServer(Qt.QThread):
+#    """The XMLRPCGuiServer is a server for the GUI where the mallory application
+#    can push events"""
+#
+#    #This signal is emitted when objects are received
+#    objectReceived = Qt.SIGNAL("objectReceived")
+#
+#    def __init__(self, objectReceiver):
+#        Qt.QThread.__init__(self)
+#        self.objectReceiver = objectReceiver
+#        self.log = logging.getLogger("mallorygui")
+#
+#    def run(self):
+#        try:
+#            self.log.info("GUI: starting XML RPC Server")
+#            server = SimpleXMLRPCServer(addr=("localhost", 20759), logRequests=False, allow_none=1)
+#            server.register_function(self.pushObject, "push")
+#            server.serve_forever()
+#        except:
+#            self.log.error("GUI: rpcserver: error connecting to remote")
+#            self.log.error(sys.exc_info())
+#
+#    def pushObject(self, object):
+#        """Objects are pushed here form the object editor implementation """
+#        self.objectReceiver.addObject(object)
+#        #self.emit(self.objectReceived)
 
 class MalloryGui(QtGui.QMainWindow):
     
@@ -139,19 +142,16 @@ class MalloryGui(QtGui.QMainWindow):
         self.app = None
         self.streammod = StreamTable(self)
         self.rulemod = RuleGui.RuleList(self)
-        self.proxy = xmlrpclib.ServerProxy("http://localhost:20757")
-        self.objectproxy = xmlrpclib.ServerProxy("http://localhost:20758")
+        
+        debugger_uri = "PYROLOC://127.0.0.1:7766/debugger"
+        self.remote_debugger = Pyro.core.getProxyForURI(debugger_uri)
+        #self.proxy = xmlrpclib.ServerProxy("http://localhost:20757")
+        #self.objectproxy = xmlrpclib.ServerProxy("http://localhost:20758")
         self.curdebugevent = ""
 
         self.log = logging.getLogger("mallorygui")
         config = Config()
         config.logsetup(self.log)
-
-
-
-
-
-
         
     def connecthandlers(self):
         self.main.btnicept.clicked.connect(self.handle_interceptclick)
@@ -178,7 +178,7 @@ class MalloryGui(QtGui.QMainWindow):
         #status = self.statusBar()
         self.updateStatusBar()
         # Rules come in base64 encoded and pickled
-        rules = pickle.loads(base64.b64decode(self.proxy.getrules()))
+        rules = pickle.loads(base64.b64decode(self.remote_debugger.getrules()))
         
         for rule in rules:
             print("MalloryGui.setUp: %s" % (str(rule)))
@@ -191,12 +191,13 @@ class MalloryGui(QtGui.QMainWindow):
         self.objectInspector = ObjectInspectorHandler(self.main.treeWidget_objectinspector, self.main.plainTextEdit_objectInspector, self.main.listWidget_objects)
 
         # Start the gui server
-        self.server = XMLRPCGuiServer(self.objectInspector)
-        self.server.start()
+        #self.server = XMLRPCGuiServer(self.objectInspector)
+        #self.server.start()
         
         #Let mallory know we are connected
         try:
-            self.objectproxy.connect() 
+            #self.objectproxy.connect()
+            pass 
         except:
             self.log.error("Could not connect to object proxy RPC server");
 
@@ -209,9 +210,9 @@ class MalloryGui(QtGui.QMainWindow):
 
     def handle_interceptclick(self):
         if self.main.btnicept.isChecked():
-            self.proxy.setdebug(True)     
+            self.remote_debugger.setdebug(True)     
         else:
-            self.proxy.setdebug(False)
+            self.remote_debugger.setdebug(False)
         self.updateStatusBar()
         
     def updateStatusBar(self):
@@ -223,19 +224,19 @@ class MalloryGui(QtGui.QMainWindow):
          
     def handle_cellclick(self, index):
         streamdata = self.streammod.getrowdata(index.row())
-        self.main.textstream.setPlainText(streamdata['data'])
-        self.hexedit.loadData(streamdata['data'])
+        self.main.textstream.setPlainText(streamdata.data)
+        self.hexedit.loadData(streamdata.data)
         self.curdebugevent = streamdata
                     
         #print "DATA FOR: %s" % (streamdata)
         
     def handle_savehex(self, checked):
         editdata = self.hexedit.getData()
-        self.curdebugevent['data'] = editdata
+        self.curdebugevent.data = editdata
         
     def handle_savetext(self, checked):
         editdata = self.main.textstream.toPlainText()
-        self.curdebugevent['data'] = str(editdata)
+        self.curdebugevent.data = str(editdata)
         
     def handle_menuflowconfig(self, checked):
         self.flowconfig.show()
@@ -260,33 +261,34 @@ class MalloryGui(QtGui.QMainWindow):
     ##### See RuleGui.py for these methods
     def handle_ruleadd(self):
         self.ruleedit.handle_ruleadd()
-        self.proxy.updaterules(self.ruleedit.get_enc_rulepickle())
+        self.remote_debugger.updaterules(self.ruleedit.get_enc_rulepickle())
     def handle_ruledel(self):
         self.ruleedit.handle_ruledel()
-        self.proxy.updaterules(self.ruleedit.get_enc_rulepickle())           
+        self.remote_debugger.updaterules(self.ruleedit.get_enc_rulepickle())           
     def handle_ruledown(self):
         self.ruleedit.handle_ruledown()
-        self.proxy.updaterules(self.ruleedit.get_enc_rulepickle())        
+        self.remote_debugger.updaterules(self.ruleedit.get_enc_rulepickle())        
     def handle_ruleup(self):
         self.ruleedit.handle_ruleup()
-        self.proxy.updaterules(self.ruleedit.get_enc_rulepickle())        
+        self.remote_debugger.updaterules(self.ruleedit.get_enc_rulepickle())        
     def handle_ruleactivated(self, index):
         self.ruleedit.handle_ruleactivated(index)        
     def handle_saverule(self):
         rules = self.ruleedit.handle_saverule()
-        self.proxy.updaterules(rules)       
+        print rule       
+        self.remote_debugger.updaterules(rules)       
         
     
     def send_cur_de(self, debugevent):
         if debugevent != "" and debugevent is not None:
             # Encode, and then decode, so the editors have the right data
-            debugevent['data'] = \
-                str(debugevent['data']).encode("string-escape")
+            #debugevent['data'] = \
+            #    str(debugevent['data']).encode("string-escape")
                         
-            self.proxy.send_de(debugevent)
+            self.remote_debugger.send_de(debugevent)
             
-            debugevent['data'] = \
-                str(debugevent['data']).decode("string-escape")
+            #debugevent['data'] = \
+            #    str(debugevent['data']).decode("string-escape")
                             
             self.main.tablestreams.resizeColumnsToContents()
                         
@@ -300,8 +302,8 @@ class MalloryGui(QtGui.QMainWindow):
             self.main.tablestreams.dataChanged(topleftidx, botrightidx)
             
             for item in self.streammod.requests:
-                if item['eventid'] == debugevent['eventid']:
-                    item['status'] = "S"
+                if item.eventid == debugevent.eventid:
+                    item.status = "S"
             return True
         
         return False
@@ -312,7 +314,7 @@ class MalloryGui(QtGui.QMainWindow):
         eventcnt = 0
         while True:
             try:
-                eventlist = self.proxy.getdebugq()
+                eventlist = self.remote_debugger.getdebugq()
                  
                 # Currently only handling one selection 
                 selections = self.main.tablestreams.selectionModel()
@@ -320,20 +322,18 @@ class MalloryGui(QtGui.QMainWindow):
              
                 row = -1
                 if len(selectlist) == 1:
-                    selectindex = selectlist[0]
+                    selectindex = selectlist [0]
                     row = selectindex.row()
                                                 
                 eventsin = 0
                 
-                # Should be acquiring a mutex here
-                for event in eventlist:
-                    # I am doing things the hard way here. Each debug event should
-                    # be an actual DebugEvent. Set the debug event instance __dict__
-                    # to the dict that comes in off of the wire. 
+                #for remoteitem in eventlist:
+                #    print "Got remote event: %s:%s" % (remoteitem.__class__, remoteitem)
                     
-                    event['cnt'] = eventcnt
-                    event['status'] = "U"
-                    event['data'] = event['data'].decode("string-escape")
+                # Should be acquiring a mutex here
+                for event in eventlist:                    
+                    event.cnt = eventcnt
+                    event.status = "U"
 
                     position = self.streammod.rowCount(None)
                     self.streammod.insertRows(position, 1, QtCore.QModelIndex(), event)
@@ -362,6 +362,7 @@ class MalloryGui(QtGui.QMainWindow):
             except:
                 print "[*] MalloryGui: check_for_de: exception in de check loop"
                 print sys.exc_info()
+                traceback.print_exc()
          
 class StreamListDelegate(QtGui.QItemDelegate):
     def __init__(self, parent, model):
@@ -372,8 +373,8 @@ class StreamListDelegate(QtGui.QItemDelegate):
         rowdata = self.model.getrowdata(index.row())
         
         color = QtCore.Qt.white
-        if "status" in rowdata.keys():
-            if rowdata["status"] == "S":
+        if "status" in rowdata.__dict__:
+            if rowdata.status == "S":
                 color = QtGui.QColor(204, 255, 204) # Light green
         else:                    
             color = QtGui.QColor(255, 204, 204) # Light red
@@ -406,7 +407,7 @@ class StreamTable(QtCore.QAbstractTableModel):
         
         nextreq = None
         for request in self.requests:
-            if request['status'] == "U":
+            if request.status == "U":
                 nextreq = request
             
         if nextreq:
@@ -465,10 +466,10 @@ class StreamTable(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.BackgroundRole:
             data = self.getrowdata(index.row())
             col = self.bgCol_c2sSent
-            if data["direction"] == "s2c":
+            if data.direction == "s2c":
                 col = self.bgCol_s2cSent
 
-            if "status" in data.keys() and data["status"] == 'U':
+            if "status" in data.__dict__ and data.status == 'U':
                 col = self.saturate(col)
             return QtCore.QVariant(col)
                     
@@ -477,7 +478,7 @@ class StreamTable(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.ForegroundRole:
             data = self.getrowdata(index.row())
             col = self.fgCol_unsent
-            if "status" in data.keys() and data["status"] == 'S':
+            if "status" in data.__dict__ and data.status == 'S':
                 col = self.fgCol_sent
             return QtCore.QVariant(col)
                             
@@ -485,22 +486,22 @@ class StreamTable(QtCore.QAbstractTableModel):
             data = self.getrowdata(index.row())
 
             if index.column() == 0:
-                return data['cnt']
+                return data.cnt
             if index.column() == 1:
-                return data['direction']
+                return data.direction
             if index.column() == 2:
-                return str(len(data['data']))
+                return str(len(data.data))
             if index.column() == 3:
-                return "%s:%s" % (data['source'][0], data['source'][1])
+                return "%s:%s" % (data.source[0], data.source[1])
             if index.column() == 4:
-                return "%s:%s" % (data['destination'][0], data['destination'][1])
+                return "%s:%s" % (data.destination[0], data.destination[1])
             if index.column() == 5:
-                if "status" in data.keys():
-                    return data['status']
+                if "status" in data.__dict__:
+                    return data.status
                 else:
                     return "U"                
             if index.column() == 5:
-                return data['eventid']   
+                return data.eventid
         else:
             return QtCore.QVariant()                   
     

@@ -82,6 +82,7 @@ import logging
 import traceback
 import struct
 import ruleconfig
+import rpc
 
 ### MALLORY IMPORTS ###
 import netfilter
@@ -168,6 +169,7 @@ class Mallory(Subject):
         self.dbname = self.opts.trafficdb
         self.debugon = False
         self.debugger = Debugger(ruleconfig.globalrules)
+        self.rpcserver = rpc.RPCServer()
         self.nftool = netfilter.NetfilterTool()
         self.log = logging.getLogger("mallorymain")
         config.logsetup(self.log)
@@ -260,7 +262,9 @@ class Mallory(Subject):
         dbConn = TrafficDb(self.dbname)
 
         # Kick off a thread for the debugger
-        thread.start_new_thread(self.debugger.rpcserver, ())
+        #thread.start_new_thread(self.debugger.rpcserver, ())
+        self.rpcserver.add_remote_obj(self.debugger, "debugger")
+        thread.start_new_thread(self.rpcserver.start_server, ())
 
         try:
             # Create proxy and wait for connections

@@ -368,6 +368,7 @@ class TcpProtocol(Protocol):
                 
                 shoulddebug = True
                 
+
                 if self.rules is not None:
                     shoulddebug, string = self.processrules(string, conndata)
                     
@@ -491,7 +492,8 @@ class TcpProtocol(Protocol):
         # TODO: Use a metaclass/mixin to add debugging to instances be they UDP
         # or TcpProtocol classes. This will make the debugging functionality
         # Easy to attach to any class instance and allow it to remain more
-        # separate as it really does not belong in a protocol   
+        # separate as it really does not belong in a protocol
+        
         if self.debugon == False:# or conndata.direction == "c2s": #(USE THIS TO TEST SOME PROTOS. TURN THIS INTO A FEATURE)
             return data
         
@@ -539,6 +541,10 @@ class TcpProtocol(Protocol):
         return data
     
     def update(self, publisher, **kwargs):
+        """
+        Incoming updates that TcpProtocol is interested in. This will include
+        events that TcpProtocol is waiting for from the stream debugger
+        """
         super(TcpProtocol, self).update(publisher, **kwargs)
         
         if "event" not in kwargs:
@@ -560,10 +566,7 @@ class TcpProtocol(Protocol):
             self.log.info("BaseTcp: Setting debugon to: %s" % (self.debugon))
         
         if event=="debugevent":
-            # This will come in as a dictionary. Set it to a DebugEvent
             de = kwargs["debugevent"]
-#            de = DebugEvent()            
-#            de.__dict__ = debugevent
             if de.eventid == self.waitfor[de.direction]:
                 self.debugqs[de.direction].put(de)                
                 self.log.debug("BaseTcp[%d]: putting: [%s] in queue debugevent. waiting for[%s]" % (id(self), de.eventid, self.waitfor[de.direction]))
