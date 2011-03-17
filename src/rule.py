@@ -297,8 +297,7 @@ class Rule(object):
         return x
     
     def __getstate__(self):
-        odict = self.__dict__.copy()
-        print "Pickling: ", odict     
+        odict = self.__dict__.copy()   
         del odict['matching_funcs']
         return odict
     

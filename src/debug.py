@@ -124,9 +124,9 @@ class Debugger(Subject, Pyro.core.ObjBase):
             return []
         
         for rule in self.rules:
-            self.log.debug("Debugger.getrulesXXX: %s" % (str(rule)))
+            self.log.debug("Debugger.getrules: %s" % (str(rule)))
 
-        self.log.debug("Debugger.getrulesXXX: client requested rules -  %s" % (self.rules))
+        self.log.debug("Debugger.getrules: client requested rules -  %s" % (self.rules))
         
         return self.rules
     
