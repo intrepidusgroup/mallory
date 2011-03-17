@@ -124,22 +124,14 @@ class Debugger(Subject, Pyro.core.ObjBase):
             return []
         
         for rule in self.rules:
-            self.log.debug("Debugger.getrules: %s" % (str(rule)))
+            self.log.debug("Debugger.getrulesXXX: %s" % (str(rule)))
 
-        self.log.debug("Debugger.getrules: client requested rules -  %s" % (self.rules))
-        #p_rules = []
-            
-        #for i in self.rules:
-        #   p_rules.append(pickle.dumps(i))
-        #self.log.debug(p_rules)
-        e = base64.b64encode(pickle.dumps(self.rules))
+        self.log.debug("Debugger.getrulesXXX: client requested rules -  %s" % (self.rules))
         
-        return e
+        return self.rules
     
     def updaterules(self, rulearray):
-        d = base64.b64decode(rulearray)
-        unpickled = pickle.loads(d)
-        self.rules = unpickled
+        self.rules = rulearray
         
         for rule in self.rules:
             self.log.debug("Debugger.updaterules: %s" % (str(rule)))
@@ -149,7 +141,7 @@ class Debugger(Subject, Pyro.core.ObjBase):
 #                    self.log.debug("Debugger.updaterules.muck: %s" %(binascii.hexlify(muck)))
                 
             
-        self.log.debug("Debugger.updaterules: %s" % (unpickled))
-        self.notify(event="updaterules", rules=unpickled)
+        self.log.debug("Debugger.updaterules: %s" % (rulearray))
+        self.notify(event="updaterules", rules=rulearray)
         
         return ""             

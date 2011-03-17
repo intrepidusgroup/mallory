@@ -179,7 +179,7 @@ class Rule(object):
         self.matching = []
         
         self.name = str(kargs.get('name', ""))
-        self.passthru = self.make_bool(kargs.get('passthru', "false"))                
+        self.passthru = kargs.get('passthru', False)                
         # The seemingly redundant string calls are important for PyQt based code
         self.addr = self.make_str(str(kargs.get('addr', "*")))
         self.port = self.make_port(str(kargs.get('port', "*")))
@@ -261,6 +261,8 @@ class Rule(object):
             # TODO: interesting feature is ability to do
             # confidence and fuzzy/partial matching
             arg = kargs.get(crit)
+            
+            # Convert everything to a string (catches ports and others)
             if isinstance(arg, int) or isinstance(arg,long):
                arg = str(arg)
             
@@ -296,6 +298,7 @@ class Rule(object):
     
     def __getstate__(self):
         odict = self.__dict__.copy()
+        print "Pickling: ", odict     
         del odict['matching_funcs']
         return odict
     

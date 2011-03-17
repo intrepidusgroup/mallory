@@ -16,7 +16,7 @@ class RuleEdit(object):
         self.rulemod = rulemod
     
     def get_enc_rulepickle(self):
-        return base64.b64encode(pickle.dumps(self.rulemod.getRules()))
+        return self.rulemod.getRules()
     
     def handle_ruleadd(self):
         rules = self.main.listrules
@@ -121,9 +121,8 @@ class RuleEdit(object):
         self.rulemod.setRule(int(selected.row()), newrule)
         self.rulemod.reset()
          
-        rulepickle = base64.b64encode(pickle.dumps(self.rulemod.getRules()))
         
-        return rulepickle
+        return self.rulemod.getRules()
     
     def rulefromform(self):
         name = str(self.main.linename.text())
@@ -148,9 +147,9 @@ class RuleEdit(object):
         except:
            pass
        
-        passthru = "false"
+        passthru = False
         if self.main.radio_passthru_yes.isChecked():
-            passthru = "true"
+            passthru = True
             
         action = rule.Nothing()
         if self.main.radio_type_debug.isChecked():

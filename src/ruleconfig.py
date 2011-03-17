@@ -55,7 +55,7 @@ userrules = [
 # "direction":"c2s",
 # "port":"5900",
 # "action":rule.Muck(["\x04\x01\x00\x00\x00\x00\x00\x41/\x04\x01\x00\x00\x00\x00\x00\x42/g"]),
-# "passthru":"true"
+# "passthru":true
 #},
 #{
 # "name":"s2c_debug",

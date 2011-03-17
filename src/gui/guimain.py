@@ -178,11 +178,10 @@ class MalloryGui(QtGui.QMainWindow):
         #status = self.statusBar()
         self.updateStatusBar()
         # Rules come in base64 encoded and pickled
-        rules = pickle.loads(base64.b64decode(self.remote_debugger.getrules()))
+        rules = self.remote_debugger.getrules()
         
         for rule in rules:
             print("MalloryGui.setUp: %s" % (str(rule)))
-            print "MalloryGui.setUp: %s" % rule.port
         
         self.rulemod.rules = rules
         
