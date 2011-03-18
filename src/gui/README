@@ -1,0 +1,6 @@
+To translate the UI files to python code pyuic4 must be run
+
+pyuic4 file.ui > file.py
+
+This will translate the file to python so that the running programming using 
+the GUI will actually use the newly updated .ui file changes
