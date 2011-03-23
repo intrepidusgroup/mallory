@@ -113,7 +113,7 @@
                </size>
               </property>
               <property name="rowCount">
-               <number>1</number>
+               <number>2</number>
               </property>
               <property name="columnCount">
                <number>3</number>
@@ -124,6 +124,11 @@
               <attribute name="verticalHeaderVisible">
                <bool>false</bool>
               </attribute>
+              <row>
+               <property name="text">
+                <string>Test</string>
+               </property>
+              </row>
               <row/>
               <column>
                <property name="text">
