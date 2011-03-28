@@ -356,7 +356,7 @@ class Mallory(Subject):
                     self.debugger.attach(protoinst)
                     protoinst.attach(self.debugger)
                     
-                    #RAJRAJRAJ
+                    # Which Protocol manager to which protocol
                     for plugin_manager in self.configured_plugin_managers:
                         if sport == plugin_manager.server_port:
                             protoinst.attach_plugin_manager(plugin_manager)
