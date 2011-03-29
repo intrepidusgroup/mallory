@@ -5,6 +5,7 @@ import thread
 import mutex
 import HexEdit
 import RuleGui
+import InterfacesGui
 import flowconfig
 import rule
 import muckpipe
@@ -142,6 +143,9 @@ class MalloryGui(QtGui.QMainWindow):
         self.app = None
         self.streammod = StreamTable(self)
         self.rulemod = RuleGui.RuleList(self)
+                
+        # Initialized after setupUi runs
+        self.interfacesgui = None
         
         debugger_uri = "PYROLOC://127.0.0.1:7766/debugger"
         self.remote_debugger = Pyro.core.getProxyForURI(debugger_uri)
@@ -347,7 +351,7 @@ class MalloryGui(QtGui.QMainWindow):
 #                    if row > -1:
 #                        idx = self.streammod.createIndex(row, 0)
 #                        self.main.tablestreams.setCurrentIndex(idx)
-                         
+
                 # Should probably be releasing the mutex we should acquire here
                 time.sleep(.1)
                 
@@ -503,17 +507,20 @@ class StreamTable(QtCore.QAbstractTableModel):
                 return data.eventid
         else:
             return QtCore.QVariant()                   
-    
-    
+
 def main():
     app = QtGui.QApplication(sys.argv)
     window = MalloryGui()    
     window.app = app    
-    window.main.setupUi(window)    
+    window.main.setupUi(window) 
     window.connecthandlers()
     window.setUp()
     window.setupModels()
-    
+  
+    # Interfaces Editor Gui
+    window.interfacesgui = InterfacesGui.InterfacesGui(window.main.tableinterfaces)
+   
+    #window.main.tab_protocols
     # Kick off debug event loop in a separate thread
     thread.start_new_thread(window.check_for_de, ())
     

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'gui/TCPEdit.ui'
+# Form implementation generated from reading ui file 'TCPEdit.ui'
 #
-# Created: Thu Mar 17 22:44:51 2011
+# Created: Mon Mar 28 16:33:42 2011
 #      by: PyQt4 UI code generator 4.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -54,28 +54,12 @@ class Ui_MainWindow(object):
         self.label_11.setFont(font)
         self.label_11.setObjectName("label_11")
         self.verticalLayout_5.addWidget(self.label_11)
+        self.tableinterfaces = QtGui.QTableView(self.verticalLayoutWidget)
+        self.tableinterfaces.setObjectName("tableinterfaces")
+        self.tableinterfaces.verticalHeader().setVisible(False)
+        self.verticalLayout_5.addWidget(self.tableinterfaces)
         spacerItem = QtGui.QSpacerItem(16, 16, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         self.verticalLayout_5.addItem(spacerItem)
-        self.tableWidget = QtGui.QTableWidget(self.verticalLayoutWidget)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
-        self.tableWidget.setSizePolicy(sizePolicy)
-        self.tableWidget.setMinimumSize(QtCore.QSize(0, 0))
-        self.tableWidget.setRowCount(1)
-        self.tableWidget.setColumnCount(3)
-        self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(3)
-        self.tableWidget.setRowCount(1)
-        item = QtGui.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(0, item)
-        item = QtGui.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(1, item)
-        item = QtGui.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(2, item)
-        self.tableWidget.verticalHeader().setVisible(False)
-        self.verticalLayout_5.addWidget(self.tableWidget)
         self.btnrefreshifaces = QtGui.QPushButton(self.verticalLayoutWidget)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -94,6 +78,9 @@ class Ui_MainWindow(object):
         self.verticalLayout_8.addWidget(self.label_12)
         self.horizontalLayout_12.addWidget(self.splitter_5)
         self.tabWidget_2.addTab(self.tab_interfaces, "")
+        self.tab_protocols = QtGui.QWidget()
+        self.tab_protocols.setObjectName("tab_protocols")
+        self.tabWidget_2.addTab(self.tab_protocols, "")
         self.tab_streams = QtGui.QWidget()
         self.tab_streams.setObjectName("tab_streams")
         self.horizontalLayout_3 = QtGui.QHBoxLayout(self.tab_streams)
@@ -454,12 +441,10 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "TCP Debugger", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_2.setToolTip(QtGui.QApplication.translate("MainWindow", "An IP address to match. Blank for wildcard match.", None, QtGui.QApplication.UnicodeUTF8))
         self.label_11.setText(QtGui.QApplication.translate("MainWindow", "Networking Interfaces", None, QtGui.QApplication.UnicodeUTF8))
-        self.tableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "Interface Name", None, QtGui.QApplication.UnicodeUTF8))
-        self.tableWidget.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "Perform MiTM", None, QtGui.QApplication.UnicodeUTF8))
-        self.tableWidget.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Outbound", None, QtGui.QApplication.UnicodeUTF8))
         self.btnrefreshifaces.setText(QtGui.QApplication.translate("MainWindow", "Refresh Interfaces", None, QtGui.QApplication.UnicodeUTF8))
         self.label_12.setText(QtGui.QApplication.translate("MainWindow", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_interfaces), QtGui.QApplication.translate("MainWindow", "1. Interfaces", None, QtGui.QApplication.UnicodeUTF8))
+        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_protocols), QtGui.QApplication.translate("MainWindow", "2. Protocols", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("MainWindow", "Actions:", None, QtGui.QApplication.UnicodeUTF8))
         self.btnicept.setToolTip(QtGui.QApplication.translate("MainWindow", "Tell Mallory the Debugger wants to intercept traffic", None, QtGui.QApplication.UnicodeUTF8))
         self.btnicept.setText(QtGui.QApplication.translate("MainWindow", "Intercept", None, QtGui.QApplication.UnicodeUTF8))

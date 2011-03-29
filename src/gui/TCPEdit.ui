@@ -83,6 +83,16 @@
              </widget>
             </item>
             <item>
+             <widget class="QTableView" name="tableinterfaces">
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -97,76 +107,6 @@
                </size>
               </property>
              </spacer>
-            </item>
-            <item>
-             <widget class="QTableWidget" name="tableWidget">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="rowCount">
-               <number>2</number>
-              </property>
-              <property name="columnCount">
-               <number>3</number>
-              </property>
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
-              <row>
-               <property name="text">
-                <string>Test</string>
-               </property>
-              </row>
-              <row/>
-              <column>
-               <property name="text">
-                <string>Interface Name</string>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Sans Serif</family>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>Perform MiTM</string>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Sans Serif</family>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>Outbound</string>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Sans Serif</family>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-              </column>
-             </widget>
             </item>
             <item>
              <widget class="QPushButton" name="btnrefreshifaces">
@@ -200,6 +140,11 @@
          </widget>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="tab_protocols">
+       <attribute name="title">
+        <string>2. Protocols</string>
+       </attribute>
       </widget>
       <widget class="QWidget" name="tab_streams">
        <attribute name="title">
