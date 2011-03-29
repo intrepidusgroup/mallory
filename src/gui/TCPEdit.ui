@@ -137,8 +137,33 @@
            <layout class="QVBoxLayout" name="verticalLayout_8">
             <item>
              <widget class="QLabel" name="label_12">
+              <property name="font">
+               <font>
+                <family>Sans Serif</family>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
               <property name="text">
-               <string>TextLabel</string>
+               <string>Help</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPlainTextEdit" name="texteditdesc">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+              <property name="plainText">
+               <string>The first step to running Mallory is configuring your networking interfaces. 
+
+MiTM interfaces will be interfaces that are going to have all of their traffic MiTMed. This includes PPP interfaces, such as ppp0, from PPTPD VPN clients as well as any other interfaces that are being used by victims as gateways. 
+
+The outbound interface is one interface used to route the vicitmized and local machine traffic to the Internet or destination. This interface needs to be able to get to any network locations the victims are attempting to access. Usually this is the Internet or some local testing servers. 
+
+When you are finished click &quot;Save Configuration&quot; and Mallory will do the rest. 
+
+Note: Saving will completely rewrite your iptables, enable IP forwarding and redirect all traffic.</string>
               </property>
              </widget>
             </item>

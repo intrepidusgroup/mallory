@@ -69,13 +69,15 @@ class InterfacesTableModel(QtCore.QAbstractTableModel):
         ifs_list = ni.get_ifs().keys()
         ifs_list.sort()
         self.if_cfg.set_interfaces(ifs_list)
+        self.emit_data_changed()
              
     def save_config(self):
         self.if_cfg.save()
     
     def emit_data_changed(self):
         top_left = self.createIndex(0, 0)
-        bottom_right = self.createIndex(3, self.if_cfg.num_ifs())
+        bottom_right = self.createIndex(len(self.columns.keys()), 
+                                        self.if_cfg.num_ifs())
         self.dataChanged.emit(top_left, bottom_right)  
              
     ## Required methods to subclass QAbstractTableModel    

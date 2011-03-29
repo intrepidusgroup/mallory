@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'TCPEdit.ui'
+# Form implementation generated from reading ui file 'gui/TCPEdit.ui'
 #
-# Created: Tue Mar 29 13:37:44 2011
+# Created: Tue Mar 29 16:45:26 2011
 #      by: PyQt4 UI code generator 4.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -77,8 +77,17 @@ class Ui_MainWindow(object):
         self.verticalLayout_8 = QtGui.QVBoxLayout(self.verticalLayoutWidget_2)
         self.verticalLayout_8.setObjectName("verticalLayout_8")
         self.label_12 = QtGui.QLabel(self.verticalLayoutWidget_2)
+        font = QtGui.QFont()
+        font.setFamily("Sans Serif")
+        font.setWeight(75)
+        font.setBold(True)
+        self.label_12.setFont(font)
         self.label_12.setObjectName("label_12")
         self.verticalLayout_8.addWidget(self.label_12)
+        self.texteditdesc = QtGui.QPlainTextEdit(self.verticalLayoutWidget_2)
+        self.texteditdesc.setReadOnly(True)
+        self.texteditdesc.setObjectName("texteditdesc")
+        self.verticalLayout_8.addWidget(self.texteditdesc)
         self.horizontalLayout_12.addWidget(self.splitter_5)
         self.tabWidget_2.addTab(self.tab_interfaces, "")
         self.tab_protocols = QtGui.QWidget()
@@ -446,7 +455,16 @@ class Ui_MainWindow(object):
         self.label_11.setText(QtGui.QApplication.translate("MainWindow", "Networking Interfaces", None, QtGui.QApplication.UnicodeUTF8))
         self.btnsaveifcfg.setText(QtGui.QApplication.translate("MainWindow", "Save Configuration", None, QtGui.QApplication.UnicodeUTF8))
         self.btnrefreshifaces.setText(QtGui.QApplication.translate("MainWindow", "Refresh Interfaces", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_12.setText(QtGui.QApplication.translate("MainWindow", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_12.setText(QtGui.QApplication.translate("MainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
+        self.texteditdesc.setPlainText(QtGui.QApplication.translate("MainWindow", "The first step to running Mallory is configuring your networking interfaces. \n"
+"\n"
+"MiTM interfaces will be interfaces that are going to have all of their traffic MiTMed. This includes PPP interfaces, such as ppp0, from PPTPD VPN clients as well as any other interfaces that are being used by victims as gateways. \n"
+"\n"
+"The outbound interface is one interface used to route the vicitmized and local machine traffic to the Internet or destination. This interface needs to be able to get to any network locations the victims are attempting to access. Usually this is the Internet or some local testing servers. \n"
+"\n"
+"When you are finished click \"Save Configuration\" and Mallory will do the rest. \n"
+"\n"
+"Note: Saving will completely rewrite your iptables, enable IP forwarding and redirect all traffic.", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_interfaces), QtGui.QApplication.translate("MainWindow", "1. Interfaces", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_protocols), QtGui.QApplication.translate("MainWindow", "2. Protocols", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("MainWindow", "Actions:", None, QtGui.QApplication.UnicodeUTF8))
