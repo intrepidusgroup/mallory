@@ -7,6 +7,7 @@ any POSIX compliant system. Only tested on Linux.
 """
 from ctypes import *
 
+import subprocess
 
 # Structures as defined by:
 # http://www.kernel.org/doc/man-pages/online/pages/man3/getifaddrs.3.html
@@ -24,9 +25,7 @@ class ifaddrs(Structure):
                 ("ifa_ifu", ifa_ifu),
                 ("ifa_data", c_void_p)
                 ]
-    
 
-    
 class InterfacesConfigured(object):
     def __init__(self):
         """
@@ -41,7 +40,14 @@ class InterfacesConfigured(object):
         self.interfaces = []
         self.mitm_interfaces = []
         self.outbound_interfaces = []
-        
+        self.banned_interfaces = ['lo']
+     
+    def set_interfaces(self, interfaces):
+        self.interfaces = interfaces
+        for interface in self.interfaces:
+            if interface in self.banned_interfaces:
+                self.interfaces.remove(interface)
+                
     def get_idx_for_if(self, interface):
         return self.interfaces.index(interface)
     
@@ -111,7 +117,48 @@ class InterfacesConfigured(object):
         self.interfaces = []
         self.mitm_interfaces = []
         self.outbound_interfaces = []
+     
+    def save(self):
+        """
+        This method saves the configuration of the MiTM and Outbond interfaces
         
+        Note: Dire security implications here as we are calling a bunch of
+        shell commands with *potentially* untrusted input. The only real input
+        are network interface device names. We figure, if an attacker can get
+        a malicious interface name onto your system to sneak into these shell
+        commands you were already in trouble. Probably owned by an APT. 
+        """
+        cmds = []
+        
+        # Turn on ip_forwarding. Linux only
+        cmds.append("echo 1 > /proc/sys/net/ipv4/ip_forward")
+        
+        # Delete all iptables rules and set it to 
+        cmds.append("iptables -F")
+        cmds.append("iptables -X")
+        cmds.append("iptables -t nat -F")
+        cmds.append("iptables -t nat -X")
+        cmds.append("iptables -t mangle -F")
+        cmds.append("iptables -t mangle -X")
+        cmds.append("iptables -P INPUT ACCEPT")
+        cmds.append("iptables -P FORWARD ACCEPT")
+        cmds.append("iptables -P OUTPUT ACCEPT")
+ 
+        # Turn on NAT on the outbound interfaces
+        cmds.append(
+                    ("iptables -t nat -A POSTROUTING -o "
+                    "%s -j MASQUERADE") % self.outbound_interfaces[0]
+                    )
+        for interface in self.get_mitm():
+            cmds.append( ("iptables -t nat -A PREROUTING -j REDIRECT -i "
+                          "%s -p tcp -m tcp --to-ports 20755") %  interface)
+            cmds.append( ("iptables -t nat -A PREROUTING -j REDIRECT -i "
+                          "%s -p udp -m udp --to-ports 20755") %  interface)
+            
+        for cmd in cmds:
+            subprocess.call(cmd, shell=True)
+        
+        print cmds
     def __str__(self):
         return ("ifs:%s, mitm_ifs:%s, outbound_ifs:%s" 
                     % (self.interfaces, self.mitm_interfaces, 

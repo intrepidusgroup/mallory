@@ -518,7 +518,10 @@ def main():
     window.setupModels()
   
     # Interfaces Editor Gui
-    window.interfacesgui = InterfacesGui.InterfacesGui(window.main.tableinterfaces)
+    window.interfacesgui = \
+        InterfacesGui.InterfacesGui(window.main.tableinterfaces,
+                                    window.main.btnsaveifcfg,
+                                    window.main.btnrefreshifaces)
    
     #window.main.tab_protocols
     # Kick off debug event loop in a separate thread

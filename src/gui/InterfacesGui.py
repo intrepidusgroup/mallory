@@ -17,15 +17,31 @@ http://stackoverflow.com/questions/1744348/embedding-a-control-in-a-qtableview
 
 """
 class InterfacesGui(object):
-    def __init__(self, interfaces_table):
+    def __init__(self, interfaces_table, btnsaveifcfg, btnrefreshifaces):
         self.interfaces_table_view = interfaces_table
         self.interfaces_model = InterfacesTableModel()
         self.interfaces_table_view.setModel(self.interfaces_model)
+        self.btnsaveifcfg = btnsaveifcfg
+        self.btnrefreshifaces = btnrefreshifaces
         
         # Set column widths
         for column in self.interfaces_model.columns.keys():
             self.interfaces_table_view.setColumnWidth(column, 150)
+      
+        self.connect_handlers()
         
+    def connect_handlers(self):
+        self.btnsaveifcfg.clicked.connect(self.handle_saveconfig)
+        self.btnrefreshifaces.clicked.connect(self.handle_refreshifaces)
+    
+    def handle_saveconfig(self):
+        print "Handling save confg"
+        self.interfaces_model.save_config()
+     
+    def handle_refreshifaces(self):
+        print "Handling interfaces refresh"
+        self.interfaces_model.refresh_interfaces()
+           
     def resize_content_columns(self):
         self.interfaces_table_view.resizeColumnsToContents()      
         
@@ -38,17 +54,30 @@ class InterfacesTableModel(QtCore.QAbstractTableModel):
                          1: "Perform MiTM",
                          2: "Outbound Interface"
                         }
-                
+           
+        # TODO: Make this a remote mallory server object     
         self.if_cfg = config_if.InterfacesConfigured()
         
         # Get interfaces, sort them, save them in if_cfg
-        ni = config_if.NetworkInterfaces()
-        ifs_list = ni.get_ifs().keys()
-        ifs_list.sort()
-        self.if_cfg.interfaces = ifs_list
+        self.refresh_interfaces()
             
         self.checked = True
     
+    
+    def refresh_interfaces(self):
+        ni = config_if.NetworkInterfaces()
+        ifs_list = ni.get_ifs().keys()
+        ifs_list.sort()
+        self.if_cfg.set_interfaces(ifs_list)
+             
+    def save_config(self):
+        self.if_cfg.save()
+    
+    def emit_data_changed(self):
+        top_left = self.createIndex(0, 0)
+        bottom_right = self.createIndex(3, self.if_cfg.num_ifs())
+        self.dataChanged.emit(top_left, bottom_right)  
+             
     ## Required methods to subclass QAbstractTableModel    
     def rowCount(self, parent):
         return self.if_cfg.num_ifs()
@@ -88,10 +117,8 @@ class InterfacesTableModel(QtCore.QAbstractTableModel):
             else:
                 self.if_cfg.set_outbound(if_name, True)
         
-        
-        top_left = self.createIndex(0, 0)
-        bottom_right = self.createIndex(3, self.if_cfg.num_ifs())
-        self.dataChanged.emit(top_left, bottom_right)
+        # Emit dataChanged signal
+        self.emit_data_changed()
         
         return True
         

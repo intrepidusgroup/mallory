@@ -52,7 +52,7 @@
            <bool>true</bool>
           </property>
           <widget class="QWidget" name="verticalLayoutWidget">
-           <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,0">
+           <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,0,0">
             <property name="spacing">
              <number>6</number>
             </property>
@@ -107,6 +107,13 @@
                </size>
               </property>
              </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnsaveifcfg">
+              <property name="text">
+               <string>Save Configuration</string>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QPushButton" name="btnrefreshifaces">

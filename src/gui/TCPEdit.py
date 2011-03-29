@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'TCPEdit.ui'
 #
-# Created: Mon Mar 28 16:33:42 2011
+# Created: Tue Mar 29 13:37:44 2011
 #      by: PyQt4 UI code generator 4.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -60,6 +60,9 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.addWidget(self.tableinterfaces)
         spacerItem = QtGui.QSpacerItem(16, 16, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         self.verticalLayout_5.addItem(spacerItem)
+        self.btnsaveifcfg = QtGui.QPushButton(self.verticalLayoutWidget)
+        self.btnsaveifcfg.setObjectName("btnsaveifcfg")
+        self.verticalLayout_5.addWidget(self.btnsaveifcfg)
         self.btnrefreshifaces = QtGui.QPushButton(self.verticalLayoutWidget)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -441,6 +444,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "TCP Debugger", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_2.setToolTip(QtGui.QApplication.translate("MainWindow", "An IP address to match. Blank for wildcard match.", None, QtGui.QApplication.UnicodeUTF8))
         self.label_11.setText(QtGui.QApplication.translate("MainWindow", "Networking Interfaces", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnsaveifcfg.setText(QtGui.QApplication.translate("MainWindow", "Save Configuration", None, QtGui.QApplication.UnicodeUTF8))
         self.btnrefreshifaces.setText(QtGui.QApplication.translate("MainWindow", "Refresh Interfaces", None, QtGui.QApplication.UnicodeUTF8))
         self.label_12.setText(QtGui.QApplication.translate("MainWindow", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_interfaces), QtGui.QApplication.translate("MainWindow", "1. Interfaces", None, QtGui.QApplication.UnicodeUTF8))
