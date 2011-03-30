@@ -56,7 +56,7 @@ class InterfacesTableModel(QtCore.QAbstractTableModel):
                         }
            
         # TODO: Make this a remote mallory server object     
-        self.if_cfg = config_if.InterfacesConfigured()
+        self.if_cfg = config_if.ConfigInterfaces()
         
         # Get interfaces, sort them, save them in if_cfg
         self.refresh_interfaces()

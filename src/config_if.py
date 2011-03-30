@@ -26,7 +26,7 @@ class ifaddrs(Structure):
                 ("ifa_data", c_void_p)
                 ]
 
-class InterfacesConfigured(object):
+class ConfigInterfaces(object):
     def __init__(self):
         """
         This class is the model for the configured interfaces. It will hold

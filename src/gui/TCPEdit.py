@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui/TCPEdit.ui'
 #
-# Created: Tue Mar 29 16:45:26 2011
+# Created: Tue Mar 29 17:08:22 2011
 #      by: PyQt4 UI code generator 4.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -458,9 +458,9 @@ class Ui_MainWindow(object):
         self.label_12.setText(QtGui.QApplication.translate("MainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
         self.texteditdesc.setPlainText(QtGui.QApplication.translate("MainWindow", "The first step to running Mallory is configuring your networking interfaces. \n"
 "\n"
-"MiTM interfaces will be interfaces that are going to have all of their traffic MiTMed. This includes PPP interfaces, such as ppp0, from PPTPD VPN clients as well as any other interfaces that are being used by victims as gateways. \n"
+"MiTM interfaces will be interfaces that are going to have all of their traffic MiTMed. This includes PPP interfaces, such as ppp0, from PPTPD VPN clients as well as any other interfaces that are being used by victims as a gateway. \n"
 "\n"
-"The outbound interface is one interface used to route the vicitmized and local machine traffic to the Internet or destination. This interface needs to be able to get to any network locations the victims are attempting to access. Usually this is the Internet or some local testing servers. \n"
+"The outbound interface is one interface used to route the vicitmized and local machine traffic to its destination. This interface needs to be able to access to any network locations the victims are attempting to access. Usually this is the Internet or some local testing servers. \n"
 "\n"
 "When you are finished click \"Save Configuration\" and Mallory will do the rest. \n"
 "\n"

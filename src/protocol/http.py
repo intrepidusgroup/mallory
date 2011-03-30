@@ -192,7 +192,7 @@ class HTTP(TcpProtocol):
             self.trafficdb.qFlow.put((conndata.conncount, \
                 conndata.direction, 0, time.time(), repr(str_request))) 
             self.destination.sendall(str(request))
-                     
+        
         except:
             traceback.print_exc()
             
