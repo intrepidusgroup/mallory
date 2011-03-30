@@ -353,7 +353,7 @@ class TcpProtocol(Protocol):
                 self.log.debug("TcpProtocol: recv bytes:%s" % (conndata.direction))
             
             
-                
+            # There needs to be some exception catching here.      
             string = source.recv(8192)
             
             crc1 = crc32(string)

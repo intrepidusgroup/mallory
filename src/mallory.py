@@ -408,16 +408,15 @@ class Mallory(Subject):
                 # Store the connection data
                 dbConn.qConn.put((connCount, shost, sport, \
                                   caddr[0], caddr[1]))
-                
+
+ 
                 # Kick off the s2c and c2s data pumps
                 thread.start_new_thread(self.forward, (protoinst, clientconn))                
                 serverconn = copy.deepcopy(clientconn)
                 serverconn.direction = 's2c'                
                 thread.start_new_thread(self.forward, (protoinst, serverconn))
 
-                
                 connCount = connCount + 1
-        
         except KeyboardInterrupt:
             self.log.info("Mallory: Goodbye.")
             proxy.close()
@@ -447,12 +446,12 @@ if __name__ == '__main__':
     #    mallory.configure_protocol(nonstandardssl, "add")
     #
     # And now mallory will treat traffic on port 987 as SSL protocol traffic.
-    
-#    mallory.configure_protocol(sslproto.SSLProtocol(None, None, None), "add")    
-    #mallory.configure_protocol(http.HTTP(None, None, None), "add")
-    #mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager ())
+
+    mallory.configure_protocol(sslproto.SSLProtocol(None, None, None), "add")    
+#    mallory.configure_protocol(http.HTTP(None, None, None), "add")
+#    mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager ())
 #    
-    #mallory.configure_protocol(https.HTTPS(None, None, None), "add")
+#    mallory.configure_protocol(https.HTTPS(None, None, None), "add")
 #    mallory.configure_protocol(dnsp.DNS(None, None, None), "add")
 #    mallory.configure_protocol(ssh.SSHProtocol(None, None, None), "add")
     
