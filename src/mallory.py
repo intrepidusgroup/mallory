@@ -92,6 +92,7 @@ from trafficdb import TrafficDb
 from observer import Subject
 from debug import DebugEvent, Debugger
 from binascii import hexlify, unhexlify
+import cert_auth
 
 # These protocols have no dependencies and are safe to import
 from protocol import base, dnsp
