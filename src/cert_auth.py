@@ -126,13 +126,13 @@ class CertAuth(object):
                'Digital Signature, Non Repudiation, Key Encipherment, Data Encipherment')
         ext3.set_critical(1)
        
-        issId = self.ca_cert.get_ext("subjectKeyIdentifier")
-        issId = issId.get_value()
-        issId = issId+'\n'
+        #issId = self.ca_cert.get_ext("subjectKeyIdentifier")
+        #issId = issId.get_value()
+        #issId = issId+'\n'
         
-        print "RAJRAJRAJ"
-        print "keyid:"+issId+"*"
-        ext4 = M2Crypto.X509.new_extension('authorityKeyIdentifier','')
+        #print "RAJRAJRAJ"
+        #print "keyid:"+issId+"*"
+        #ext4 = M2Crypto.X509.new_extension('authorityKeyIdentifier','')
         cert.add_ext(ext1)
         cert.add_ext(ext2)
         cert.add_ext(ext3) 
