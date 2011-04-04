@@ -87,6 +87,7 @@ import rpc
 ### MALLORY IMPORTS ###
 import netfilter
 import malloryevt
+import config_proto
 from cmdlineopts import CmdLineOpts
 from trafficdb import TrafficDb
 from observer import Subject
@@ -170,6 +171,7 @@ class Mallory(Subject):
         self.dbname = self.opts.trafficdb
         self.debugon = False
         self.debugger = Debugger(ruleconfig.globalrules)
+        self.config_protocols = config_proto.ConfigProtocols()
         self.rpcserver = rpc.RPCServer()
         self.nftool = netfilter.NetfilterTool()
         self.log = logging.getLogger("mallorymain")
@@ -191,7 +193,16 @@ class Mallory(Subject):
         """        
         if action == "add":
             self.configured_protos.append(protocol)
-            
+            print protocol.serverPort
+    
+    def configure_protocols(self):
+        protocols = self.config_protocols.get_protocols()
+        
+        for protocol in protocols:
+            print "Configuring protocol : %s" % (protocol)
+            self.configure_protocol(protocol, "add")
+        
+   
     def add_plugin_manager(self, pluginManager):
         """
         Add a new plugin manager to Mallory's configured plugin managers.
@@ -216,7 +227,7 @@ class Mallory(Subject):
         if not protoinst:
             return
         
-        for proto in self.configured_protos:            
+        for proto in self.configured_protos:     
             if mevt in proto.supports:
                 if proto.serverPort == protoinst.serverPort:
                     if mevt == malloryevt.CSACCEPT or mevt == malloryevt.CSAFTERSS:
@@ -265,6 +276,9 @@ class Mallory(Subject):
         # Kick off a thread for the debugger
         #thread.start_new_thread(self.debugger.rpcserver, ())
         self.rpcserver.add_remote_obj(self.debugger, "debugger")
+        
+        self.configure_protocols()
+        
         thread.start_new_thread(self.rpcserver.start_server, ())
 
         try:
@@ -417,7 +431,9 @@ class Mallory(Subject):
                 serverconn.direction = 's2c'                
                 thread.start_new_thread(self.forward, (protoinst, serverconn))
 
+                
                 connCount = connCount + 1
+        
         except KeyboardInterrupt:
             self.log.info("Mallory: Goodbye.")
             proxy.close()
@@ -437,6 +453,7 @@ if __name__ == '__main__':
     opts = CmdLineOpts() 
     mallory = Mallory(opts)
     
+
     # If a protocol for a destination / server is listening on a nonstandard
     # port the protocol can be configured to target a different server port
     # In this case we will demonstrate how to configure an SSL based protocol
@@ -447,12 +464,12 @@ if __name__ == '__main__':
     #    mallory.configure_protocol(nonstandardssl, "add")
     #
     # And now mallory will treat traffic on port 987 as SSL protocol traffic.
-
-    mallory.configure_protocol(sslproto.SSLProtocol(None, None, None), "add")    
-#    mallory.configure_protocol(http.HTTP(None, None, None), "add")
-#    mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager ())
+    
+#    mallory.configure_protocol(sslproto.SSLProtocol(None, None, None), "add")    
+    #mallory.configure_protocol(http.HTTP(None, None, None), "add")
+    #mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager ())
 #    
-#    mallory.configure_protocol(https.HTTPS(None, None, None), "add")
+    #mallory.configure_protocol(https.HTTPS(None, None, None), "add")
 #    mallory.configure_protocol(dnsp.DNS(None, None, None), "add")
 #    mallory.configure_protocol(ssh.SSHProtocol(None, None, None), "add")
     

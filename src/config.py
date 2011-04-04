@@ -1,7 +1,7 @@
 import logging
 import sys
 
-class Config:
+class Config(object):
     def __init__(self):
         self.debug = 1
         self.http = {}

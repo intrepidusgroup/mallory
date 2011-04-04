@@ -52,7 +52,7 @@
            <bool>true</bool>
           </property>
           <widget class="QWidget" name="verticalLayoutWidget">
-           <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,0">
+           <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,0,0">
             <property name="spacing">
              <number>6</number>
             </property>
@@ -83,6 +83,16 @@
              </widget>
             </item>
             <item>
+             <widget class="QTableView" name="tableinterfaces">
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -99,73 +109,10 @@
              </spacer>
             </item>
             <item>
-             <widget class="QTableWidget" name="tableWidget">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+             <widget class="QPushButton" name="btnsaveifcfg">
+              <property name="text">
+               <string>Save Configuration</string>
               </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="rowCount">
-               <number>2</number>
-              </property>
-              <property name="columnCount">
-               <number>3</number>
-              </property>
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
-              <row>
-               <property name="text">
-                <string>Test</string>
-               </property>
-              </row>
-              <row/>
-              <column>
-               <property name="text">
-                <string>Interface Name</string>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Sans Serif</family>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>Perform MiTM</string>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Sans Serif</family>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>Outbound</string>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Sans Serif</family>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-              </column>
              </widget>
             </item>
             <item>
@@ -190,8 +137,33 @@
            <layout class="QVBoxLayout" name="verticalLayout_8">
             <item>
              <widget class="QLabel" name="label_12">
+              <property name="font">
+               <font>
+                <family>Sans Serif</family>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
               <property name="text">
-               <string>TextLabel</string>
+               <string>Help</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPlainTextEdit" name="texteditdesc">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+              <property name="plainText">
+               <string>The first step to running Mallory is configuring your networking interfaces. 
+
+MiTM interfaces will be interfaces that are going to have all of their traffic MiTMed. This includes PPP interfaces, such as ppp0, from PPTPD VPN clients as well as any other interfaces that are being used by victims as a gateway. 
+
+The outbound interface is one interface used to route the vicitmized and local machine traffic to its destination. This interface needs to be able to access to any network locations the victims are attempting to access. Usually this is the Internet or some local testing servers. 
+
+When you are finished click &quot;Save Configuration&quot; and Mallory will do the rest. 
+
+Note: Saving will completely rewrite your iptables, enable IP forwarding and redirect all traffic.</string>
               </property>
              </widget>
             </item>
@@ -200,6 +172,11 @@
          </widget>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="tab_protocols">
+       <attribute name="title">
+        <string>2. Protocols</string>
+       </attribute>
       </widget>
       <widget class="QWidget" name="tab_streams">
        <attribute name="title">
