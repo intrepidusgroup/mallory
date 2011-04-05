@@ -86,6 +86,9 @@ class CertAuth(object):
             extention to work around an M2Crypt but in the ubuntu
             M2 package. We also had to use a stubCert to get
             around that bug.
+            
+            @param ca_pkey: M2Crypto key pair
+            @return self signed ca cert
         """
         name = M2Crypto.X509.X509_Name()
         # TODO: Make this editable
@@ -129,9 +132,9 @@ class CertAuth(object):
 
         # Start of the hack to make Ubuntu M2 work
         # Hard code SKID to match with the sub cert exts
-        sub_key_id = "D1:AB:10:69:D1:AB:10:69:"\
-                     "D1:AB:10:69:D1:AB:10:69:"\
-                     "D1:AB:10:69" 
+        sub_key_id = 'D1:AB:10:69:D1:AB:10:69:'\
+                     'D1:AB:10:69:D1:AB:10:69:'\
+                     'D1:AB:10:69' 
         ext3 = M2Crypto.X509.new_extension('subjectKeyIdentifier', sub_key_id)
         
         # Use file to add the akid ext
@@ -166,6 +169,7 @@ class CertAuth(object):
             @param peer_not_after: peer cert not after time
             @param peer_not_before: peer cert not before time
             @param peer_serialt: peer cert serial
+            @return cert and key
         """
         key = self.generate_rsa_key()
         peer_key = self.make_pkey(key)
@@ -178,8 +182,12 @@ class CertAuth(object):
                        peer_not_after, peer_not_before, 
                        peer_serial, peer_key):
 
+        """
+            Make a peer cert with the data passed in.
+            @return M2Crypto Cert
+        """
         cert = M2Crypto.X509.X509()
-        cert.set_serial_number(random.randrange(0,0xffffff))
+        cert.set_serial_number(random.randrange(0,0xffffffffffffffff))
         cert.set_version(2)
         cert.set_subject(peer_sub)
         cert.set_issuer(self.ca_cert.get_subject())
@@ -195,13 +203,16 @@ class CertAuth(object):
 
         ext2 = M2Crypto.X509.new_extension('subjectKeyIdentifier', sub_key_id)    
         ext3 = M2Crypto.X509.new_extension('keyUsage', 
-               'Digital Signature, Non Repudiation, Key Encipherment, Data Encipherment')
+               'Digital Signature, Non Repudiation,'\
+               ' Key Encipherment, Data Encipherment')
         ext3.set_critical(1)
-       
+        # Hack to make this work with broken ubuntu m2crypto
         tempCert = open("ca/stubPeer.cer")
         tempCert = tempCert.read()
         tempCert = M2Crypto.X509.load_cert_string(tempCert)
         ext4 = tempCert.get_ext('authorityKeyIdentifier')
+        # End of hack
+
         cert.add_ext(ext1)
         cert.add_ext(ext2)
         cert.add_ext(ext3) 
