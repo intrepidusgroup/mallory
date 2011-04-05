@@ -16,6 +16,10 @@ http://stackoverflow.com/questions/4403704/qt-qtableview-alignment-of-checkbox-w
 http://stackoverflow.com/questions/1744348/embedding-a-control-in-a-qtableview
 
 """
+
+# TODO: Add IP address coumn
+# TODO: Load existing iptables config? (maybe)
+
 class InterfacesGui(object):
     def __init__(self, interfaces_table, btnsaveifcfg, btnrefreshifaces):
         self.interfaces_table_view = interfaces_table
