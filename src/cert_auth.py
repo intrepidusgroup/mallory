@@ -12,13 +12,13 @@ class CertAndKeyContainer(object):
     temp files
     """
     def __init__(self,cert,key,cert_file_name,key_file_name):
-        """Initialize a single cert store element.
+        """
+           Initialize a single cert store element.
 
-           @param data:This is the data associated with a cert.
-           cert: 
-           key:
-           cert_file:
-           key_file_name:
+           @param cert: M2Crypto Cert 
+           @param key: M2Crypto PKEY
+           @param cert_file: Filename to temp file
+           @param key_file_name: Filename of temp file 
 
            @return: CertAndKeyConainer
 
@@ -29,7 +29,18 @@ class CertAndKeyContainer(object):
         self.key_file_name = key_file_name
 
 class CertAuth(object):
+    """
+        This is the main Python Cert Authority Class
+        Note that this is a singleton class and will
+        only exist once in all of Mallory
+    """
     def __init__(self):
+        """
+            Initialize the cert auth.
+            If there is not CA cert stored in the "src/ca" directory
+            this wil create one. Else it will load the CA and Key 
+            into self.ca_cert and self.ca_key
+        """
         self.store_of_certs = {}
         if (not os.path.exists("ca/ca.cer")):
             self.ca_cert, self.ca_pkey = self.ca()
@@ -47,6 +58,11 @@ class CertAuth(object):
 
 
     def ca(self):
+        """
+           Warper function that will generate the CA cert and key
+           It returns the cert as M2Crypt.X509 and key as 
+           M2Crypto.EVP.PKEY 
+        """
         key = self.generate_rsa_key()
         pkey =  self.make_pkey(key)
         cert = self.make_ca_cert(pkey)
