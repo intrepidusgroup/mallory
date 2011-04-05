@@ -77,18 +77,36 @@ class CertAuth(object):
         return pkey
 
     def make_ca_cert(self, ca_pkey):
+        """
+            This will generate and sign a CA cert that mimics a
+            VeriSign cert. The name is hard coded right now. We will
+            make it editable in the future.
+
+            Major Note: We had to hard code the subjectKeyIdentifier
+            extention to work around an M2Crypt but in the ubuntu
+            M2 package. We also had to use a stubCert to get
+            around that bug.
+        """
         name = M2Crypto.X509.X509_Name()
         # TODO: Make this editable
          
         name.C = "US"
         name.O = "VeriSign, Inc"
         name.CN = "VeriSign Clas 3 Secure Server CA - GG"
+        
+        # This is here becuase the real cert has it however the 
+        # cert that we verified to work on iOS does not. I should
+        # try to add it in later. 
         #name.OU = "Verisign Trust Networks"
+        
         cert = M2Crypto.X509.X509()
         cert.set_serial_number(1)
         cert.set_version(2)
         cert.set_subject(name)
-
+        
+        # Probably dont need to use a new Name object.
+        # Oh well... will work on optimization later
+        # TODO: Optimize
         issuer = M2Crypto.X509.X509_Name()
         
         issuer.C = "US"
@@ -100,11 +118,18 @@ class CertAuth(object):
 
         ext1 = M2Crypto.X509.new_extension('basicConstraints', 'CA:TRUE')
         ext1.set_critical(1)
-        ext2 = M2Crypto.X509.new_extension('nsCertType', 'SSL CA, S/MIME CA, Object Signing CA') 
+        ext2 = M2Crypto.X509.new_extension('nsCertType', 
+                       'SSL CA, S/MIME CA, Object Signing CA') 
+        
+        # The proper way to make the id extention
+        # Too bad we cant use it because of M2 bug in ubuntu
         #modulus = cert.get_pubkey().get_modulus()
         #sha_hash = hashlib.sha1(modulus).digest()
         #sub_key_id = ":".join(["%02X"%ord(byte) for byte in sha_hash])
-        sub_key_id = "D1:AB:10:69:D1:AB:10:69:D1:AB:10:69:D1:AB:10:69:D1:AB:10:69" 
+        
+        sub_key_id = "D1:AB:10:69:D1:AB:10:69:"\
+                     "D1:AB:10:69:D1:AB:10:69:"\
+                     "D1:AB:10:69" 
         ext3 = M2Crypto.X509.new_extension('subjectKeyIdentifier', sub_key_id)
         
         tempCert = open("ca/stubCa.cer")
@@ -136,7 +161,8 @@ class CertAuth(object):
                                         peer_key, self.ca_pkey)
         return (peer_cert, peer_key)
     
-    def make_peer_cert(self, peer_sub, peer_iss, peer_not_after, peer_not_before, 
+    def make_peer_cert(self, peer_sub, peer_iss, 
+                       peer_not_after, peer_not_before, 
                        peer_serial, peer_key, ca_key):
 
         cert = M2Crypto.X509.X509()
@@ -190,14 +216,16 @@ class CertAuth(object):
             fake_cert, fake_key = self.get_fake_cert_and_key(real_cert)
             
             temp_cert_file = tempfile.NamedTemporaryFile(delete=False)
-            temp_cert_file.write(fake_cert.as_text() + "\n" + fake_cert.as_pem())
+            temp_cert_file.write(fake_cert.as_text()+'\n'+fake_cert.as_pem())
             temp_cert_file.flush()
 
             temp_key_file = tempfile.NamedTemporaryFile(delete=False)
             temp_key_file.write(fake_key.as_pem(None))
             temp_key_file.flush()
-            self.store_of_certs[cert_subject] = CertAndKeyContainer(fake_cert, fake_key,
-                    temp_cert_file.name, temp_key_file.name)
+            self.store_of_certs[cert_subject] = CertAndKeyContainer(fake_cert, 
+                                                fake_key,
+                                                temp_cert_file.name, 
+                                                temp_key_file.name)
             return (temp_cert_file.name, temp_key_file.name)
 
 ca = CertAuth()
