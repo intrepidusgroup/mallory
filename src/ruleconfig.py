@@ -21,15 +21,15 @@ Note: UDP is not currently supported, but it will eventually be supported.
 userrules = [
 # Default wildcard ruleset, send everything to debugger when active.
 {
+ "name":"http_muck_mangle_c2s", 
+ "action":rule.Muck(["gzip,deflate/ /1","deflate/ /1","gzip/ /1"]),
+ "direction":"c2s",
+ "passthru":"True"
+},
+{
  "name":"default",  
  "action":rule.Debug()
 },
-#{
-# "name":"http_muck_mangle_c2s", 
-# "port":"80", 
-# "action":rule.Muck(["gzip,deflate/ /1","deflate/ /1","gzip/ /1"]),
-# "direction":"c2s"
-#},
 #{
 # "name":"https_debug", 
 # "port":443, 
