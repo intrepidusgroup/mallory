@@ -6,7 +6,23 @@ import random
 import time
 
 class CertAndKeyContainer(object):
+    """
+    This class encaptulates an entry in the global cert store for mallory.
+    Each item will contain the M2Crypto cert and key and filename to the
+    temp files
+    """
     def __init__(self,cert,key,cert_file_name,key_file_name):
+        """Initialize a single cert store element.
+
+           @param data:This is the data associated with a cert.
+           cert: 
+           key:
+           cert_file:
+           key_file_name:
+
+           @return: CertAndKeyConainer
+
+        """
         self.cert = cert
         self.key = key
         self.cert_file_name = cert_file_name
