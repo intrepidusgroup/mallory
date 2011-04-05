@@ -158,7 +158,7 @@ class CertAuth(object):
         return cert
     
     def cert (self, peer_sub, peer_iss, peer_not_after, peer_not_before,
-              peer_serial, ca_key):
+              peer_serial):
         """
             Generated a peer cert and key
             @param peer_sub: peer certs subject
@@ -171,12 +171,12 @@ class CertAuth(object):
         peer_key = self.make_pkey(key)
         peer_cert = self.make_peer_cert(peer_sub, peer_iss, peer_not_after, 
                                         peer_not_before, peer_serial, 
-                                        peer_key, self.ca_pkey)
+                                        peer_key)
         return (peer_cert, peer_key)
     
     def make_peer_cert(self, peer_sub, peer_iss, 
                        peer_not_after, peer_not_before, 
-                       peer_serial, peer_key, ca_key):
+                       peer_serial, peer_key):
 
         cert = M2Crypto.X509.X509()
         cert.set_serial_number(random.randrange(0,0xffffff))
@@ -217,7 +217,7 @@ class CertAuth(object):
         peer_serial = real_cert.get_serial_number()
         fake_cert, fake_key = self.cert(peer_sub, peer_iss,
                                    peer_not_after, peer_not_before,
-                                   peer_serial, self.ca_pkey)
+                                   peer_serial)
         return (fake_cert, fake_key)
 
     def get_fake_cert_and_key_filename(self, real_cert):
