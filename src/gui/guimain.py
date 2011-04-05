@@ -6,6 +6,7 @@ import mutex
 import HexEdit
 import RuleGui
 import InterfacesGui
+import ProtocolsGui
 import flowconfig
 import rule
 import muckpipe
@@ -146,9 +147,11 @@ class MalloryGui(QtGui.QMainWindow):
                 
         # Initialized after setupUi runs
         self.interfacesgui = None
+        self.protocolsgui = None
         
         debugger_uri = "PYROLOC://127.0.0.1:7766/debugger"
         self.remote_debugger = Pyro.core.getProxyForURI(debugger_uri)
+        
         #self.proxy = xmlrpclib.ServerProxy("http://localhost:20757")
         #self.objectproxy = xmlrpclib.ServerProxy("http://localhost:20758")
         self.curdebugevent = ""
@@ -517,12 +520,19 @@ def main():
     window.setUp()
     window.setupModels()
   
-    # Interfaces Editor Gui
+    # Interfaces Editor GUI (self contained in interfaces tab)
     window.interfacesgui = \
         InterfacesGui.InterfacesGui(window.main.tableinterfaces,
                                     window.main.btnsaveifcfg,
                                     window.main.btnrefreshifaces)
-   
+        
+    # Protocols Editor GUI (self contained in protocols tab)
+    window.protocolsgui = \
+        ProtocolsGui.ProtocolsGui(window.main.tableprotocols,
+                                  window.main.btnapplyproto,
+                                  window.main.btnremoveproto,
+                                  window.main.btnaddproto)
+        
     #window.main.tab_protocols
     # Kick off debug event loop in a separate thread
     thread.start_new_thread(window.check_for_de, ())

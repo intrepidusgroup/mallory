@@ -2,6 +2,7 @@ import ConfigParser
 import protocol
 import sets
 import logging
+import Pyro.core
 
 """
 import protocol
@@ -28,12 +29,14 @@ except:
 
 # Implement Save functionality
 
-class ConfigProtocols(object):
+class ConfigProtocols(Pyro.core.ObjBase):
     def __init__(self):
+        Pyro.core.ObjBase.__init__(self)
+        
         self.config_path = "protos.ini"
+        # self.protocols should be type array
         self.protocols = None
         self.log = logging.getLogger("mallorymain")
-        
         self.load_config()
       
     def load_config(self):
@@ -65,7 +68,10 @@ class ConfigProtocols(object):
         print protos
          
         self.protocols = protos
-        
+      
+    def num_protos(self):
+        return len(self.protocols)
+      
     def get_protocols(self):
         return self.protocols
     

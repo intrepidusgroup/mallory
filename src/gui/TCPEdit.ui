@@ -111,7 +111,7 @@
             <item>
              <widget class="QPushButton" name="btnsaveifcfg">
               <property name="text">
-               <string>Save Configuration</string>
+               <string>Apply Save Configuration</string>
               </property>
              </widget>
             </item>
@@ -177,6 +177,82 @@ Note: Saving will completely rewrite your iptables, enable IP forwarding and red
        <attribute name="title">
         <string>2. Protocols</string>
        </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_26">
+        <item>
+         <widget class="QSplitter" name="splitter_11">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QWidget" name="verticalLayoutWidget_3">
+           <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,0,0">
+            <item>
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>Configured Protocols</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableView" name="tableprotocols">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_13">
+              <item>
+               <widget class="QPushButton" name="btnapplyproto">
+                <property name="text">
+                 <string>Apply</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnremoveproto">
+                <property name="text">
+                 <string>-</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnaddproto">
+                <property name="text">
+                 <string>+</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="verticalLayoutWidget_4">
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <item>
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPlainTextEdit" name="texteditdesc_2">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+              <property name="plainText">
+               <string>The second step to running Mallory is configuring your protocol interfaces</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_streams">
        <attribute name="title">

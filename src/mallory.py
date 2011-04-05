@@ -276,6 +276,7 @@ class Mallory(Subject):
         # Kick off a thread for the debugger
         #thread.start_new_thread(self.debugger.rpcserver, ())
         self.rpcserver.add_remote_obj(self.debugger, "debugger")
+        self.rpcserver.add_remote_obj(self.config_protocols, "config_proto")
         
         self.configure_protocols()
         
@@ -453,7 +454,6 @@ if __name__ == '__main__':
     opts = CmdLineOpts() 
     mallory = Mallory(opts)
     
-
     # If a protocol for a destination / server is listening on a nonstandard
     # port the protocol can be configured to target a different server port
     # In this case we will demonstrate how to configure an SSL based protocol
@@ -472,7 +472,6 @@ if __name__ == '__main__':
     #mallory.configure_protocol(https.HTTPS(None, None, None), "add")
 #    mallory.configure_protocol(dnsp.DNS(None, None, None), "add")
 #    mallory.configure_protocol(ssh.SSHProtocol(None, None, None), "add")
-    
     # Pull in the protocol configured on the command line for use with the
     # no-transparent option when the proxy is not being used transparently
     if opts.options.proto:
