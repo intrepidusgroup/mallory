@@ -3,6 +3,7 @@ import M2Crypto
 import tempfile
 import hashlib
 import random
+import time
 
 class CertAndKeyContainer(object):
     def __init__(self,cert,key,cert_file_name,key_file_name):
@@ -14,19 +15,19 @@ class CertAndKeyContainer(object):
 class CertAuth(object):
     def __init__(self):
         self.store_of_certs = {}
-        if (not os.path.exists("ca/MalloryCert")):
+        if (not os.path.exists("ca/ca.cer")):
             self.ca_cert, self.ca_pkey = self.ca()
-            self.ca_cert_file = open ("ca/MalloryCert","w")
+            self.ca_cert_file = open ("ca/ca.cer","w")
             self.ca_cert_file.write(self.ca_cert.as_pem())
             self.ca_cert_file.close()
-            self.ca_key_file = open ("ca/MalloryKey","w")
+            self.ca_key_file = open ("ca/ca.key","w")
             self.ca_key_file.write(self.ca_pkey.as_pem(None))
             self.ca_key_file.close()
         else:
             self.ca_cert = M2Crypto.X509.load_cert_string(
-                        open("ca/MalloryCert","r").read())
+                        open("ca/ca.cer","r").read())
             self.ca_pkey = M2Crypto.EVP.load_key_string(
-                        open("ca/MalloryKey","r").read())
+                        open("ca/ca.key","r").read())
 
 
     def ca(self):
@@ -46,50 +47,50 @@ class CertAuth(object):
     def make_ca_cert(self, ca_pkey):
         name = M2Crypto.X509.X509_Name()
         # TODO: Make this editable
-        name.CN = "VeriSign Clas 3 Secure Server CA - G2"
-        name.O = "VeriSign, Inc."
+         
         name.C = "US"
-        name.OU = "Verisign Trust Network"
-
+        name.O = "VeriSign, Inc"
+        name.CN = "VeriSign Clas 3 Secure Server CA - GG"
+        #name.OU = "Verisign Trust Networks"
         cert = M2Crypto.X509.X509()
         cert.set_serial_number(1)
         cert.set_version(2)
         cert.set_subject(name)
 
         issuer = M2Crypto.X509.X509_Name()
-        issuer.CN = "VeriSign Class 3 Secure Server CA - G2"
-        issuer.O = "VeriSign, Inc."
-        issuer.C = "US"
-        issuer.OU = "Verisign Trust Network"
         
+        issuer.C = "US"
+        issuer.O = "VeriSign, Inc"
+        issuer.CN = "VeriSign Clas 3 Secure Server CA - GG"
+ 
         cert.set_issuer(issuer)
         cert.set_pubkey(ca_pkey)
-        
 
         ext1 = M2Crypto.X509.new_extension('basicConstraints', 'CA:TRUE')
         ext1.set_critical(1)
-        ext2 = M2Crypto.X509.new_extension('authorityKeyIdentifier', "keyid:0")
-         
-        modulus = cert.get_pubkey().get_modulus()
-        sha_hash = hashlib.sha1(modulus).digest()
-        sub_key_id = ":".join(["%02X"%ord(byte) for byte in sha_hash])
-        
+        ext2 = M2Crypto.X509.new_extension('nsCertType', 'SSL CA, S/MIME CA, Object Signing CA') 
+        #modulus = cert.get_pubkey().get_modulus()
+        #sha_hash = hashlib.sha1(modulus).digest()
+        #sub_key_id = ":".join(["%02X"%ord(byte) for byte in sha_hash])
+        sub_key_id = "D1:AB:10:69:D1:AB:10:69:D1:AB:10:69:D1:AB:10:69:D1:AB:10:69" 
         ext3 = M2Crypto.X509.new_extension('subjectKeyIdentifier', sub_key_id)
-        #extstack = M2Crypto.X509.X509_Extension_Stack()
-        #extstack.push(ext1)
-        #extstack.push(ext2)
-        #extstack.push(ext3)
-
-        cert.add_ext(ext1)
-        #cert.add_ext(ext2)
-        cert.add_ext(ext3)
+        
+        tempCert = open("ca/stubCa.cer")
+        tempCert = tempCert.read()
+        tempCert = M2Crypto.X509.load_cert_string(tempCert)
+        ext4 = tempCert.get_ext('authorityKeyIdentifier')
+        
+        t = long(time.time())
+        before = M2Crypto.ASN1.ASN1_UTCTIME()
+        before.set_time(t-(60*60*24*30*6))
+        after = M2Crypto.ASN1.ASN1_UTCTIME()
+        after.set_time(t+(60*60*24*365*10))
+        cert.set_not_before(before)
+        cert.set_not_after(after)
         cert.add_ext(ext2)
-        #cert.add_ext(ext3)
-        # TODO:Figure this part out
-        notBefore = M2Crypto.m2.x509_get_not_before(cert.x509)
-        notAfter =  M2Crypto.m2.x509_get_not_after(cert.x509)
-        M2Crypto.m2.x509_gmtime_adj(notBefore, 0)
-        M2Crypto.m2.x509_gmtime_adj(notAfter, 60*60*24*365*10)
+        cert.add_ext(ext1)
+        cert.add_ext(ext4)
+        cert.add_ext(ext3)
 
         cert.sign(ca_pkey, 'sha1')
         return cert
@@ -126,17 +127,14 @@ class CertAuth(object):
                'Digital Signature, Non Repudiation, Key Encipherment, Data Encipherment')
         ext3.set_critical(1)
        
-        #issId = self.ca_cert.get_ext("subjectKeyIdentifier")
-        #issId = issId.get_value()
-        #issId = issId+'\n'
-        
-        #print "RAJRAJRAJ"
-        #print "keyid:"+issId+"*"
-        #ext4 = M2Crypto.X509.new_extension('authorityKeyIdentifier','')
+        tempCert = open("ca/stubPeer.cer")
+        tempCert = tempCert.read()
+        tempCert = M2Crypto.X509.load_cert_string(tempCert)
+        ext4 = tempCert.get_ext('authorityKeyIdentifier')
         cert.add_ext(ext1)
         cert.add_ext(ext2)
         cert.add_ext(ext3) 
-        #cert.add_ext(ext4)
+        cert.add_ext(ext4)
         cert.sign(self.ca_pkey,'sha1')
         return cert
     
