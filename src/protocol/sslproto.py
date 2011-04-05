@@ -34,9 +34,7 @@ class SSLProtocol(TcpProtocol):
         self.log.debug("SSLProto: Getting common name from socket")
         cert_from_remote_server = self.destination.getpeercert(True)
 
-        m2_crypto_cert = M2Crypto.X509.load_cert_der_string(
-            cert_from_remote_server)
-        fake_cert, fake_key = cert_auth.ca.get_fake_cert_and_key_filename(m2_crypto_cert)
+        fake_cert, fake_key = cert_auth.ca.get_fake_cert_and_key_filename(cert_from_remote_server)
         self.log.debug("SSLProto: Starting Socket")
         try:
             self.source = ssl.wrap_socket(self.source,

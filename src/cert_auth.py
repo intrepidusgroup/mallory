@@ -165,8 +165,7 @@ class CertAuth(object):
             @param peer_iss: peer cert issuer
             @param peer_not_after: peer cert not after time
             @param peer_not_before: peer cert not before time
-            @param peer_cert: peer cert serial
-            @
+            @param peer_serialt: peer cert serial
         """
         key = self.generate_rsa_key()
         peer_key = self.make_pkey(key)
@@ -222,6 +221,7 @@ class CertAuth(object):
         return (fake_cert, fake_key)
 
     def get_fake_cert_and_key_filename(self, real_cert):
+        real_cert = M2Crypto.X509.load_cert_der_string(real_cert)
         cert_subject = real_cert.get_subject().as_text()
         if cert_subject in self.store_of_certs:
             cert_container = self.store_of_certs[cert_subject]
