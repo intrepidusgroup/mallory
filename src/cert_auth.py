@@ -126,17 +126,22 @@ class CertAuth(object):
         #modulus = cert.get_pubkey().get_modulus()
         #sha_hash = hashlib.sha1(modulus).digest()
         #sub_key_id = ":".join(["%02X"%ord(byte) for byte in sha_hash])
-        
+
+        # Start of the hack to make Ubuntu M2 work
+        # Hard code SKID to match with the sub cert exts
         sub_key_id = "D1:AB:10:69:D1:AB:10:69:"\
                      "D1:AB:10:69:D1:AB:10:69:"\
                      "D1:AB:10:69" 
         ext3 = M2Crypto.X509.new_extension('subjectKeyIdentifier', sub_key_id)
         
+        # Use file to add the akid ext
         tempCert = open("ca/stubCa.cer")
         tempCert = tempCert.read()
         tempCert = M2Crypto.X509.load_cert_string(tempCert)
         ext4 = tempCert.get_ext('authorityKeyIdentifier')
-        
+        # End of hack to make Ubuntu M2 work
+
+
         t = long(time.time())
         before = M2Crypto.ASN1.ASN1_UTCTIME()
         before.set_time(t-(60*60*24*30*6))
@@ -154,6 +159,15 @@ class CertAuth(object):
     
     def cert (self, peer_sub, peer_iss, peer_not_after, peer_not_before,
               peer_serial, ca_key):
+        """
+            Generated a peer cert and key
+            @param peer_sub: peer certs subject
+            @param peer_iss: peer cert issuer
+            @param peer_not_after: peer cert not after time
+            @param peer_not_before: peer cert not before time
+            @param peer_cert: peer cert serial
+            @
+        """
         key = self.generate_rsa_key()
         peer_key = self.make_pkey(key)
         peer_cert = self.make_peer_cert(peer_sub, peer_iss, peer_not_after, 
