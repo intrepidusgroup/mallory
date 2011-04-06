@@ -3,6 +3,7 @@ import protocol
 import sets
 import logging
 import Pyro.core
+import observer
 
 """
 import protocol
@@ -29,8 +30,9 @@ except:
 
 # Implement Save functionality
 
-class ConfigProtocols(Pyro.core.ObjBase):
+class ConfigProtocols(observer.Subject, Pyro.core.ObjBase):
     def __init__(self):
+        observer.Subject.__init__(self)
         Pyro.core.ObjBase.__init__(self)
         
         self.config_path = "protos.ini"
@@ -39,6 +41,18 @@ class ConfigProtocols(Pyro.core.ObjBase):
         self.log = logging.getLogger("mallorymain")
         self.load_config()
       
+    def load_config_raw(self):
+        f = open(self.config_path, "r")
+        config_raw = f.read()
+        f.close()
+        
+        return config_raw
+    
+    def save_config_raw(self, raw_config):
+        f = open(self.config_path, "w")
+        f.write(raw_config)
+        f.close()
+        
     def load_config(self):
         cp = ConfigParser.ConfigParser()
         cp.read(self.config_path)
@@ -65,10 +79,11 @@ class ConfigProtocols(Pyro.core.ObjBase):
                 except:
                     self.log.info( ("ConfigProtocols.load_config: bad config "
                                     "line supplied (%s)") % proto_data)
-        print protos
-         
+ 
         self.protocols = protos
-      
+        
+        self.notify(action="load_protos", protocols=protos)
+            
     def num_protos(self):
         return len(self.protocols)
       

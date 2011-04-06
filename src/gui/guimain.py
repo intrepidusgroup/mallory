@@ -529,9 +529,9 @@ def main():
     # Protocols Editor GUI (self contained in protocols tab)
     window.protocolsgui = \
         ProtocolsGui.ProtocolsGui(window.main.tableprotocols,
-                                  window.main.btnapplyproto,
-                                  window.main.btnremoveproto,
-                                  window.main.btnaddproto)
+                                  window.main.btnprotoreload,
+                                  window.main.btnprotoapply,
+                                  window.main.textprotoedit)
         
     #window.main.tab_protocols
     # Kick off debug event loop in a separate thread
