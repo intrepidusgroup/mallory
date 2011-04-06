@@ -254,10 +254,14 @@ class Mallory(Subject):
 
 
     def update(self, publisher, **kwargs):
-        """
-        Does nothing. Internal method.
-        """        
-        pass
+        if "action" not in kwargs:
+            return
+        
+        if kwargs["action"] == "load_protos":
+            self.configure_protocols()
+        
+            
+                
 
     def main(self):
         """
@@ -275,6 +279,10 @@ class Mallory(Subject):
 
         # Kick off a thread for the debugger
         #thread.start_new_thread(self.debugger.rpcserver, ())
+        
+        # Mallory needs to know if the protocol config changes
+        self.config_protocols.attach(self)
+        
         self.rpcserver.add_remote_obj(self.debugger, "debugger")
         self.rpcserver.add_remote_obj(self.config_protocols, "config_proto")
         

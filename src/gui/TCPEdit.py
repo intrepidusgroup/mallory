@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui/TCPEdit.ui'
 #
-# Created: Mon Apr  4 21:47:52 2011
+# Created: Tue Apr  5 21:21:07 2011
 #      by: PyQt4 UI code generator 4.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -112,17 +112,23 @@ class Ui_MainWindow(object):
         self.tableprotocols.setSizePolicy(sizePolicy)
         self.tableprotocols.setObjectName("tableprotocols")
         self.verticalLayout_9.addWidget(self.tableprotocols)
+        self.label_29 = QtGui.QLabel(self.verticalLayoutWidget_3)
+        self.label_29.setObjectName("label_29")
+        self.verticalLayout_9.addWidget(self.label_29)
+        self.textprotoedit = QtGui.QPlainTextEdit(self.verticalLayoutWidget_3)
+        font = QtGui.QFont()
+        font.setFamily("Monospace")
+        self.textprotoedit.setFont(font)
+        self.textprotoedit.setObjectName("textprotoedit")
+        self.verticalLayout_9.addWidget(self.textprotoedit)
         self.horizontalLayout_13 = QtGui.QHBoxLayout()
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
-        self.btnapplyproto = QtGui.QPushButton(self.verticalLayoutWidget_3)
-        self.btnapplyproto.setObjectName("btnapplyproto")
-        self.horizontalLayout_13.addWidget(self.btnapplyproto)
-        self.btnremoveproto = QtGui.QPushButton(self.verticalLayoutWidget_3)
-        self.btnremoveproto.setObjectName("btnremoveproto")
-        self.horizontalLayout_13.addWidget(self.btnremoveproto)
-        self.btnaddproto = QtGui.QPushButton(self.verticalLayoutWidget_3)
-        self.btnaddproto.setObjectName("btnaddproto")
-        self.horizontalLayout_13.addWidget(self.btnaddproto)
+        self.btnprotoapply = QtGui.QPushButton(self.verticalLayoutWidget_3)
+        self.btnprotoapply.setObjectName("btnprotoapply")
+        self.horizontalLayout_13.addWidget(self.btnprotoapply)
+        self.btnprotoreload = QtGui.QPushButton(self.verticalLayoutWidget_3)
+        self.btnprotoreload.setObjectName("btnprotoreload")
+        self.horizontalLayout_13.addWidget(self.btnprotoreload)
         self.verticalLayout_9.addLayout(self.horizontalLayout_13)
         self.verticalLayoutWidget_4 = QtGui.QWidget(self.splitter_11)
         self.verticalLayoutWidget_4.setObjectName("verticalLayoutWidget_4")
@@ -489,7 +495,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuMallory.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.tabWidget_2.setCurrentIndex(1)
         self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -511,9 +517,9 @@ class Ui_MainWindow(object):
 "Note: Saving will completely rewrite your iptables, enable IP forwarding and redirect all traffic.", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_interfaces), QtGui.QApplication.translate("MainWindow", "1. Interfaces", None, QtGui.QApplication.UnicodeUTF8))
         self.label_13.setText(QtGui.QApplication.translate("MainWindow", "Configured Protocols", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnapplyproto.setText(QtGui.QApplication.translate("MainWindow", "Apply", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnremoveproto.setText(QtGui.QApplication.translate("MainWindow", "-", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnaddproto.setText(QtGui.QApplication.translate("MainWindow", "+", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_29.setText(QtGui.QApplication.translate("MainWindow", "Protocol Configuration", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnprotoapply.setText(QtGui.QApplication.translate("MainWindow", "Apply", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnprotoreload.setText(QtGui.QApplication.translate("MainWindow", "Reload", None, QtGui.QApplication.UnicodeUTF8))
         self.label_14.setText(QtGui.QApplication.translate("MainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
         self.texteditdesc_2.setPlainText(QtGui.QApplication.translate("MainWindow", "The second step to running Mallory is configuring your protocol interfaces", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_protocols), QtGui.QApplication.translate("MainWindow", "2. Protocols", None, QtGui.QApplication.UnicodeUTF8))

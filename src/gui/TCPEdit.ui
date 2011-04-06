@@ -21,7 +21,7 @@
        <string>An IP address to match. Blank for wildcard match.</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_interfaces">
        <attribute name="title">
@@ -184,7 +184,7 @@ Note: Saving will completely rewrite your iptables, enable IP forwarding and red
            <enum>Qt::Horizontal</enum>
           </property>
           <widget class="QWidget" name="verticalLayoutWidget_3">
-           <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,0,0">
+           <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,0,0,0,0">
             <item>
              <widget class="QLabel" name="label_13">
               <property name="text">
@@ -203,25 +203,34 @@ Note: Saving will completely rewrite your iptables, enable IP forwarding and red
              </widget>
             </item>
             <item>
+             <widget class="QLabel" name="label_29">
+              <property name="text">
+               <string>Protocol Configuration</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPlainTextEdit" name="textprotoedit">
+              <property name="font">
+               <font>
+                <family>Monospace</family>
+               </font>
+              </property>
+             </widget>
+            </item>
+            <item>
              <layout class="QHBoxLayout" name="horizontalLayout_13">
               <item>
-               <widget class="QPushButton" name="btnapplyproto">
+               <widget class="QPushButton" name="btnprotoapply">
                 <property name="text">
                  <string>Apply</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="btnremoveproto">
+               <widget class="QPushButton" name="btnprotoreload">
                 <property name="text">
-                 <string>-</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="btnaddproto">
-                <property name="text">
-                 <string>+</string>
+                 <string>Reload</string>
                 </property>
                </widget>
               </item>
