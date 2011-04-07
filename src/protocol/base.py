@@ -29,6 +29,7 @@ class Protocol(Subject):
         self.config = config
         self.rules = rules
         self.plugin_manager  = None
+        self.friendly_name = "Undefined"
         
     def setrules(self, rules):
         self.rules = rules     
@@ -77,6 +78,7 @@ class UdpProtocol(Protocol):
         self.lock = thread.allocate_lock()
         self.configured_protos = configured_protos
         self.supports = {}
+        self.friendly_name = "UDP"
         
 #    def supports(self):
 #        pass
@@ -275,6 +277,8 @@ class TcpProtocol(Protocol):
     def __init__(self, trafficdb, source, destination):
         Protocol.__init__(self)
         
+        self.friendly_name = "TCP"
+        
         self.trafficdb = trafficdb
         
         # The source is always the "client" or "victim" in the code
@@ -301,6 +305,22 @@ class TcpProtocol(Protocol):
         self.waitfor = {"c2s":"", "s2c":""}       
 
 
+    def __getstate__(self):
+        """
+        We can't serialize (pickle) anything with a lock (thread.lock). 
+        
+        Get rid of traffic DB, mostly because.
+        
+        Get rid of log and debugqs because they have locks and would be
+        messy to deserialize in a lot of situations        
+        """
+        d = self.__dict__.copy()
+        del d["debugqs"]
+        del d["trafficdb"]
+        del d["log"]
+                
+        return d
+    
     def forward_s2c(self):
         """Generic server to client forwarding method. Reimplement this
         method to modify bytes that is being sent back to the client"""

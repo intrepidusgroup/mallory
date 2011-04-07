@@ -21,7 +21,8 @@ class SSLProtocol(TcpProtocol):
     certificates to fully facilitate SSL MiTM"""
     
     def __init__(self, trafficdb, source, destination):
-        TcpProtocol.__init__(self, trafficdb, source, destination)       
+        TcpProtocol.__init__(self, trafficdb, source, destination) 
+        self.friendly_name = "SSL Base"      
         self.serverPort = 443
         self.name = "SSL"
         self.log = logging.getLogger("mallorymain")

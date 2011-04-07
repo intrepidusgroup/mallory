@@ -193,13 +193,11 @@ class Mallory(Subject):
         """        
         if action == "add":
             self.configured_protos.append(protocol)
-            print protocol.serverPort
     
     def configure_protocols(self):
         protocols = self.config_protocols.get_protocols()
         
         for protocol in protocols:
-            print "Configuring protocol : %s" % (protocol)
             self.configure_protocol(protocol, "add")
         
    
@@ -462,24 +460,7 @@ if __name__ == '__main__':
     opts = CmdLineOpts() 
     mallory = Mallory(opts)
     
-    # If a protocol for a destination / server is listening on a nonstandard
-    # port the protocol can be configured to target a different server port
-    # In this case we will demonstrate how to configure an SSL based protocol
-    # listening on port 987. 
-    #
-    #    nonstandardssl = sslproto.SSLProtocol(None, None, None)
-    #    nonstandardssl.serverPort = 987
-    #    mallory.configure_protocol(nonstandardssl, "add")
-    #
-    # And now mallory will treat traffic on port 987 as SSL protocol traffic.
-    
-#    mallory.configure_protocol(sslproto.SSLProtocol(None, None, None), "add")    
-    #mallory.configure_protocol(http.HTTP(None, None, None), "add")
-    #mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager ())
-#    
-    #mallory.configure_protocol(https.HTTPS(None, None, None), "add")
-#    mallory.configure_protocol(dnsp.DNS(None, None, None), "add")
-#    mallory.configure_protocol(ssh.SSHProtocol(None, None, None), "add")
+
     # Pull in the protocol configured on the command line for use with the
     # no-transparent option when the proxy is not being used transparently
     if opts.options.proto:

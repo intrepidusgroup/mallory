@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui/TCPEdit.ui'
 #
-# Created: Tue Apr  5 21:21:07 2011
+# Created: Thu Apr  7 00:18:36 2011
 #      by: PyQt4 UI code generator 4.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -94,12 +94,13 @@ class Ui_MainWindow(object):
         self.tab_protocols.setObjectName("tab_protocols")
         self.horizontalLayout_26 = QtGui.QHBoxLayout(self.tab_protocols)
         self.horizontalLayout_26.setObjectName("horizontalLayout_26")
-        self.splitter_11 = QtGui.QSplitter(self.tab_protocols)
-        self.splitter_11.setOrientation(QtCore.Qt.Horizontal)
-        self.splitter_11.setObjectName("splitter_11")
-        self.verticalLayoutWidget_3 = QtGui.QWidget(self.splitter_11)
+        self.splitterproto = QtGui.QSplitter(self.tab_protocols)
+        self.splitterproto.setOrientation(QtCore.Qt.Horizontal)
+        self.splitterproto.setObjectName("splitterproto")
+        self.verticalLayoutWidget_3 = QtGui.QWidget(self.splitterproto)
         self.verticalLayoutWidget_3.setObjectName("verticalLayoutWidget_3")
         self.verticalLayout_9 = QtGui.QVBoxLayout(self.verticalLayoutWidget_3)
+        self.verticalLayout_9.setSizeConstraint(QtGui.QLayout.SetMinimumSize)
         self.verticalLayout_9.setObjectName("verticalLayout_9")
         self.label_13 = QtGui.QLabel(self.verticalLayoutWidget_3)
         self.label_13.setObjectName("label_13")
@@ -111,6 +112,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.tableprotocols.sizePolicy().hasHeightForWidth())
         self.tableprotocols.setSizePolicy(sizePolicy)
         self.tableprotocols.setObjectName("tableprotocols")
+        self.tableprotocols.verticalHeader().setVisible(False)
         self.verticalLayout_9.addWidget(self.tableprotocols)
         self.label_29 = QtGui.QLabel(self.verticalLayoutWidget_3)
         self.label_29.setObjectName("label_29")
@@ -130,7 +132,7 @@ class Ui_MainWindow(object):
         self.btnprotoreload.setObjectName("btnprotoreload")
         self.horizontalLayout_13.addWidget(self.btnprotoreload)
         self.verticalLayout_9.addLayout(self.horizontalLayout_13)
-        self.verticalLayoutWidget_4 = QtGui.QWidget(self.splitter_11)
+        self.verticalLayoutWidget_4 = QtGui.QWidget(self.splitterproto)
         self.verticalLayoutWidget_4.setObjectName("verticalLayoutWidget_4")
         self.verticalLayout_10 = QtGui.QVBoxLayout(self.verticalLayoutWidget_4)
         self.verticalLayout_10.setObjectName("verticalLayout_10")
@@ -141,7 +143,7 @@ class Ui_MainWindow(object):
         self.texteditdesc_2.setReadOnly(True)
         self.texteditdesc_2.setObjectName("texteditdesc_2")
         self.verticalLayout_10.addWidget(self.texteditdesc_2)
-        self.horizontalLayout_26.addWidget(self.splitter_11)
+        self.horizontalLayout_26.addWidget(self.splitterproto)
         self.tabWidget_2.addTab(self.tab_protocols, "")
         self.tab_streams = QtGui.QWidget()
         self.tab_streams.setObjectName("tab_streams")
@@ -519,9 +521,36 @@ class Ui_MainWindow(object):
         self.label_13.setText(QtGui.QApplication.translate("MainWindow", "Configured Protocols", None, QtGui.QApplication.UnicodeUTF8))
         self.label_29.setText(QtGui.QApplication.translate("MainWindow", "Protocol Configuration", None, QtGui.QApplication.UnicodeUTF8))
         self.btnprotoapply.setText(QtGui.QApplication.translate("MainWindow", "Apply", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnprotoreload.setText(QtGui.QApplication.translate("MainWindow", "Reload", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnprotoreload.setText(QtGui.QApplication.translate("MainWindow", "Reload From Disk", None, QtGui.QApplication.UnicodeUTF8))
         self.label_14.setText(QtGui.QApplication.translate("MainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
-        self.texteditdesc_2.setPlainText(QtGui.QApplication.translate("MainWindow", "The second step to running Mallory is configuring your protocol interfaces", None, QtGui.QApplication.UnicodeUTF8))
+        self.texteditdesc_2.setPlainText(QtGui.QApplication.translate("MainWindow", "The second step to running Mallory is configuring your protocol interfaces.\n"
+"\n"
+"Note: Only protocols that show up with \"Yes\" in the \"Debuggable\" column can be edited in the streams tab. \n"
+"\n"
+"The protocol configuration text is loaded from protos.ini in the \'src\' directory.  At the top of this file must be the configuration line.\n"
+"\n"
+"[protocols]\n"
+"\n"
+"You enter the protocols you desire to be configured. An example protocol is shown below:\n"
+"\n"
+"http_1: http.HTTP:80\n"
+"\n"
+"What this says is create an http.HTTP protocol, for server port (destination port) 80 and name it http_1. All names, like http_1, must be unique. All ports must be unique. Failure to create unique names results in the first one loaded to be used. \n"
+"\n"
+"You may supply comments by starting the line with ; or #. \n"
+"\n"
+"; Set up HTTP on port 80\n"
+"http_1:http.HTTP:80\n"
+"\n"
+"The current list of valid protocols is:\n"
+"http.HTTP\n"
+"https.HTTPS\n"
+"ssh.SSHProtocol\n"
+"sslproto.SSLProtocol\n"
+"dnsp.DNS\n"
+"\n"
+"You must type it in the configuration exactly as shown.\n"
+"", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_protocols), QtGui.QApplication.translate("MainWindow", "2. Protocols", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("MainWindow", "Actions:", None, QtGui.QApplication.UnicodeUTF8))
         self.btnicept.setToolTip(QtGui.QApplication.translate("MainWindow", "Tell Mallory the Debugger wants to intercept traffic", None, QtGui.QApplication.UnicodeUTF8))

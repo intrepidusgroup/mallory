@@ -404,7 +404,8 @@ class StreamTable(QtCore.QAbstractTableModel):
                    5: "Status"
         }
         self.requests = []
-        self.nrows = 5        
+        self.nrows = 5
+           
     def getrowdata(self, row):    
         data = self.requests[row]
         return data
@@ -525,13 +526,14 @@ def main():
         InterfacesGui.InterfacesGui(window.main.tableinterfaces,
                                     window.main.btnsaveifcfg,
                                     window.main.btnrefreshifaces)
-        
+    
     # Protocols Editor GUI (self contained in protocols tab)
     window.protocolsgui = \
         ProtocolsGui.ProtocolsGui(window.main.tableprotocols,
                                   window.main.btnprotoreload,
                                   window.main.btnprotoapply,
-                                  window.main.textprotoedit)
+                                  window.main.textprotoedit,
+                                  window.main.splitterproto)
         
     #window.main.tab_protocols
     # Kick off debug event loop in a separate thread

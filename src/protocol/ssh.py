@@ -31,6 +31,7 @@ class SSHProtocol(TcpProtocol):
     """This class implements the shell parts of the SSH protocol MiTM"""
     def __init__(self, trafficdb, source, destination):
         TcpProtocol.__init__(self, trafficdb, source, destination)
+        self.friendly_name = "SSH"
         self.log = logging.getLogger("mallorymain")              
         self.serverPort = 22
         self.name = "SSH"

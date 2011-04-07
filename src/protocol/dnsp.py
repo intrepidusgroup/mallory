@@ -7,6 +7,7 @@ import dnsconfig
 
 class DNS(base.UdpProtocol):
     def __init__(self, trafficdb, source, destination):
+        self.friendly_name = "DNS"
         self.serverPort = 53
         self.trafficdb = None
         self.log = logging.getLogger("mallorymain")

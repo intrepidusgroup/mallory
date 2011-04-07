@@ -163,6 +163,7 @@ class HTTP(TcpProtocol):
     """
     def __init__(self, trafficdb, source, destination):
         TcpProtocol.__init__(self, trafficdb, source, destination)
+        self.friendly_name = "HTTP"
         self.serverPort = 80
         self.log = logging.getLogger("mallorymain")
         self.log.info("HTTP protocol handler initialized")

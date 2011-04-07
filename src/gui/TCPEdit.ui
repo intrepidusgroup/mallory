@@ -179,12 +179,15 @@ Note: Saving will completely rewrite your iptables, enable IP forwarding and red
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_26">
         <item>
-         <widget class="QSplitter" name="splitter_11">
+         <widget class="QSplitter" name="splitterproto">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
           <widget class="QWidget" name="verticalLayoutWidget_3">
            <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,0,0,0,0">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMinimumSize</enum>
+            </property>
             <item>
              <widget class="QLabel" name="label_13">
               <property name="text">
@@ -200,6 +203,12 @@ Note: Saving will completely rewrite your iptables, enable IP forwarding and red
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
              </widget>
             </item>
             <item>
@@ -230,7 +239,7 @@ Note: Saving will completely rewrite your iptables, enable IP forwarding and red
               <item>
                <widget class="QPushButton" name="btnprotoreload">
                 <property name="text">
-                 <string>Reload</string>
+                 <string>Reload From Disk</string>
                 </property>
                </widget>
               </item>
@@ -253,7 +262,34 @@ Note: Saving will completely rewrite your iptables, enable IP forwarding and red
                <bool>true</bool>
               </property>
               <property name="plainText">
-               <string>The second step to running Mallory is configuring your protocol interfaces</string>
+               <string>The second step to running Mallory is configuring your protocol interfaces.
+
+Note: Only protocols that show up with &quot;Yes&quot; in the &quot;Debuggable&quot; column can be edited in the streams tab. 
+
+The protocol configuration text is loaded from protos.ini in the 'src' directory.  At the top of this file must be the configuration line.
+
+[protocols]
+
+You enter the protocols you desire to be configured. An example protocol is shown below:
+
+http_1: http.HTTP:80
+
+What this says is create an http.HTTP protocol, for server port (destination port) 80 and name it http_1. All names, like http_1, must be unique. All ports must be unique. Failure to create unique names results in the first one loaded to be used. 
+
+You may supply comments by starting the line with ; or #. 
+
+; Set up HTTP on port 80
+http_1:http.HTTP:80
+
+The current list of valid protocols is:
+http.HTTP
+https.HTTPS
+ssh.SSHProtocol
+sslproto.SSLProtocol
+dnsp.DNS
+
+You must type it in the configuration exactly as shown.
+</string>
               </property>
              </widget>
             </item>
