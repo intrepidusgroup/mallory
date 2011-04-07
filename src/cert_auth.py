@@ -187,7 +187,7 @@ class CertAuth(object):
             @return M2Crypto Cert
         """
         cert = M2Crypto.X509.X509()
-        cert.set_serial_number(random.randrange(0,0xffffffffffffffff))
+        cert.set_serial_number(random.randrange(0,0xffffffff))
         cert.set_version(2)
         cert.set_subject(peer_sub)
         cert.set_issuer(self.ca_cert.get_subject())

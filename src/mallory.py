@@ -405,7 +405,11 @@ class Mallory(Subject):
                     protoinst.destination.connect((shost, int(sport)))
                         
                     # Client socket configuration after server socket creation                    
-                    protoinst.source = csock                    
+                    protoinst.source = csock
+#                    buf = ""
+#                    hack = csock.recv(1024, socket.MSG_PEEK)
+#                    print "Hack Bits: " + repr(hack)
+                                        
                     self.configure_socket(malloryevt.CSAFTERSS,
                                           protoinst=protoinst)
                     
