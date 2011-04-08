@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>879</width>
-    <height>807</height>
+    <width>910</width>
+    <height>828</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
        <string>An IP address to match. Blank for wildcard match.</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="tab_interfaces">
        <attribute name="title">
@@ -84,9 +84,6 @@
             </item>
             <item>
              <widget class="QTableView" name="tableinterfaces">
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
               <attribute name="verticalHeaderVisible">
                <bool>false</bool>
               </attribute>
@@ -203,9 +200,6 @@ Note: Saving will completely rewrite your iptables, enable IP forwarding and red
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
               <attribute name="verticalHeaderVisible">
                <bool>false</bool>
               </attribute>
@@ -1119,6 +1113,97 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tabdbview">
+       <attribute name="title">
+        <string>DB View</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_15">
+        <item>
+         <widget class="QSplitter" name="splitter_db">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QWidget" name="horizontalLayoutWidget_2">
+           <layout class="QVBoxLayout" name="verticalLayout_12">
+            <item>
+             <widget class="QLabel" name="label_15">
+              <property name="text">
+               <string>SQL Query</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPlainTextEdit" name="textdbsql">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>100</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Monospace</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_14">
+              <item>
+               <widget class="QPushButton" name="btndbexec">
+                <property name="text">
+                 <string>Execute SQL</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btndbflowsq">
+                <property name="text">
+                 <string>Create Flows Query</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_16">
+              <property name="text">
+               <string>Results</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableView" name="tabledbview"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="verticalLayoutWidget_5">
+           <layout class="QVBoxLayout" name="verticalLayout_11">
+            <item>
+             <widget class="QLabel" name="label_17">
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPlainTextEdit" name="plainTextEdit">
+              <property name="plainText">
+               <string>This is the traffic database viewier. It is a more advanced user interface element. To use it simply (view all TCP flows), click the &quot;Create Flows Query&quot; button and then the &quot;Execute SQL&quot; button. This will then show all flows and their releated connections. 
+
+To view a full capture of traffic double click the row in question.
+
+To see the schema go to $MALLORYROOT$/db and run &quot;sqlite3 trafficdb&quot; to open the  the traffic DB. Then type .schema to see the currently available tables. </string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -1128,7 +1213,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>879</width>
+     <width>910</width>
      <height>25</height>
     </rect>
    </property>

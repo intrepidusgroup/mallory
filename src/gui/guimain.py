@@ -7,6 +7,7 @@ import HexEdit
 import RuleGui
 import InterfacesGui
 import ProtocolsGui
+import DbGui
 import flowconfig
 import rule
 import muckpipe
@@ -148,6 +149,7 @@ class MalloryGui(QtGui.QMainWindow):
         # Initialized after setupUi runs
         self.interfacesgui = None
         self.protocolsgui = None
+        self.dbgui = None
         
         debugger_uri = "PYROLOC://127.0.0.1:7766/debugger"
         self.remote_debugger = Pyro.core.getProxyForURI(debugger_uri)
@@ -534,6 +536,12 @@ def main():
                                   window.main.btnprotoapply,
                                   window.main.textprotoedit,
                                   window.main.splitterproto)
+        
+    window.dbgui = DbGui.DbGui(window.main.tabledbview,
+                               window.main.btndbexec,
+                               window.main.btndbflowsq,
+                               window.main.textdbsql,
+                               window.main.splitter_db)
         
     #window.main.tab_protocols
     # Kick off debug event loop in a separate thread

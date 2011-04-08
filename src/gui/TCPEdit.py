@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui/TCPEdit.ui'
 #
-# Created: Thu Apr  7 00:18:36 2011
+# Created: Thu Apr  7 21:56:22 2011
 #      by: PyQt4 UI code generator 4.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PyQt4 import QtCore, QtGui
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(879, 807)
+        MainWindow.resize(910, 828)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_9 = QtGui.QHBoxLayout(self.centralwidget)
@@ -481,10 +481,59 @@ class Ui_MainWindow(object):
         self.plainTextEdit_objectInspector.setObjectName("plainTextEdit_objectInspector")
         self.verticalLayout_4.addWidget(self.splitter_4)
         self.tabWidget_2.addTab(self.tab, "")
+        self.tabdbview = QtGui.QWidget()
+        self.tabdbview.setObjectName("tabdbview")
+        self.horizontalLayout_15 = QtGui.QHBoxLayout(self.tabdbview)
+        self.horizontalLayout_15.setObjectName("horizontalLayout_15")
+        self.splitter_db = QtGui.QSplitter(self.tabdbview)
+        self.splitter_db.setOrientation(QtCore.Qt.Horizontal)
+        self.splitter_db.setObjectName("splitter_db")
+        self.horizontalLayoutWidget_2 = QtGui.QWidget(self.splitter_db)
+        self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
+        self.verticalLayout_12 = QtGui.QVBoxLayout(self.horizontalLayoutWidget_2)
+        self.verticalLayout_12.setObjectName("verticalLayout_12")
+        self.label_15 = QtGui.QLabel(self.horizontalLayoutWidget_2)
+        self.label_15.setObjectName("label_15")
+        self.verticalLayout_12.addWidget(self.label_15)
+        self.textdbsql = QtGui.QPlainTextEdit(self.horizontalLayoutWidget_2)
+        self.textdbsql.setMaximumSize(QtCore.QSize(16777215, 100))
+        font = QtGui.QFont()
+        font.setFamily("Monospace")
+        font.setPointSize(11)
+        self.textdbsql.setFont(font)
+        self.textdbsql.setObjectName("textdbsql")
+        self.verticalLayout_12.addWidget(self.textdbsql)
+        self.horizontalLayout_14 = QtGui.QHBoxLayout()
+        self.horizontalLayout_14.setObjectName("horizontalLayout_14")
+        self.btndbexec = QtGui.QPushButton(self.horizontalLayoutWidget_2)
+        self.btndbexec.setObjectName("btndbexec")
+        self.horizontalLayout_14.addWidget(self.btndbexec)
+        self.btndbflowsq = QtGui.QPushButton(self.horizontalLayoutWidget_2)
+        self.btndbflowsq.setObjectName("btndbflowsq")
+        self.horizontalLayout_14.addWidget(self.btndbflowsq)
+        self.verticalLayout_12.addLayout(self.horizontalLayout_14)
+        self.label_16 = QtGui.QLabel(self.horizontalLayoutWidget_2)
+        self.label_16.setObjectName("label_16")
+        self.verticalLayout_12.addWidget(self.label_16)
+        self.tabledbview = QtGui.QTableView(self.horizontalLayoutWidget_2)
+        self.tabledbview.setObjectName("tabledbview")
+        self.verticalLayout_12.addWidget(self.tabledbview)
+        self.verticalLayoutWidget_5 = QtGui.QWidget(self.splitter_db)
+        self.verticalLayoutWidget_5.setObjectName("verticalLayoutWidget_5")
+        self.verticalLayout_11 = QtGui.QVBoxLayout(self.verticalLayoutWidget_5)
+        self.verticalLayout_11.setObjectName("verticalLayout_11")
+        self.label_17 = QtGui.QLabel(self.verticalLayoutWidget_5)
+        self.label_17.setObjectName("label_17")
+        self.verticalLayout_11.addWidget(self.label_17)
+        self.plainTextEdit = QtGui.QPlainTextEdit(self.verticalLayoutWidget_5)
+        self.plainTextEdit.setObjectName("plainTextEdit")
+        self.verticalLayout_11.addWidget(self.plainTextEdit)
+        self.horizontalLayout_15.addWidget(self.splitter_db)
+        self.tabWidget_2.addTab(self.tabdbview, "")
         self.horizontalLayout_9.addWidget(self.tabWidget_2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 879, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 910, 25))
         self.menubar.setObjectName("menubar")
         self.menuMallory = QtGui.QMenu(self.menubar)
         self.menuMallory.setObjectName("menuMallory")
@@ -497,7 +546,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuMallory.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(1)
+        self.tabWidget_2.setCurrentIndex(5)
         self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -642,6 +691,17 @@ class Ui_MainWindow(object):
         self.labelrulepreview.setText(QtGui.QApplication.translate("MainWindow", "Rule Preview", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_rules), QtGui.QApplication.translate("MainWindow", "Rules", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "Objects", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_15.setText(QtGui.QApplication.translate("MainWindow", "SQL Query", None, QtGui.QApplication.UnicodeUTF8))
+        self.btndbexec.setText(QtGui.QApplication.translate("MainWindow", "Execute SQL", None, QtGui.QApplication.UnicodeUTF8))
+        self.btndbflowsq.setText(QtGui.QApplication.translate("MainWindow", "Create Flows Query", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_16.setText(QtGui.QApplication.translate("MainWindow", "Results", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_17.setText(QtGui.QApplication.translate("MainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
+        self.plainTextEdit.setPlainText(QtGui.QApplication.translate("MainWindow", "This is the traffic database viewier. It is a more advanced user interface element. To use it simply (view all TCP flows), click the \"Create Flows Query\" button and then the \"Execute SQL\" button. This will then show all flows and their releated connections. \n"
+"\n"
+"To view a full capture of traffic double click the row in question.\n"
+"\n"
+"To see the schema go to $MALLORYROOT$/db and run \"sqlite3 trafficdb\" to open the  the traffic DB. Then type .schema to see the currently available tables. ", None, QtGui.QApplication.UnicodeUTF8))
+        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tabdbview), QtGui.QApplication.translate("MainWindow", "DB View", None, QtGui.QApplication.UnicodeUTF8))
         self.menuMallory.setTitle(QtGui.QApplication.translate("MainWindow", "Mallory", None, QtGui.QApplication.UnicodeUTF8))
         self.actionFlow_Config.setText(QtGui.QApplication.translate("MainWindow", "Flow Config", None, QtGui.QApplication.UnicodeUTF8))
 

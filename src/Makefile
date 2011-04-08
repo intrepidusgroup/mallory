@@ -4,3 +4,4 @@ pyuic = pyuic4
 .PHONY : gui
 gui:
 	$(pyuic) gui/TCPEdit.ui > gui/TCPEdit.py
+	$(pyuic) gui/TextViewDialog.ui > gui/TextViewDialog.py
