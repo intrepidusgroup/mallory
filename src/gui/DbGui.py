@@ -18,7 +18,11 @@ from connections c
 inner join flows f ON f.conncount = c.conncount        
 """
         
-        
+MISSING_DEPS_TEXT = """You are missing QtSql (Ubuntu packagepython-qt4-sql) 
+or QtSqlite (Ubuntu package libqt4-sql-sqlite) and maybe both.")
+
+Database View Functionality Is Disabled"""
+
 class DbGui(object):
     """
     Quick and dirty database GUI
@@ -40,10 +44,6 @@ class DbGui(object):
          # Set initial splitter sizes        
         self.splitter_db.setSizes([200, 100])
         
-        
-        self.connect_handlers()
-        self.db = None
-        
         try:
             self.db = QtSql.QSqlDatabase.addDatabase("QSQLITE")
             NoSqlite = False
@@ -51,10 +51,15 @@ class DbGui(object):
             NoSqlite = True
             
         if NoQtSql or NoSqlite:
-            print ("You are missing QtSql (Ubuntu packagepython-qt4-sql) "
-                   "or QtSqlite (libqt4-sql-sqlite) and maybe both.") 
+            warn = QtGui.QMessageBox.Warning 
+            title = "Missing dependencies"
+            text = MISSING_DEPS_TEXT
+            self.msgbox = QtGui.QMessageBox(warn, title, text)
+            self.msgbox.show()             
             return
         
+        self.connect_handlers()
+                
         self.db.setDatabaseName("../db/trafficdb")
         open = self.db.open()
         
