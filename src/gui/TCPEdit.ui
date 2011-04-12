@@ -21,11 +21,11 @@
        <string>An IP address to match. Blank for wildcard match.</string>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tab_interfaces">
        <attribute name="title">
-        <string>1. Interfaces</string>
+        <string>Interfaces</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_12">
         <item>
@@ -172,7 +172,7 @@ Note: Saving will completely rewrite your iptables, enable IP forwarding and red
       </widget>
       <widget class="QWidget" name="tab_protocols">
        <attribute name="title">
-        <string>2. Protocols</string>
+        <string>Protocols</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_26">
         <item>
@@ -285,296 +285,6 @@ dnsp.DNS
 You must type it in the configuration exactly as shown.
 </string>
               </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_streams">
-       <attribute name="title">
-        <string>Streams</string>
-       </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QSplitter" name="splitter">
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="lineWidth">
-           <number>3</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <widget class="QTableView" name="tablestreams">
-           <property name="font">
-            <font>
-             <family>Sans Serif</family>
-             <pointsize>8</pointsize>
-            </font>
-           </property>
-           <property name="midLineWidth">
-            <number>3</number>
-           </property>
-           <property name="autoScroll">
-            <bool>true</bool>
-           </property>
-           <property name="selectionMode">
-            <enum>QAbstractItemView::SingleSelection</enum>
-           </property>
-           <property name="selectionBehavior">
-            <enum>QAbstractItemView::SelectRows</enum>
-           </property>
-           <property name="gridStyle">
-            <enum>Qt::SolidLine</enum>
-           </property>
-           <property name="sortingEnabled">
-            <bool>true</bool>
-           </property>
-           <attribute name="horizontalHeaderStretchLastSection">
-            <bool>true</bool>
-           </attribute>
-           <attribute name="verticalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-          </widget>
-          <widget class="QWidget" name="layoutWidget">
-           <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout">
-              <item>
-               <widget class="QLabel" name="label">
-                <property name="text">
-                 <string>Actions:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="btnicept">
-                <property name="toolTip">
-                 <string>Tell Mallory the Debugger wants to intercept traffic</string>
-                </property>
-                <property name="text">
-                 <string>Intercept</string>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="btnauto">
-                <property name="toolTip">
-                 <string>Automagically send all packets</string>
-                </property>
-                <property name="text">
-                 <string>Auto Send</string>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="btnsend">
-                <property name="toolTip">
-                 <string>Send the selected packet</string>
-                </property>
-                <property name="text">
-                 <string>Send</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QTabWidget" name="tabWidget">
-              <property name="toolTip">
-               <string>Save changes made during text editing</string>
-              </property>
-              <property name="currentIndex">
-               <number>1</number>
-              </property>
-              <widget class="QWidget" name="tabtext">
-               <attribute name="title">
-                <string>Text</string>
-               </attribute>
-               <layout class="QVBoxLayout" name="verticalLayout_2">
-                <item>
-                 <widget class="QPushButton" name="btnsavetext">
-                  <property name="text">
-                   <string>Save Text Changes</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPlainTextEdit" name="textstream"/>
-                </item>
-               </layout>
-              </widget>
-              <widget class="QWidget" name="tabhex">
-               <attribute name="title">
-                <string>Hex</string>
-               </attribute>
-               <layout class="QHBoxLayout" name="horizontalLayout_2">
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_3">
-                  <item>
-                   <widget class="QPushButton" name="btnsavehex">
-                    <property name="toolTip">
-                     <string>Save changes made during hex editing</string>
-                    </property>
-                    <property name="text">
-                     <string>Save Hex Changes</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QTableWidget" name="tablehex">
-                    <property name="font">
-                     <font>
-                      <family>Courier 10 Pitch</family>
-                      <pointsize>10</pointsize>
-                     </font>
-                    </property>
-                    <property name="selectionMode">
-                     <enum>QAbstractItemView::ContiguousSelection</enum>
-                    </property>
-                    <property name="textElideMode">
-                     <enum>Qt::ElideNone</enum>
-                    </property>
-                    <property name="rowCount">
-                     <number>10</number>
-                    </property>
-                    <attribute name="horizontalHeaderDefaultSectionSize">
-                     <number>22</number>
-                    </attribute>
-                    <attribute name="horizontalHeaderMinimumSectionSize">
-                     <number>22</number>
-                    </attribute>
-                    <attribute name="horizontalHeaderStretchLastSection">
-                     <bool>true</bool>
-                    </attribute>
-                    <attribute name="verticalHeaderDefaultSectionSize">
-                     <number>18</number>
-                    </attribute>
-                    <attribute name="verticalHeaderMinimumSectionSize">
-                     <number>12</number>
-                    </attribute>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <column>
-                     <property name="text">
-                      <string>00</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>1</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>2</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>3</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>4</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>5</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>6</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>7</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>8</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>9</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>A</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>B</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>C</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>D</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>E</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>Text</string>
-                     </property>
-                    </column>
-                    <item row="0" column="0">
-                     <property name="text">
-                      <string>AA</string>
-                     </property>
-                    </item>
-                    <item row="0" column="1">
-                     <property name="text">
-                      <string>01</string>
-                     </property>
-                    </item>
-                    <item row="1" column="2">
-                     <property name="text">
-                      <string>0C</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </widget>
              </widget>
             </item>
            </layout>
@@ -1077,6 +787,320 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_streams">
+       <attribute name="title">
+        <string>Streams</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QSplitter" name="splitter">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="lineWidth">
+           <number>3</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QTableView" name="tablestreams">
+           <property name="font">
+            <font>
+             <family>Sans Serif</family>
+             <pointsize>8</pointsize>
+            </font>
+           </property>
+           <property name="midLineWidth">
+            <number>3</number>
+           </property>
+           <property name="autoScroll">
+            <bool>true</bool>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SingleSelection</enum>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectRows</enum>
+           </property>
+           <property name="gridStyle">
+            <enum>Qt::SolidLine</enum>
+           </property>
+           <property name="sortingEnabled">
+            <bool>true</bool>
+           </property>
+           <attribute name="horizontalHeaderStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string>Actions:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnicept">
+                <property name="toolTip">
+                 <string>Tell Mallory the Debugger wants to intercept traffic</string>
+                </property>
+                <property name="text">
+                 <string>Intercept</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnauto">
+                <property name="toolTip">
+                 <string>Automagically send all packets</string>
+                </property>
+                <property name="text">
+                 <string>Auto Send</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnsend">
+                <property name="toolTip">
+                 <string>Send the selected packet</string>
+                </property>
+                <property name="text">
+                 <string>Send</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QTabWidget" name="tabWidget">
+              <property name="toolTip">
+               <string>Save changes made during text editing</string>
+              </property>
+              <property name="currentIndex">
+               <number>1</number>
+              </property>
+              <widget class="QWidget" name="tabtext">
+               <attribute name="title">
+                <string>Text</string>
+               </attribute>
+               <layout class="QVBoxLayout" name="verticalLayout_2">
+                <item>
+                 <widget class="QPushButton" name="btnsavetext">
+                  <property name="text">
+                   <string>Save Text Changes</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPlainTextEdit" name="textstream"/>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="tabhex">
+               <attribute name="title">
+                <string>Hex</string>
+               </attribute>
+               <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_3">
+                  <item>
+                   <widget class="QPushButton" name="btnsavehex">
+                    <property name="toolTip">
+                     <string>Save changes made during hex editing</string>
+                    </property>
+                    <property name="text">
+                     <string>Save Hex Changes</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QTableWidget" name="tablehex">
+                    <property name="font">
+                     <font>
+                      <family>Courier 10 Pitch</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="selectionMode">
+                     <enum>QAbstractItemView::ContiguousSelection</enum>
+                    </property>
+                    <property name="textElideMode">
+                     <enum>Qt::ElideNone</enum>
+                    </property>
+                    <property name="rowCount">
+                     <number>10</number>
+                    </property>
+                    <attribute name="horizontalHeaderDefaultSectionSize">
+                     <number>22</number>
+                    </attribute>
+                    <attribute name="horizontalHeaderMinimumSectionSize">
+                     <number>22</number>
+                    </attribute>
+                    <attribute name="horizontalHeaderStretchLastSection">
+                     <bool>true</bool>
+                    </attribute>
+                    <attribute name="verticalHeaderDefaultSectionSize">
+                     <number>18</number>
+                    </attribute>
+                    <attribute name="verticalHeaderMinimumSectionSize">
+                     <number>12</number>
+                    </attribute>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <column>
+                     <property name="text">
+                      <string>00</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>1</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>2</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>3</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>4</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>5</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>6</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>7</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>8</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>9</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>A</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>B</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>C</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>D</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>E</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>Text</string>
+                     </property>
+                    </column>
+                    <item row="0" column="0">
+                     <property name="text">
+                      <string>AA</string>
+                     </property>
+                    </item>
+                    <item row="0" column="1">
+                     <property name="text">
+                      <string>01</string>
+                     </property>
+                    </item>
+                    <item row="1" column="2">
+                     <property name="text">
+                      <string>0C</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_advanced">
+       <attribute name="title">
+        <string>Advanced</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_16">
+        <item>
+         <widget class="QTabWidget" name="tabwidget_advanced">
+          <property name="currentIndex">
+           <number>1</number>
+          </property>
+          <widget class="QWidget" name="tab_2">
+           <attribute name="title">
+            <string>Tab 1</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="tab_3">
+           <attribute name="title">
+            <string>Tab 2</string>
+           </attribute>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tab">
        <attribute name="title">
         <string>Objects</string>
@@ -1194,7 +1218,9 @@ p, li { white-space: pre-wrap; }
 
 To view a full capture of traffic double click the row in question.
 
-To see the schema go to $MALLORYROOT$/db and run &quot;sqlite3 trafficdb&quot; to open the  the traffic DB. Then type .schema to see the currently available tables. </string>
+To see the schema go to $MALLORYROOT$/db and run &quot;sqlite3 trafficdb&quot; to open the  the traffic DB. Then type .schema to see the currently available tables. 
+
+To refresh the data, click the Execute SQL button again.</string>
               </property>
              </widget>
             </item>

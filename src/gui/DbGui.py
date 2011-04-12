@@ -100,10 +100,6 @@ class DbGui(object):
         self.bufferview.setText(big_buffers_str)
         self.bufferview.show()
             
-            
-        
-        
-        
 class BufferView(QtGui.QDialog):
     """
     This class creates a dialog that is used to capture and then insert a Hex or
