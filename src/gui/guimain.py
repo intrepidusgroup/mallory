@@ -16,12 +16,14 @@ import pickle
 import Queue
 import traceback
 from PyQt4 import QtGui, QtCore, Qt
-from TCPEdit import Ui_MainWindow
+from Mallory import Ui_MainWindow
 from debug import DebugEvent
 from binascii import hexlify, unhexlify
 from threading import Lock
 import Pyro.core
 import logging
+import AboutDialog
+
 from config import Config
 # Pyro imports go here
 
@@ -145,6 +147,9 @@ class MalloryGui(QtGui.QMainWindow):
         self.app = None
         self.streammod = StreamTable(self)
         self.rulemod = RuleGui.RuleList(self)
+
+        # Dialogs
+        self.aboutdialog = AboutDialog.AboutDialog(self) 
                 
         # Initialized after setupUi runs
         self.interfacesgui = None
@@ -178,7 +183,13 @@ class MalloryGui(QtGui.QMainWindow):
         self.main.buttonaddrule.clicked.connect(self.handle_ruleadd)
         self.main.buttondelrule.clicked.connect(self.handle_ruledel)        
         self.main.btnauto.clicked.connect(self.updateStatusBar)
+        self.main.actionAbout_Mallory.triggered.connect(self.handle_about)
+    
         
+    def handle_about(self):
+        self.aboutdialog.show()
+        print "Handling About"
+           
     def setUp(self):
         self.hexedit = HexEdit.HexEdit(self.main.tablehex, self.app, self.statusBar())
         self.hexedit.ready = True 
@@ -522,6 +533,7 @@ def main():
     window.connecthandlers()
     window.setUp()
     window.setupModels()
+    
   
     # Interfaces Editor GUI (self contained in interfaces tab)
     window.interfacesgui = \

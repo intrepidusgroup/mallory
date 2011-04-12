@@ -1,5 +1,5 @@
 from PyQt4 import QtGui, QtCore, Qt
-import TextViewDialog
+import TextViewDialogUi
 
 try:
     from PyQt4 import QtSql
@@ -107,7 +107,7 @@ class BufferView(QtGui.QDialog):
     """
     def __init__(self, hexedit):
         QtGui.QDialog.__init__(self)
-        self.dialog = TextViewDialog.Ui_Dialog()
+        self.dialog = TextViewDialogUi.Ui_Dialog()
         self.dialog.setupUi(self)
         
     def setText(self, text):
