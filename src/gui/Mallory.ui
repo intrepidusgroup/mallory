@@ -28,7 +28,7 @@
        <string>An IP address to match. Blank for wildcard match.</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tab_interfaces">
        <attribute name="icon">
@@ -1163,7 +1163,7 @@ p, li { white-space: pre-wrap; }
         <item>
          <widget class="QTabWidget" name="tabwidget_advanced">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tabdbview">
            <attribute name="icon">
@@ -1270,41 +1270,41 @@ To refresh the data, click the Execute SQL button again.</string>
             </item>
            </layout>
           </widget>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>Objects</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item>
-         <widget class="QSplitter" name="splitter_4">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <widget class="QListWidget" name="listWidget_objects"/>
-          <widget class="QSplitter" name="splitter_3">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <widget class="QTreeWidget" name="treeWidget_objectinspector">
-            <property name="columnCount">
-             <number>2</number>
-            </property>
-            <column>
-             <property name="text">
-              <string notr="true">1</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string notr="true">2</string>
-             </property>
-            </column>
-           </widget>
-           <widget class="QPlainTextEdit" name="plainTextEdit_objectInspector"/>
+          <widget class="QWidget" name="tab">
+           <attribute name="title">
+            <string>HTTP Objects</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QSplitter" name="splitter_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <widget class="QListWidget" name="listWidget_objects"/>
+              <widget class="QSplitter" name="splitter_3">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <widget class="QTreeWidget" name="treeWidget_objectinspector">
+                <property name="columnCount">
+                 <number>2</number>
+                </property>
+                <column>
+                 <property name="text">
+                  <string notr="true">1</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string notr="true">2</string>
+                 </property>
+                </column>
+               </widget>
+               <widget class="QPlainTextEdit" name="plainTextEdit_objectInspector"/>
+              </widget>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </widget>
         </item>
