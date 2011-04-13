@@ -111,16 +111,17 @@ class RuleAction(object):
         pass
     
 class Fuzz(RuleAction):
-    def __init__(self):
+    def __init__(self, bit_flip_percentage=20, bof_injection_percentage=20):
         RuleAction.__init__(self)
         self.name = "fuzz"
-
+        self.bfp = bit_flip_percentage
+        self.bip = bof_injection_percentage
     def execute(self, **kwargs):
         if "data" in kwargs:
             data = kwargs["data"]
         else:
             return ""
-        return proxfuzz.fuzz(data)
+        return proxfuzz.fuzz(data,self.bfp,self.bip)
 
 class Muck(RuleAction):
     def __init__(self, mucks = []):

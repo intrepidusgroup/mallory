@@ -26,12 +26,12 @@ userrules = [
  "direction":"c2s",
  "passthru":"True"
 },
-#{
-# "name":"FuzzS2C",
-# "action":rule.Fuzz(),
-# "direction":"s2c",
-# "passthru":"True"
-#},
+{
+ "name":"FuzzS2C",
+ "action":rule.Fuzz(bof_injection_percentage=20*-1,bit_flip_percentage=45*-1), 
+ "direction":"s2c",
+ "passthru":"True"
+},
 {
  "name":"default",  
  "action":rule.Debug()
