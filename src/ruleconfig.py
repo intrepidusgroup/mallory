@@ -26,12 +26,12 @@ userrules = [
  "direction":"c2s",
  "passthru":"True"
 },
-{
- "name":"FuzzS2C",
- "action":rule.Fuzz(),
- "direction":"s2c",
- "passthru":"True"
-},
+#{
+# "name":"FuzzS2C",
+# "action":rule.Fuzz(),
+# "direction":"s2c",
+# "passthru":"True"
+#},
 {
  "name":"default",  
  "action":rule.Debug()

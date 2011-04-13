@@ -21,11 +21,11 @@ def bofinjection(data):
 def fuzz(data):
 
     r = randint(0,5)
-    if r==0 or True:
+    if r==0:
         data = bitflipping(data)
 
     r = randint(0,5)
-    if r==0 or True:
+    if r==0:
         data = bofinjection(data)
     return data
 
