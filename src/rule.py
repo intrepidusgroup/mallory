@@ -1,5 +1,6 @@
 import muckpipe
 import binascii
+import proxfuzz
 
 """
     Rules help determine what Mallory will do with a specific piece of data. 
@@ -60,7 +61,7 @@ import binascii
     
     In this system it makes sense to put the most specific rules first and put
     the least specific rules last. It is up to the user to craft a ruleset that
-    does what they want it to. 
+u   does what they want it to. 
     
 
     
@@ -109,6 +110,18 @@ class RuleAction(object):
     def execute(self, **kwargs):
         pass
     
+class Fuzz(RuleAction):
+    def __init__(self):
+        RuleAction.__init__(self)
+        self.name = "fuzz"
+
+    def execute(self, **kwargs):
+        if "data" in kwargs:
+            data = kwargs["data"]
+        else:
+            return ""
+        return proxfuzz.fuzz(data)
+
 class Muck(RuleAction):
     def __init__(self, mucks = []):
         RuleAction.__init__(self)

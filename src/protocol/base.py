@@ -486,6 +486,8 @@ class TcpProtocol(Protocol):
                 shoulddebug = True
             if rule.action.name == "muck":
                 string = rule.action.execute(data=string)
+            if rule.action.name == "fuzz":
+                string = rule.action.execute(data=string)
         
         # Logging cruft
         if matched and self.config.debug > 2:
