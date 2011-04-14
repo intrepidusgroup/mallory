@@ -114,6 +114,8 @@ class Muck(RuleAction):
         RuleAction.__init__(self)
         self.name = "muck"
         self.mucks = mucks
+        print "Got mucks"
+        print mucks
         
     def execute(self, **kwargs):        
         if "data" in kwargs:
@@ -151,7 +153,6 @@ class Data(object):
              
 class Rule(object):
     def __init__(self, name, **kargs):
-        kargs['name'] = name
         self.init_invariants()
         self.init_variants(**kargs)
         
@@ -179,7 +180,7 @@ class Rule(object):
         self.matching = []
         
         self.name = str(kargs.get('name', ""))
-        self.passthru = kargs.get('passthru', False)                
+        self.passthru = self.make_bool(str(kargs.get('passthru', False)))                
         # The seemingly redundant string calls are important for PyQt based code
         self.addr = self.make_str(str(kargs.get('addr', "*")))
         self.port = self.make_port(str(kargs.get('port', "*")))
