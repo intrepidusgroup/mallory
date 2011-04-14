@@ -1,6 +1,6 @@
 import muckpipe
 import binascii
-import proxfuzz
+import fuzz
 
 """
     Rules help determine what Mallory will do with a specific piece of data. 
@@ -121,7 +121,7 @@ class Fuzz(RuleAction):
             data = kwargs["data"]
         else:
             return ""
-        return proxfuzz.fuzz(data,self.bfp,self.bip)
+        return fuzz.fuzz(data,self.bfp,self.bip)
 
 class Muck(RuleAction):
     def __init__(self, mucks = []):
