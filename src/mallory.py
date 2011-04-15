@@ -326,7 +326,7 @@ class Mallory(Subject):
             
             # Handle UDP
             udp = base.UdpProtocol(dbConn, udpproxy, self.configured_protos)
-            
+            udp.setrules(self.debugger.rules) 
             # Setup bi-directional pub/sub setup for debugger events. This
             # is a very important step. Without it the debugging client and or
             # mallory will not know when an event has occured

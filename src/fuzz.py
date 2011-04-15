@@ -18,18 +18,18 @@ def bofinjection(data):
     return data
 
 
-def fuzz(data, bit_flip_percentage = 20, bof_injection_percentage = 20):
+def fuzz(data, bit_flip_percentage = 20, bof_injection_percentage = 20, bit_flip_density = 7):
     
-    print "Fuzz:"
-    print "    bfp:" + str(bit_flip_percentage)
-    print "    bip:" + str(bof_injection_percentage)
+    #print "Fuzz:"
+    #print "    bfp:" + str(bit_flip_percentage)
+    #print "    bip:" + str(bof_injection_percentage)
     
     r = randint(0,100)
-    print "    first r:" + str(r)
+    #print "    first r:" + str(r)
     if r<=bit_flip_percentage:
-        data = bitflipping(data)
+        data = bitflipping(data, bit_flip_density)
 
-    print "    second r:" + str(r)
+    #print "    second r:" + str(r)
     r = randint(0,100)
     if r<=bof_injection_percentage:
         data = bofinjection(data)

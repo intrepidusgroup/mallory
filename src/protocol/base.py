@@ -21,6 +21,45 @@ from observer import Subject
 from debug import DebugEvent
 from binascii import hexlify, unhexlify, crc32
 
+class ConnData():
+    """This class encapsulates all of the information about a connection it 
+    is mostly designed to be a data holding class and provide convenience
+    methods to turn the data into a string for easy logging, etc."""
+
+    # TODO: Use the defines...
+    DIR_C2S = 'c2s'
+    DIR_S2C = 's2c'
+    DIR_NONE = ''
+
+    def __init__(self, data={'clientip':'', 'clientport':0, \
+                                 'serverip':'', 'serverport':0, \
+                                 'conncount':'', 'direction':''}):
+        """
+        Initialize the connection data.
+
+        @param data: This is the data associated with the connection.
+        clientip: the client's (victim's) ip address).
+        clientport: the victim's source port.
+        serverip: the destination IP address.
+        serverport: the destination port.
+        conncount: Used to track connections in the data store.
+        direction: C2S or S2C (client to server or server to client).
+
+        @return: No return value
+
+        """
+        self.clientip = data['clientip']
+        self.clientport = data['clientport']
+        self.serverip = data['serverip']
+        self.serverport = data['serverport']
+        self.conncount = data['conncount']
+        self.direction = data['direction']
+
+    def __str__(self):
+        return "clientip:%s, clientport:%d, serverip:%s, serverport:%d " \
+            "conncount:%d, direction:%s" % (self.clientip, self.clientport, \
+            self.serverip, self.serverport, self.conncount, self.direction)
+
 
 class Protocol(Subject):
     def __init__(self, rules = [], config = config.Config()):
@@ -143,12 +182,22 @@ class UdpProtocol(Protocol):
                 
                 if dest in r:
                     pkt, raddr = dest.recvfrom(65507)
+                    
+                    conndata = ConnData({'clientip' : raddr[0], \
+                        'clientport' : raddr[1], \
+                        'serverip' : caddr[0], 'serverport' : caddr[1], \
+                        'conncount' : 1, 'direction' : 's2c' })
+                    
+                    if self.rules is not None:
+                        pkt = self.processrules(pkt, conndata)
+                    
+                    
                     tdata = (raddr[0], raddr[1], caddr[0], caddr[1], "s2c",
                              repr(pkt), time.time())
                     self.trafficdb.dgram.put(tdata)       
                                   
-                    # TODO: Protocol/Plugin Point: Pass server pkt+conndata
                     proto = self.proto_lookup(raddr[0], raddr[1])
+   
                     if proto:
                         pkt = proto.s2c_data(pkt)
                          
@@ -187,6 +236,15 @@ class UdpProtocol(Protocol):
                 rdst, rpt = nftool.getrealdest_ct(caddr[0], caddr[1])        
                 raddr = (rdst, rpt)
                 
+                conndata = ConnData({'clientip' : caddr[0], \
+                        'clientport' : caddr[1], \
+                        'serverip' : rdst, 'serverport' : rpt, \
+                        'conncount' : 1, 'direction' : 'c2s' })
+    
+                if self.rules is not None:
+                    pkt = self.processrules(pkt, conndata)
+
+
                 tdata = (caddr[0], caddr[1], rdst, rpt, "c2s", repr(pkt), 
                          time.time())
                 self.trafficdb.dgram.put(tdata)                  
@@ -199,7 +257,6 @@ class UdpProtocol(Protocol):
                 self.log.debug("UDPProtocol[m]: self.getssion returned %d" 
                                % (sport))
                 
-                # TODO: Protocol/Plugin Point: Pass Client pkt+conndata                
                 if sport != 0:
                     dest = self.session[sport][2]
                     bsent = dest.sendto(pkt, raddr)              
@@ -251,9 +308,73 @@ class UdpProtocol(Protocol):
         """Generic client to server forwarding method. Reimplement this method 
         to modify bytes that is being sent from the client to the server
         """
+
+    def processrules(self, string, conndata):
+        """
+        TODO: This code is not 100% ideal. It places a lot of responsibility on
+        the caller for processing the rule chain, etc. This should be abstracted
+        out and hidden in in the rule module. This is a nice, functional
+        version, though.
+        
+        Very little of this code depends on the class it is in. All it needs
+        is a rule chain. Perhaps a RuleChain class is in order?
+        """
+        if self.rules is None:
+            return string
+        if len(self.rules) == 0:
+            return  string
+                
+        addr = ""
+        port = conndata.serverport
+                
+        if conndata.direction == "c2s":
+            addr = conndata.clientip
+        elif conndata.direction == "s2c":
+            addr = conndata.serverip
+
+        matchingrules = []
+        result = None
+        kargs = {'addr':addr,
+                 'port':port,
+                 'direction':conndata.direction,
+                 'payload':string}
+        for rule in self.rules:
+            #matched = rule.match(addr, port, conndata.direction)
+            matched = rule.match(**kargs)
+            
+            if matched:
+                matchingrules.append(rule)                
+                # Stop processing unless the rule is a passthru Rule
+                if not rule.passthru:
+                    break
+        
+        for rule in matchingrules:
+            self.log.debug("Matched rule: %s" % (rule))
+            
+            if rule.action.name == "muck":
+                string = rule.action.execute(data=string)
+            if rule.action.name == "fuzz":
+                string = rule.action.execute(data=string)
+        
+        return string 
         
     def update(self, publisher, **kwargs):
-        super(Subject, self).update(self, publisher, **kwargs)
+        super(UdpProtocol, self).update(self, publisher, **kwargs)
+    
+        if "event" not in kwargs:
+            self.log.debug("BaseUDP: Event not in kwargs.")
+            return
+
+        event = kwargs["event"]
+
+        if event == "updaterules":
+            # TODO: Make this thread safe
+            if "rules" not in kwargs:
+                return
+
+            rulesin = kwargs["rules"]
+            self.rules = rulesin
+
         
 class TcpProtocol(Protocol):
     """This class is the base class that TCP protocols will inherit from
