@@ -28,7 +28,7 @@ userrules = [
 },
 {
  "name":"FuzzS2C",
- "action":rule.Fuzz(bit_flip_percentage=45*-1, bof_injection_percentage=20*-1), 
+ "action":rule.Fuzz(bit_flip_percentage=45, bof_injection_percentage=20, bit_flip_density=12), 
  "direction":"s2c",
  "passthru":"True"
 },

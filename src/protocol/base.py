@@ -21,6 +21,45 @@ from observer import Subject
 from debug import DebugEvent
 from binascii import hexlify, unhexlify, crc32
 
+class ConnData():
+    """This class encapsulates all of the information about a connection it 
+    is mostly designed to be a data holding class and provide convenience
+    methods to turn the data into a string for easy logging, etc."""
+
+    # TODO: Use the defines...
+    DIR_C2S = 'c2s'
+    DIR_S2C = 's2c'
+    DIR_NONE = ''
+
+    def __init__(self, data={'clientip':'', 'clientport':0, \
+                                 'serverip':'', 'serverport':0, \
+                                 'conncount':'', 'direction':''}):
+        """
+        Initialize the connection data.
+
+        @param data: This is the data associated with the connection.
+        clientip: the client's (victim's) ip address).
+        clientport: the victim's source port.
+        serverip: the destination IP address.
+        serverport: the destination port.
+        conncount: Used to track connections in the data store.
+        direction: C2S or S2C (client to server or server to client).
+
+        @return: No return value
+
+        """
+        self.clientip = data['clientip']
+        self.clientport = data['clientport']
+        self.serverip = data['serverip']
+        self.serverport = data['serverport']
+        self.conncount = data['conncount']
+        self.direction = data['direction']
+
+    def __str__(self):
+        return "clientip:%s, clientport:%d, serverip:%s, serverport:%d " \
+            "conncount:%d, direction:%s" % (self.clientip, self.clientport, \
+            self.serverip, self.serverport, self.conncount, self.direction)
+
 
 class Protocol(Subject):
     def __init__(self, rules = [], config = config.Config()):
@@ -143,12 +182,19 @@ class UdpProtocol(Protocol):
                 
                 if dest in r:
                     pkt, raddr = dest.recvfrom(65507)
+                    
+                    clientconn = ConnData({'clientip' : caddr[0], \
+                        'clientport' : caddr[1], \
+                        'serverip' : rdst, 'serverport' : rpt, \
+                        'conncount' : 1, 'direction' : 's2c' })
+                    
                     tdata = (raddr[0], raddr[1], caddr[0], caddr[1], "s2c",
                              repr(pkt), time.time())
                     self.trafficdb.dgram.put(tdata)       
                                   
-                    # TODO: Protocol/Plugin Point: Pass server pkt+conndata
+                    # TODO:Not here... Above Protocol/Plugin Point: Pass server pkt+conndata
                     proto = self.proto_lookup(raddr[0], raddr[1])
+   
                     if proto:
                         pkt = proto.s2c_data(pkt)
                          
@@ -187,6 +233,18 @@ class UdpProtocol(Protocol):
                 rdst, rpt = nftool.getrealdest_ct(caddr[0], caddr[1])        
                 raddr = (rdst, rpt)
                 
+                clientconn = ConnData({'clientip' : caddr[0], \
+                        'clientport' : caddr[1], \
+                        'serverip' : rdst, 'serverport' : rpt, \
+                        'conncount' : 1, 'direction' : 'c2s' })
+    
+
+                print "RAJRAJRAJ"
+                print clientconn
+                print repr(pkt)
+                print "RAJRAJRAJ"
+
+ 
                 tdata = (caddr[0], caddr[1], rdst, rpt, "c2s", repr(pkt), 
                          time.time())
                 self.trafficdb.dgram.put(tdata)                  

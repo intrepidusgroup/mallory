@@ -111,11 +111,12 @@ class RuleAction(object):
         pass
     
 class Fuzz(RuleAction):
-    def __init__(self, bit_flip_percentage=20, bof_injection_percentage=20):
+    def __init__(self, bit_flip_percentage=20, bof_injection_percentage=20, bit_flip_density=7):
         RuleAction.__init__(self)
         self.name = "fuzz"
         self.bfp = bit_flip_percentage
         self.bip = bof_injection_percentage
+        self.bfd = bit_flip_density
     def execute(self, **kwargs):
         if "data" in kwargs:
             data = kwargs["data"]
