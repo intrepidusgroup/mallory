@@ -575,11 +575,15 @@ class TcpProtocol(Protocol):
         
         event = kwargs["event"]
         
+
+        
         if event == "updaterules":
             # TODO: Make this thread safe
             if "rules" not in kwargs:
                 return
-            
+
+            #self.log.info("TcpProtocol.update - Got some rules %s" % (kwargs["rules"]))
+                    
             rulesin = kwargs["rules"]
             self.rules = rulesin
             

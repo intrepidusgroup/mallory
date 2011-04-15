@@ -48,14 +48,13 @@ class Debugger(Subject, Pyro.core.ObjBase):
     The Debugger class is the primary remote interface for any remote stream
     debugging clients. 
     """
-    def __init__(self, rules = []):
+    def __init__(self):
         Subject.__init__(self)
         Pyro.core.ObjBase.__init__(self)
         
         self.debugq = Queue.Queue()
         self.debugon = False
         self.log = logging.getLogger("mallorymain")
-        self.rules = rules
 
     def setdebug(self, state):
         """
@@ -157,40 +156,3 @@ class Debugger(Subject, Pyro.core.ObjBase):
         #self.log.debug("Debugger: send_de: got debugevent %s: " %  (debugevent))
         #self.log.debug("Debugger: send_de: got debugevent %s: " %  (de))
         return ""
-    
-    def getrules(self):
-        """
-        Get and return the current ruleset that is being enforced
-        
-        @return: array of L{rule.Rule} objects
-        """     
-        if self.rules is None:
-            return []
-        
-        for rule in self.rules:
-            self.log.debug("Debugger.getrules: %s" % (str(rule)))
-
-        self.log.debug("Debugger.getrules: client requested rules -  %s" % (self.rules))
-        
-        return self.rules
-    
-    def updaterules(self, rulearray):
-        """
-        Update the current array of rule objects
-        
-        @param rulearray: The array of rule objects to replace the current one.
-        """
-        self.rules = rulearray
-        
-        for rule in self.rules:
-            self.log.debug("Debugger.updaterules: %s" % (str(rule)))
-#            if rule.action.name == "muck":
-#                self.log.debug("Debugger.updaterules: %s" % (rule.action.mucks))
-#                for muck in rule.action.mucks:
-#                    self.log.debug("Debugger.updaterules.muck: %s" %(binascii.hexlify(muck)))
-                
-            
-        self.log.debug("Debugger.updaterules: %s" % (rulearray))
-        self.notify(event="updaterules", rules=rulearray)
-        
-        return ""             

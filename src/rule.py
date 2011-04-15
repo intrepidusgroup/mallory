@@ -2,107 +2,6 @@ import muckpipe
 import binascii
 import fuzz
 
-"""
-    Rules help determine what Mallory will do with a specific piece of data. 
-    
-    Currently The first step for any rule system is "does thing X match rule Y. 
-    For Mallory this will mean does a packet being sent to or from a client
-    match with some rules the Mallory user is interested in. And if the data
-    does match what happens. The key thing to be controlled by rules will be
-    if the data is mucked, if the data is sent to the debugger, or if it is
-    simply sent along with no modifications.
-    
-    
-    Currently the debugging code is the only modification that is processed.
-    
-    That entire "things that may potentially modify the data" subsystem should
-    be ripped out and handled cleanly in a separate interface. Rules are one of
-    the first steps in this system that determine how that data might be
-    processed: Manually(debugger), muckpipe(regex,automagic), plugin (automatic)
-    
-    
-    One idea is that this will be a basic event handling system and can be
-    modeled similar to a GUI using the chain of responsibility design pattern.
-    An event (DataReceived, DataSent) will be generated. The rules engine will
-    them come to life checking all existing rules. If the rule matches it will
-    have a specific action attached to it. That action will then be processed.
-    We can take advantage of Python and potentially have callables or something
-    else attached to make it easy to do a lot of different things based on
-    what the action is. Or we can go with a more firm system where we define
-    a class hierarchy of actions and then the action to take / code to execute
-    will be fairly easy to figure out. PluginAction = Some Plugin Interface that
-    does plugin stuff (keeps state across requests, etc.). A MuckAction would
-    have a specific MuckPipe attached.
-    
-    
-    Current events, 
-        *Event
-        **DataIn
-        **HTTPDataIn?
-        **
-        
-    Currently it does not seem that there are really a lot of events. We will
-    only be taking actions on a data send or receive and that is already covered
-    by the direction parameter. So it seems sensible to avoid over-complicating
-    the system with events at this time. The key thing will be to figure out
-    how to handle rule priority. My current idea is first match = the winner.
-    Store all rules in an array and check over them. The naieve implementation
-    is to loop over the list of rules for every incoming packet. Assuming there 
-    are less than one hundred rules in effect at any given time this would be
-    fairly fast. An optimization would be to store a hash table for each 
-    matchable parameter, retrieve all of the rules that matched and then determine
-    a priority ordering based on the priority list. This should only be done
-    for rules that only match on one parameter, though. Optimizations will complicate
-    the design and figuring out if a rule matches is mostly an optimization 
-    problem so it should be left to the simple list based approach for the
-    first implementation and the rule matching can be optimized with some clever
-    algorithms and data structures if required. 
-    
-    
-    In this system it makes sense to put the most specific rules first and put
-    the least specific rules last. It is up to the user to craft a ruleset that
-u   does what they want it to. 
-    
-
-    
-    a.addr = "192.168.1.60"
-    a.port = "80"
-    a.direction = "c2s"
-
-    b.addr = "192.168.1.60"
-    b.port = "80"
-        
-    c.addr = "192.168.1.60"
-    
-    d.port = "80"
-    
-    e.direction = "c2s"    
-    
-    rules = [a, b, c, d, e] # priority is set by place in list
-    
-    {"addr":"192.168.1.60","port":80,"direction":s2c}
-        * matches: b, c, d
-        
-    {"addr":"192.168.1.60","port":22,"direction":c2s}
-        * matches: c, e
-        
-    {"addr":"192.168.1.60","port":80,"direction":c2s}
-        * matches: a, b, c, d, e
-        
-    {"addr":"192.168.1.60","port":80,"direction":c2s}
-        * matches: a, b, c, d, e
-        
-    {"addr":"192.168.1.100","port":80,"direction":c2s} 
-        * matches: d, e
-    
-   
-   
-   
-   
- 
-"""
-
-
 class RuleAction(object):
     def __init__(self):
         self.name = "base"
@@ -166,6 +65,13 @@ class Data(object):
         
              
 class Rule(object):
+    """
+    A Rule is an entity that triggers when certain matching criteria are met. These
+    criteria are when the rule is triggered. Each rule has a rule action that
+    determines what happens when the rule is triggered. Generally rule actions
+    are for special activities in Mallory (such as debugging) or for stateless
+    data modification, such as data mangling or fuzzing. 
+    """
     def __init__(self, name, **kargs):
         self.init_invariants()
         self.init_variants(**kargs)

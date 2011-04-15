@@ -4,6 +4,7 @@ import pickle
 import sys
 import muckpipe
 import binascii
+import Pyro
 
 from PyQt4 import QtGui, QtCore
 
@@ -11,10 +12,61 @@ RULEUP = -1
 RULEDOWN = 1
 
 class RuleEdit(object):
-    def __init__(self, main, rulemod):
+    def __init__(self, main):
+        """
+        Implementation note. There are two ways we have been designing these
+        classes. Method 1 is to pass in just the interface objects needed.
+        Method 2 is to expose the entire main window to the controller
+        (RuleEdit)
+        
+        Ideally there would not be a global name space of objects and they would
+        be broken down into widget compositions that keep each view very small
+        (in the MVC sense of view). Unfortunately, that is not as easy to do in
+        PyQt, so we have a global namespace. This was one of the first
+        components to be designed as a controller not living in guimain, thus it
+        retains a reference to the main object.
+        """
+
         self.main = main
-        self.rulemod = rulemod
+
+
+
+        
+        # Remote protocol configuration object
+        config_rules_uri = "PYROLOC://127.0.0.1:7766/config_rules"
+        self.remote_rule = \
+            Pyro.core.getProxyForURI(config_rules_uri)
+
+        rules = self.remote_rule.get_rules()
+        
+        print rules
+        
+        self.rulemod = RuleList(self.remote_rule.get_rules())
+        self.main.listrules.setModel(self.rulemod)
+        
+        self.connect_handlers()
+        
+    def connect_handlers(self):
+        self.main.listrules.activated.connect(self.handle_ruleactivated)
+        self.main.listrules.clicked.connect(self.handle_ruleactivated)
+        self.main.saverule.clicked.connect(self.handle_saverule)
+        self.main.buttondown.clicked.connect(self.handle_ruledown)
+        self.main.buttonup.clicked.connect(self.handle_ruleup)
+        self.main.buttonaddrule.clicked.connect(self.handle_ruleadd)
+        self.main.buttondelrule.clicked.connect(self.handle_ruledel)  
     
+    
+    
+    def select_row(self, row):
+        index = self.rulemod.index(row, 0, QtCore.QModelIndex())
+        rules = self.main.listrules
+        
+        # Get a selection model
+        model = rules.selectionModel()
+        model.select(index, QtGui.QItemSelectionModel.Select)
+        model.setCurrentIndex(index, QtGui.QItemSelectionModel.NoUpdate)
+        self.handle_ruleactivated(index)
+        
     def get_enc_rulepickle(self):
         return self.rulemod.getRules()
     
@@ -28,18 +80,52 @@ class RuleEdit(object):
         newrule = rule.Rule(name="new_rule")   
         self.rulemod.addRuleBefore(row, newrule)
         
+        self.select_row(row)
         
+        # Send back to Mallory server
+        self.remote_rule.update_rules(self.rulemod.getRules())
+        
+        
+#    ##### See RuleGui.py for these methods
+#    def handle_ruleadd(self):
+#        self.ruleedit.handle_ruleadd()
+#        self.remote_debugger.updaterules(self.ruleedit.get_enc_rulepickle())
+#    def handle_ruledel(self):
+#        self.ruleedit.handle_ruledel()
+#        self.remote_debugger.updaterules(self.ruleedit.get_enc_rulepickle())           
+#    def handle_ruledown(self):
+#        self.ruleedit.handle_ruledown()
+#        self.remote_debugger.updaterules(self.ruleedit.get_enc_rulepickle())        
+#    def handle_ruleup(self):
+#        self.ruleedit.handle_ruleup()
+#        self.remote_debugger.updaterules(self.ruleedit.get_enc_rulepickle())        
+#    def handle_ruleactivated(self, index):
+#        self.ruleedit.handle_ruleactivated(index)        
+#    def handle_saverule(self):
+#        rules = self.ruleedit.handle_saverule()
+#        print rule       
+#        self.remote_debugger.updaterules(rules)  
+               
     def handle_ruledel(self):
         rules = self.main.listrules
         selected = rules.selectedIndexes()[0]
         selrow = selected.row()
         self.rulemod.delRule(selrow)
+        
+
+        if selrow == self.rulemod.rowCount():
+            selrow -= 1
+                    
+        self.select_row(selrow)
+        self.remote_rule.update_rules(self.rulemod.getRules())
+        
             
     def handle_ruleupdown(self, dir):
         rules = self.main.listrules
         selected = rules.selectedIndexes()[0]
         selrow = selected.row()
-       
+        print selrow
+        
         if dir == RULEDOWN:
             if selrow < 0 or selrow >= self.rulemod.rowCount()-1:
                 return
@@ -50,22 +136,21 @@ class RuleEdit(object):
             return
         
         rl = self.rulemod.getRules()
- 
         rl[selrow], rl[selrow+dir] = rl[selrow+dir], rl[selrow]
-        
-        self.rulemod.setRules(rl)
-        
+        self.rulemod.setRules(rl)        
         self.rulemod.reset()
         
-        index = self.rulemod.createIndex(selrow+dir, 0)
-        
+        index = self.rulemod.createIndex(selrow+dir, 0)        
         self.main.listrules.setCurrentIndex(index)
+        
                
     def handle_ruledown(self):
         self.handle_ruleupdown(RULEDOWN)
+        self.remote_rule.update_rules(self.rulemod.getRules())
         
     def handle_ruleup(self):
         self.handle_ruleupdown(RULEUP)
+        self.remote_rule.update_rules(self.rulemod.getRules())
         
     def handle_ruleactivated(self, index):
         rule = self.rulemod.getRule(int(index.row()))
@@ -120,7 +205,10 @@ class RuleEdit(object):
         selected = rules.selectedIndexes()[0]
         self.rulemod.setRule(int(selected.row()), newrule)
         self.rulemod.reset()
-         
+        
+        selrow = selected.row()
+        self.select_row(selrow)
+        self.remote_rule.update_rules(self.rulemod.getRules())
         
         return self.rulemod.getRules()
     
@@ -229,4 +317,8 @@ class RuleList(QtCore.QAbstractListModel):
         
     def data(self, index, role):
         if role == QtCore.Qt.DisplayRole and index.isValid():
-            return self.rules[int(index.row())].name         
+            rule_name = self.rules[int(index.row())].name
+            if rule_name == "":
+                rule_name = "(empty name)"
+                
+            return rule_name         

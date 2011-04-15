@@ -5,30 +5,6 @@ import logging
 import Pyro.core
 import observer
 
-"""
-import protocol
-print "Proto is %s" % (opts.options.proto)
-
-modulename,protoname = opts.options.proto.split(".")
-    
-try:
-    protomodule = getattr(protocol, modulename)
-    protoinstance = getattr(protomodule, protoname)(None, None, None)
-    mallory.configure_protocol(protoinstance, "add")
-    mallory.log.info("Configuring command line protocol instance: %s "
-                     "for port %d" \
-                     % (protoinstance, protoinstance.serverPort))
-except:
-    print "Invalid protocol specified at command line"
-            
-        
-"""
-
-# Protocol Configuration
-
-# Get list of configured protocols from Mallory
-
-# Implement Save functionality
 
 class ConfigProtocols(observer.Subject, Pyro.core.ObjBase):
     def __init__(self):

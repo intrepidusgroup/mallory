@@ -81,13 +81,13 @@ import xmlrpclib
 import logging
 import traceback
 import struct
-import ruleconfig
 import rpc
 
 ### MALLORY IMPORTS ###
 import netfilter
 import malloryevt
 import config_proto
+import config_rule
 from cmdlineopts import CmdLineOpts
 from trafficdb import TrafficDb
 from observer import Subject
@@ -170,8 +170,9 @@ class Mallory(Subject):
         self.opts = options.options
         self.dbname = self.opts.trafficdb
         self.debugon = False
-        self.debugger = Debugger(ruleconfig.globalrules)
+        self.debugger = Debugger()
         self.config_protocols = config_proto.ConfigProtocols()
+        self.config_rules = config_rule.ConfigRules()
         self.rpcserver = rpc.RPCServer()
         self.nftool = netfilter.NetfilterTool()
         self.log = logging.getLogger("mallorymain")
@@ -283,6 +284,7 @@ class Mallory(Subject):
         
         self.rpcserver.add_remote_obj(self.debugger, "debugger")
         self.rpcserver.add_remote_obj(self.config_protocols, "config_proto")
+        self.rpcserver.add_remote_obj(self.config_rules, "config_rules")
         
         self.configure_protocols()
         
@@ -366,16 +368,24 @@ class Mallory(Subject):
                         protoinst = base.TcpProtocol(dbConn, csock, None)
                         
                     self.log.debug("Mallory.main: created a %s class" % (protoinst.__class__))
-                    protoinst.setrules(self.debugger.rules)
+                    protoinst.setrules(self.config_rules.get_rules())
                                                 
                     # Set the proper debugging flag.  
                     protoinst.debugon = self.debugger.debugon
                     
-                    # Connect up the proper publishers and subscribers                    
+                    ## You always *pass* the object interested in updates
+                    ## see observer.py
+                    
+                    # Protocols are interested in updates from mallory                   
                     self.attach(protoinst)
                     
-                    # Have the debugger listen for updates               
+                    # Protocols are interested in updates from rule_config
+                    self.config_rules.attach(protoinst)
+                    
+                    # Protocols are interested in updates from the debugger
                     self.debugger.attach(protoinst)
+                    
+                    # The debugger is interested in events from protos as well
                     protoinst.attach(self.debugger)
                     
                     # Which Protocol manager to which protocol

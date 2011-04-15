@@ -7,16 +7,28 @@ import observer
 import rule
 
 
+
 class ConfigRules(observer.Subject, Pyro.core.ObjBase):
+    """
+    Rule configuration is to manage the RPC interface to getting and setting
+    rules as well as the local activities of loading saved rule configuration.
+    
+    """
     def __init__(self):
         observer.Subject.__init__(self)
         Pyro.core.ObjBase.__init__(self)
         
+        self.log = logging.getLogger("mallorymain")
         self.config_path = "rules.ini"
-        self.load_config()
+        self.rules = self.load_config()
         
         
     def load_config_raw(self):
+        """
+        Load the raw configuration file from disk.
+        
+        @return: string - the configuration file loaded from persistent storage
+        """
         f = open(self.config_path, "r")
         config_raw = f.read()
         f.close()
@@ -25,6 +37,12 @@ class ConfigRules(observer.Subject, Pyro.core.ObjBase):
     
     
     def load_muck_actions(self, _rule):
+        """
+        Load muck actions for a given rule.
+        
+        @param _rule: The rule name to load parameters for
+        @type _rule: string 
+        """
         rule_keys = _rule.keys()
         
         mucks = []
@@ -44,6 +62,11 @@ class ConfigRules(observer.Subject, Pyro.core.ObjBase):
     
                 
     def load_config(self):
+        """
+        Load a configuration from disk.
+        
+        @return: List of L{rule.Rule} objects
+        """
         cp = ConfigParser.ConfigParser()
         cp.read(self.config_path)
         config_rules = cp.sections()
@@ -95,14 +118,52 @@ class ConfigRules(observer.Subject, Pyro.core.ObjBase):
             
             real_rules.append(real_rule)
             
-        print real_rules
+        self.rules = real_rules
         
-        for asdfasdf in real_rules:
-            print asdfasdf
+        return real_rules
             
             
                 
+    
+    def get_rules(self):
+        """
+        Get and return the current ruleset that is being enforced
         
+        @return: array of L{rule.Rule} objects
+        """     
+        if self.rules is None:
+            return []
+        
+        for rule in self.rules:
+            self.log.debug("Debugger.getrules: %s" % (str(rule)))
+
+        self.log.debug("Debugger.getrules: client requested rules -  %s" % (self.rules))
+        
+        return self.rules
+    
+    def update_rules(self, rule_array):
+        """
+        Update the current array of rule objects
+        
+        @param rulearray: The array of rule objects to replace the current one.
+        @type rulearray: array of L{rule.Rule}
+        """
+        self.rules = rule_array
+        
+        for rule in self.rules:
+            self.log.debug("Debugger.updaterules: %s" % (str(rule)))
+#            if rule.action.name == "muck":
+#                self.log.debug("Debugger.updaterules: %s" % (rule.action.mucks))
+#                for muck in rule.action.mucks:
+#                    self.log.debug("Debugger.updaterules.muck: %s" %(binascii.hexlify(muck)))
+                
+            
+        #self.log.debug("ConfigRules.update_rules: %s" % (rule_array))
+        
+        self.notify(event="updaterules", rules=rule_array)
+        
+        return ""             
+
         
 if __name__ == "__main__":
     cr = ConfigRules()
