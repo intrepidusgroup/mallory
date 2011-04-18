@@ -18,7 +18,7 @@ from connections c
 inner join flows f ON f.conncount = c.conncount        
 """
         
-MISSING_DEPS_TEXT = """You are missing QtSql (Ubuntu packagepython-qt4-sql) 
+MISSING_DEPS_TEXT = """You are missing QtSql (Ubuntu package python-qt4-sql) 
 or QtSqlite (Ubuntu package libqt4-sql-sqlite) and maybe both.")
 
 Database View Functionality Is Disabled"""
