@@ -28,7 +28,7 @@
        <string>An IP address to match. Blank for wildcard match.</string>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_interfaces">
        <attribute name="icon">
@@ -676,6 +676,13 @@ You must type it in the configuration exactly as shown.
                    <widget class="QRadioButton" name="radio_type_muck">
                     <property name="text">
                      <string>Muck</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radio_type_fuzz">
+                    <property name="text">
+                     <string>Fuzz</string>
                     </property>
                    </widget>
                   </item>

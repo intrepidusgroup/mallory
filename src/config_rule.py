@@ -108,6 +108,8 @@ class ConfigRules(observer.Subject, Pyro.core.ObjBase):
                     rule_action = rule.Debug()
                 elif rule_act_str == "Muck":
                     rule_action = self.load_muck_actions(_rule)
+                elif rule_act_str == "Fuzz":
+                    rule_action = rule.Fuzz()
                 else:
                     rule_action = rule.Nothing()
                     

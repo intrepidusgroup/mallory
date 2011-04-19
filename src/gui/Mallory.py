@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui/Mallory.ui'
 #
-# Created: Mon Apr 11 23:26:35 2011
+# Created: Mon Apr 18 22:20:11 2011
 #      by: PyQt4 UI code generator 4.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -311,6 +311,9 @@ class Ui_MainWindow(object):
         self.radio_type_muck = QtGui.QRadioButton(self.widget_6)
         self.radio_type_muck.setObjectName("radio_type_muck")
         self.horizontalLayout_6.addWidget(self.radio_type_muck)
+        self.radio_type_fuzz = QtGui.QRadioButton(self.widget_6)
+        self.radio_type_fuzz.setObjectName("radio_type_fuzz")
+        self.horizontalLayout_6.addWidget(self.radio_type_fuzz)
         spacerItem3 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_6.addItem(spacerItem3)
         self.formLayout.setWidget(5, QtGui.QFormLayout.FieldRole, self.widget_6)
@@ -568,10 +571,6 @@ class Ui_MainWindow(object):
         icon18 = QtGui.QIcon()
         icon18.addPixmap(QtGui.QPixmap(":/icons/icons/database.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.tabwidget_advanced.addTab(self.tabdbview, icon18, "")
-        self.horizontalLayout_16.addWidget(self.tabwidget_advanced)
-        icon19 = QtGui.QIcon()
-        icon19.addPixmap(QtGui.QPixmap(":/icons/icons/rainbow.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.tabWidget_2.addTab(self.tab_advanced, icon19, "")
         self.tab = QtGui.QWidget()
         self.tab.setObjectName("tab")
         self.verticalLayout_4 = QtGui.QVBoxLayout(self.tab)
@@ -592,7 +591,11 @@ class Ui_MainWindow(object):
         self.plainTextEdit_objectInspector = QtGui.QPlainTextEdit(self.splitter_3)
         self.plainTextEdit_objectInspector.setObjectName("plainTextEdit_objectInspector")
         self.verticalLayout_4.addWidget(self.splitter_4)
-        self.tabWidget_2.addTab(self.tab, "")
+        self.tabwidget_advanced.addTab(self.tab, "")
+        self.horizontalLayout_16.addWidget(self.tabwidget_advanced)
+        icon19 = QtGui.QIcon()
+        icon19.addPixmap(QtGui.QPixmap(":/icons/icons/rainbow.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.tabWidget_2.addTab(self.tab_advanced, icon19, "")
         self.horizontalLayout_9.addWidget(self.tabWidget_2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
@@ -629,9 +632,9 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.tabWidget_2.setCurrentIndex(2)
         self.tabWidget.setCurrentIndex(1)
-        self.tabwidget_advanced.setCurrentIndex(0)
+        self.tabwidget_advanced.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -707,6 +710,7 @@ class Ui_MainWindow(object):
         self.radio_type_nothing.setText(QtGui.QApplication.translate("MainWindow", "Nothing", None, QtGui.QApplication.UnicodeUTF8))
         self.radio_type_debug.setText(QtGui.QApplication.translate("MainWindow", "Debug", None, QtGui.QApplication.UnicodeUTF8))
         self.radio_type_muck.setText(QtGui.QApplication.translate("MainWindow", "Muck", None, QtGui.QApplication.UnicodeUTF8))
+        self.radio_type_fuzz.setText(QtGui.QApplication.translate("MainWindow", "Fuzz", None, QtGui.QApplication.UnicodeUTF8))
         self.label_9.setToolTip(QtGui.QApplication.translate("MainWindow", "Specify a string in the payload field. Any time that string is encountered in the payload/stream it will cause the rule to match the packet.", None, QtGui.QApplication.UnicodeUTF8))
         self.label_9.setText(QtGui.QApplication.translate("MainWindow", "Payload", None, QtGui.QApplication.UnicodeUTF8))
         self.label_6.setToolTip(QtGui.QApplication.translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -781,8 +785,8 @@ class Ui_MainWindow(object):
 "\n"
 "To refresh the data, click the Execute SQL button again.", None, QtGui.QApplication.UnicodeUTF8))
         self.tabwidget_advanced.setTabText(self.tabwidget_advanced.indexOf(self.tabdbview), QtGui.QApplication.translate("MainWindow", "DB View", None, QtGui.QApplication.UnicodeUTF8))
+        self.tabwidget_advanced.setTabText(self.tabwidget_advanced.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "HTTP Objects", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_advanced), QtGui.QApplication.translate("MainWindow", "Advanced", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "Objects", None, QtGui.QApplication.UnicodeUTF8))
         self.menuMallory.setTitle(QtGui.QApplication.translate("MainWindow", "Mallory", None, QtGui.QApplication.UnicodeUTF8))
         self.menuHelp.setTitle(QtGui.QApplication.translate("MainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
         self.actionFlow_Config.setText(QtGui.QApplication.translate("MainWindow", "Flow Config", None, QtGui.QApplication.UnicodeUTF8))

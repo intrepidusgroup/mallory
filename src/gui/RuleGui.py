@@ -189,7 +189,9 @@ class RuleEdit(object):
             self.main.radio_type_muck.toggle()
             mucks = rule.action.mucks
             muckstr = "\n".join(mucks)
-            self.main.textruleobj.setPlainText(muckstr.encode("string-escape"))            
+            self.main.textruleobj.setPlainText(muckstr.encode("string-escape"))
+        elif rule.action.name == "fuzz":
+            self.main.radio_type_fuzz.toggle()            
         else:
             self.main.radio_type_nothing.toggle()
                 
@@ -262,7 +264,9 @@ class RuleEdit(object):
                 self.msgbox = QtGui.QMessageBox(warn, title, text)
                 self.msgbox.show()
                 print sys.exc_info()
-                return None                    
+                return None
+        elif self.main.radio_type_fuzz.isChecked():
+            action = rule.Fuzz()              
         
         newrule = rule.Rule("").fromdict({
             "name":name,

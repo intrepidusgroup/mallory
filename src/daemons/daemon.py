@@ -10,7 +10,6 @@ import select
 import random
 import thread
 import rule
-import ruleconfig
 
 
 from observer import Subject
