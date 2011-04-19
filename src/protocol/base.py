@@ -353,7 +353,7 @@ class UdpProtocol(Protocol):
             if rule.action.name == "muck":
                 string = rule.action.execute(data=string)
             if rule.action.name == "fuzz":
-                string = rule.action.execute(data=string)
+               was_fuzzed, string = rule.action.execute(data=string)
         
         return string 
         
@@ -510,7 +510,7 @@ class TcpProtocol(Protocol):
                 
 
                 if self.rules is not None:
-                    shoulddebug, string = self.processrules(string, conndata)
+                    shoulddebug, string = self.processrules(string, conndata, msgCnt)
                     
                 # Potentially pause here while waiting for incoming data
                 if shoulddebug:
@@ -555,7 +555,8 @@ class TcpProtocol(Protocol):
     ####################################
     ### Rules Processing
     ####################################
-    def processrules(self, string, conndata):
+    # TODO: Talk to JA about the last parameter i added
+    def processrules(self, string, conndata, msg_cnt = -1):
         """
         TODO: This code is not 100% ideal. It places a lot of responsibility on
         the caller for processing the rule chain, etc. This should be abstracted
@@ -598,7 +599,7 @@ class TcpProtocol(Protocol):
                     break
         
         shoulddebug = False
-        
+        was_fuzzed = False 
         for rule in matchingrules:
             self.log.debug("Matched rule: %s" % (rule))
             
@@ -607,8 +608,13 @@ class TcpProtocol(Protocol):
             if rule.action.name == "muck":
                 string = rule.action.execute(data=string)
             if rule.action.name == "fuzz":
-                string = rule.action.execute(data=string)
+                old_string = string
+                was_fuzzed, string = rule.action.execute(data=string)
         
+        if was_fuzzed: 
+            self.trafficdb.qfuzztcp.put((conndata.conncount, msg_cnt,
+                    conndata.direction, repr(old_string), repr(string)))
+ 
         # Logging cruft
         if matched and self.config.debug > 2:
             self.log.debug("==== RULE MATCH ====")
@@ -624,7 +630,8 @@ class TcpProtocol(Protocol):
                 self.log.debug("I should be debugged!!")
                           
             self.log.debug("==== END RULE ====")
-            
+        
+        # TODO: Seems that processrules should not return a bool only related to debug    
         return shoulddebug, string
         
     ####################################   

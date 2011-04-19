@@ -16,6 +16,7 @@ class TrafficDb:
         self.qFlow = Queue.Queue()
         self.qConn = Queue.Queue()
         self.dgram = Queue.Queue()
+        self.qfuzztcp = Queue.Queue()
 
     # This method defines the traffic db schema. 
     # TODO: Clean this up a bit. Add PKs and FK refs to maintain ref integrity.  
@@ -49,9 +50,21 @@ class TrafficDb:
                 timestamp TEXT         
             )
         """
+
+        fuzztcp = """
+            CREATE TABLE fuzztcp(
+                conncount INTEGER,
+                buffindex INTEGER,
+                direction TEXT,
+                orgString BLOB,
+                fuzzString BLOB      
+            )
+        """
+ 
         self.curr.execute(connections)
         self.curr.execute(flows)
         self.curr.execute(dgrams)
+        self.curr.execute(fuzztcp)
         
         self.curr.execute("")
         
@@ -99,6 +112,13 @@ class TrafficDb:
                 entry = self.dgram.get()
                 self.curr.execute("insert into dgram values(?,?,?,?,?,?,?)",
                                   entry);
+
+            while not self.qfuzztcp.empty():
+                entry = self.qfuzztcp.get()
+                self.curr.execute("insert into fuzztcp values(?,?,?,?,?)",
+                                  entry);
+ 
+
                 
             self.conn.commit()
             

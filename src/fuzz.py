@@ -26,12 +26,15 @@ def fuzz(data, bit_flip_percentage = 20, bof_injection_percentage = 20, bit_flip
     
     r = randint(0,100)
     #print "    first r:" + str(r)
+    was_fuzzed = False
     if r<=bit_flip_percentage:
+        was_fuzzed = True
         data = bitflipping(data, bit_flip_density)
 
     #print "    second r:" + str(r)
     r = randint(0,100)
     if r<=bof_injection_percentage:
+        was_fuzzed = True
         data = bofinjection(data)
-    return data
+    return was_fuzzed, data
 
