@@ -1,5 +1,5 @@
-extiface="eth2_rename"
-serveriface="eth4"
+extiface="eth7"
+serveriface="eth6"
 
 echo "Killing network manager"
 /etc/init.d/network-manager stop
