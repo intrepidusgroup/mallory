@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui/TextViewDialog.ui'
 #
-# Created: Mon Apr 18 22:20:12 2011
+# Created: Wed Apr 20 07:07:46 2011
 #      by: PyQt4 UI code generator 4.6
 #
 # WARNING! All changes made in this file will be lost!

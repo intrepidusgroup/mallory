@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons" >
+    <file>icons/application_form_delete.png</file>
     <file>icons/money.png</file>
     <file>icons/help.png</file>
     <file>icons/page_white_text.png</file>

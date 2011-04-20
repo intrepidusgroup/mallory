@@ -62,6 +62,7 @@ class MalloryGui(QtGui.QMainWindow):
     def connecthandlers(self):
         self.main.btnicept.clicked.connect(self.handle_interceptclick)
         self.main.btnsend.clicked.connect(self.handle_send)
+        self.main.btnclear.clicked.connect(self.handle_clear_streams)
         self.main.tablestreams.activated.connect(self.handle_cellclick)
         self.main.tablestreams.clicked.connect(self.handle_cellclick)
         self.main.btnsavehex.clicked.connect(self.handle_savehex)
@@ -153,7 +154,13 @@ class MalloryGui(QtGui.QMainWindow):
         if self.send_cur_de(self.curdebugevent):
             print "GUI sending debug event:%s" % (self.curdebugevent)
             
-    
+    def handle_clear_streams(self):
+        # TODO: Make thread safe (lock, prevent new debug requests from coming)
+        self.streammod.requests = []
+        self.streammod.reset()
+        
+        print "Clearing Streams"
+        
     def send_cur_de(self, debugevent):
         if debugevent != "" and debugevent is not None:
             # Encode, and then decode, so the editors have the right data

@@ -28,7 +28,7 @@
        <string>An IP address to match. Blank for wildcard match.</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tab_interfaces">
        <attribute name="icon">
@@ -952,6 +952,17 @@ p, li { white-space: pre-wrap; }
                 <property name="icon">
                  <iconset resource="mallory_gui.qrc">
                   <normaloff>:/icons/icons/application_go.png</normaloff>:/icons/icons/application_go.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnclear">
+                <property name="text">
+                 <string>Clear Streams</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="mallory_gui.qrc">
+                  <normaloff>:/icons/icons/application_form_delete.png</normaloff>:/icons/icons/application_form_delete.png</iconset>
                 </property>
                </widget>
               </item>
