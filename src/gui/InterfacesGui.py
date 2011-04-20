@@ -45,7 +45,9 @@ class InterfacesGui(object):
     def handle_refreshifaces(self):
         print "Handling interfaces refresh"
         self.interfaces_model.refresh_interfaces()
-           
+        self.interfaces_model.reset()
+
+   
     def resize_content_columns(self):
         self.interfaces_table_view.resizeColumnsToContents()      
         
