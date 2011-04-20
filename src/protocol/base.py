@@ -186,13 +186,13 @@ class UdpProtocol(Protocol):
                         'clientport' : raddr[1], \
                         'serverip' : caddr[0], 'serverport' : caddr[1], \
                         'conncount' : 1, 'direction' : 's2c' })
-                    
+                    dgram_time = time.time() 
                     if self.rules is not None:
-                        pkt = self.processrules(pkt, conndata)
+                        pkt = self.processrules(pkt, conndata,dgram_time)
                     
                     
                     tdata = (raddr[0], raddr[1], caddr[0], caddr[1], "s2c",
-                             repr(pkt), time.time())
+                             repr(pkt), dgram_time)
                     self.trafficdb.dgram.put(tdata)       
                                   
                     proto = self.proto_lookup(raddr[0], raddr[1])
@@ -239,13 +239,14 @@ class UdpProtocol(Protocol):
                         'clientport' : caddr[1], \
                         'serverip' : rdst, 'serverport' : rpt, \
                         'conncount' : 1, 'direction' : 'c2s' })
-    
+                dgram_time = time.time() 
+                
                 if self.rules is not None:
-                    pkt = self.processrules(pkt, conndata)
+                    pkt = self.processrules(pkt, conndata, dgram_time)
 
 
                 tdata = (caddr[0], caddr[1], rdst, rpt, "c2s", repr(pkt), 
-                         time.time())
+                         dgram_time)
                 self.trafficdb.dgram.put(tdata)                  
                 self.log.debug("UDPProtocol[m]: sending data from %s to %s" 
                                % (caddr, raddr))
@@ -308,7 +309,7 @@ class UdpProtocol(Protocol):
         to modify bytes that is being sent from the client to the server
         """
 
-    def processrules(self, string, conndata):
+    def processrules(self, string, conndata, dgram_time):
         """
         TODO: This code is not 100% ideal. It places a lot of responsibility on
         the caller for processing the rule chain, etc. This should be abstracted
@@ -348,13 +349,20 @@ class UdpProtocol(Protocol):
                     break
         
         for rule in matchingrules:
-            self.log.debug("Matched rule: %s" % (rule))
-            
+            self.log.debug("Matched UDP Rule: %s" % (rule))
+           
+            was_fuzzed = False
             if rule.action.name == "muck":
                 string = rule.action.execute(data=string)
             if rule.action.name == "fuzz":
-               was_fuzzed, string = rule.action.execute(data=string)
-        
+                old_string = string
+                was_fuzzed, string = rule.action.execute(data=string)
+                if was_fuzzed:
+                    tdata = (conndata.clientip, conndata.clientport, 
+                             conndata.serverip, conndata.serverport,
+                             conndata.direction, repr(old_string),
+                             repr(string), dgram_time)
+                    self.trafficdb.qfuzzudp.put(tdata)
         return string 
         
     def update(self, publisher, **kwargs):
