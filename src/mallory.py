@@ -196,8 +196,10 @@ class Mallory(Subject):
             self.configured_protos.append(protocol)
     
     def configure_protocols(self):
+        self.log.debug("Mallory:configure_protocols - Entry")
         protocols = self.config_protocols.get_protocols()
         
+        self.configured_protos = []
         for protocol in protocols:
             self.configure_protocol(protocol, "add")
         
@@ -477,6 +479,8 @@ if __name__ == '__main__':
     mallory = Mallory(opts)
     
 
+    mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager())
+    
     # Pull in the protocol configured on the command line for use with the
     # no-transparent option when the proxy is not being used transparently
     if opts.options.proto:
