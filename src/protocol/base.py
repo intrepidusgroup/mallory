@@ -366,8 +366,8 @@ class UdpProtocol(Protocol):
         return string 
         
     def update(self, publisher, **kwargs):
-        super(UdpProtocol, self).update(self, publisher, **kwargs)
-    
+        super(UdpProtocol, self).update(publisher, **kwargs)
+        
         if "event" not in kwargs:
             self.log.debug("BaseUDP: Event not in kwargs.")
             return
@@ -375,7 +375,6 @@ class UdpProtocol(Protocol):
         event = kwargs["event"]
 
         if event == "updaterules":
-            # TODO: Make this thread safe
             if "rules" not in kwargs:
                 return
 
