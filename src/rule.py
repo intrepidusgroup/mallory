@@ -16,6 +16,7 @@ class Fuzz(RuleAction):
         self.bfp = bit_flip_percentage
         self.bip = bof_injection_percentage
         self.bfd = bit_flip_density
+        
     def execute(self, **kwargs):
         if "data" in kwargs:
             data = kwargs["data"]
@@ -45,6 +46,11 @@ class Muck(RuleAction):
         self.mp.data = data
                 
         return self.mp.muck()
+    
+    def __str__(self):
+        muck_str = ("<Muck %s>" % self.mucks)
+        
+        return muck_str
     
 class Debug(RuleAction):
     def __init__(self):
@@ -236,8 +242,8 @@ class Rule(object):
         
         crit.append("passthru:%s" % (str(self.passthru)))
         
-        return "<class Rule %s -- %s >" % \
-            (self.name, " ".join(crit))
+        return "<class Rule %s -- %s (%s)>" % \
+            (self.name, " ".join(crit), self.action)
             
 def test():
     s2c = "s2c"
