@@ -189,7 +189,7 @@ class RuleEdit(object):
             self.main.radio_type_muck.toggle()
             mucks = rule.action.mucks
             muckstr = "\n".join(mucks)
-            self.main.textruleobj.setPlainText(muckstr.encode("string-escape"))
+            self.main.textruleobj.setPlainText(muckstr)
         elif rule.action.name == "fuzz":
             self.main.radio_type_fuzz.toggle()            
         else:
@@ -233,7 +233,7 @@ class RuleEdit(object):
         payload = "" # temporary placement until guis element  is added
                 
         try:
-           payload = str(self.main.linepayload.text()).decode("string-escape")
+           payload = str(self.main.linepayload.text())
         except:
            pass
        
@@ -247,8 +247,7 @@ class RuleEdit(object):
             print "RuleEdit.rulefromform: creating debug rule"   
         elif self.main.radio_type_muck.isChecked():
             muckstr = str(self.main.textruleobj.toPlainText())
-            muckarr = muckstr.split("\n")                
-            muckarr = [i.decode("string-escape") for i in muckarr]            
+            muckarr = muckstr.split("\n")           
             action = rule.Muck(muckarr)
             
             try:

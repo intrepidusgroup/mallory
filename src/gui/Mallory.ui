@@ -28,7 +28,7 @@
        <string>An IP address to match. Blank for wildcard match.</string>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_interfaces">
        <attribute name="icon">
@@ -181,7 +181,7 @@
                <bool>true</bool>
               </property>
               <property name="plainText">
-               <string>The first step to running Mallory is configuring your networking interfaces. 
+               <string>The first step to running Mallory is configuring your networking interfaces. Mallory will not read the current state of iptables. This is a one way (saving/writing) configuration GUI. 
 
 MiTM interfaces will be interfaces that are going to have all of their traffic MiTMed. This includes PPP interfaces, such as ppp0, from PPTPD VPN clients as well as any other interfaces that are being used by victims as a gateway. 
 

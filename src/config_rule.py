@@ -137,9 +137,9 @@ class ConfigRules(observer.Subject, Pyro.core.ObjBase):
             return []
         
         for rule in self.rules:
-            self.log.debug("Debugger.getrules: %s" % (str(rule)))
+            self.log.debug("ConfigRules.getrules: %s" % (str(rule)))
 
-        self.log.debug("Debugger.getrules: client requested rules -  %s" % (self.rules))
+        self.log.debug("ConfigRules.getrules: client requested rules -  %s" % (self.rules))
         
         return self.rules
     
@@ -153,7 +153,7 @@ class ConfigRules(observer.Subject, Pyro.core.ObjBase):
         self.rules = rule_array
         
         for rule in self.rules:
-            self.log.debug("Debugger.updaterules: %s" % (str(rule)))
+            self.log.debug("ConfigRules.updaterules: %s" % (str(rule)))
 #            if rule.action.name == "muck":
 #                self.log.debug("Debugger.updaterules: %s" % (rule.action.mucks))
 #                for muck in rule.action.mucks:
