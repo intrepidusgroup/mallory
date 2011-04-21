@@ -188,6 +188,7 @@ class RuleEdit(object):
         elif rule.action.name == "muck":            
             self.main.radio_type_muck.toggle()
             mucks = rule.action.mucks
+            mucks = [i.encode("string-escape") for i in mucks]
             muckstr = "\n".join(mucks)
             self.main.textruleobj.setPlainText(muckstr)
         elif rule.action.name == "fuzz":
@@ -247,7 +248,8 @@ class RuleEdit(object):
             print "RuleEdit.rulefromform: creating debug rule"   
         elif self.main.radio_type_muck.isChecked():
             muckstr = str(self.main.textruleobj.toPlainText())
-            muckarr = muckstr.split("\n")           
+            muckarr = muckstr.split("\n")
+            muckarr = [i.decode("string-escape") for i in muckarr]           
             action = rule.Muck(muckarr)
             
             try:

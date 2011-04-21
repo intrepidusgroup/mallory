@@ -8,7 +8,7 @@ class Muckr(object):
         self.count = count
     
     def muck(self, data):
-        #print("Muckr.muck: datain: %s" % repr(data))
+        #print("Muckr.muck: self.pattern: %s, self.repl: %s, self.count:%s" % (self.pattern, repr(self.repl), str(self.count)))
         x = re.sub(self.pattern, self.repl, data, self.count)
         #print("Muckr.muck: dataout: %s" % repr(x))
         return x
