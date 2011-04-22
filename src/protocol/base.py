@@ -68,6 +68,10 @@ class Protocol(Subject):
         self.rules = rules
         self.plugin_manager  = None
         self.friendly_name = "Undefined"
+        self.done = False
+    
+    def is_done(self):
+        return self.done
         
     def setrules(self, rules):
         self.rules = rules     
@@ -429,7 +433,10 @@ class TcpProtocol(Protocol):
         
         # One debug queue for each direction. 
         self.debugqs = {"c2s":Queue.Queue(), "s2c":Queue.Queue()}
-        self.waitfor = {"c2s":"", "s2c":""}       
+        self.waitfor = {"c2s":"", "s2c":""}  
+        
+        # Done processing data
+        self.done = False     
 
 
     def __getstate__(self):
@@ -500,8 +507,13 @@ class TcpProtocol(Protocol):
                 self.log.debug("TcpProtocol: recv bytes:%s" % (conndata.direction))
             
             
-            # There needs to be some exception catching here.      
-            string = source.recv(8192)
+            try:
+                # There needs to be some exception catching here.      
+                string = source.recv(8192)
+            except:
+                self.done = True
+                string = ""
+                raise Exception("base.TcpProtocol: error with source.recv")
             
             crc1 = crc32(string)
             if string:
@@ -531,7 +543,11 @@ class TcpProtocol(Protocol):
                         self.log.debug("TcpProtocol: Internal CRC FAIL: %08x - %08x" % (crc1, crc2))
                         self.log.debug("TcpProtocol: %s****\n\n****%s" % (repr(sorig), repr(string)))
     
-                destination.sendall(string)
+                try:
+                    destination.sendall(string)
+                except:
+                    self.done = True
+                    raise Exception("TcpProtocol.forward_any: sendall error")
                 
                 # Store the stream data
                 self.trafficdb.qFlow.put((conndata.conncount, \
@@ -553,6 +569,7 @@ class TcpProtocol(Protocol):
                                          
                     source.shutdown(socket.SHUT_RD)
                     destination.shutdown(socket.SHUT_WR)
+                    self.done = True
                     return
                 except:
                     return

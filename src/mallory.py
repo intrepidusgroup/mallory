@@ -263,7 +263,17 @@ class Mallory(Subject):
         
             
                 
-
+    def cleanup_proto(self):
+        # List of proto instances that are done
+        done_list = []
+        
+        for proto in self.protoinstances:
+            if proto.is_done():
+                done_list.append(proto)
+        
+        for proto in done_list:
+            self.protoinstances.remove(proto)
+                            
     def main(self):
         """
         Mallory's main method. When this is called the following activities
@@ -341,6 +351,10 @@ class Mallory(Subject):
                     
             # Handle TCP
             while 1:
+                # Clean up first
+                self.cleanup_proto()
+                
+                # Main accept
                 (csock, caddr) = proxy.accept()
                         
                 
