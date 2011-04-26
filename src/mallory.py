@@ -264,6 +264,7 @@ class Mallory(Subject):
             
                 
     def cleanup_proto(self):
+        #self.log.info("Mallory.cleanup_proto()")
         # List of proto instances that are done
         done_list = []
         
@@ -271,7 +272,17 @@ class Mallory(Subject):
             if proto.is_done():
                 done_list.append(proto)
         
+        #self.log.info("Mallory.cleanup_proto():%s" % (done_list))
         for proto in done_list:
+            """
+            TODO: Figure out why we still leak socket handles
+            Current behavior is to slowly leak a few handles per minute
+            under heavy load. Especially when the remote server
+            disappears.
+            
+            This fixes up the majority of the issues for now
+            """ 
+            proto.close()
             self.protoinstances.remove(proto)
                             
     def main(self):
@@ -354,8 +365,10 @@ class Mallory(Subject):
                 # Clean up first
                 self.cleanup_proto()
                 
+                
                 # Main accept
                 (csock, caddr) = proxy.accept()
+
                         
                 
                 if config.debug == 1:
@@ -429,7 +442,8 @@ class Mallory(Subject):
                         shost,sport = self.opts.proxify.split(":")
                         sport = int(sport)       
                         
-                    # Connect the server socket 
+                    
+                    # Connect the server socket
                     protoinst.destination.connect((shost, int(sport)))
                         
                     # Client socket configuration after server socket creation                    
@@ -447,6 +461,9 @@ class Mallory(Subject):
                                   " conn attempt")
                     sys.exit(0)
                 except:
+                    # Force clean up soon
+                    protoinst.set_done(True)
+                    
                     # Deal with the freaky folks
                     self.log.error("main: error connecting to remote")
                     traceback.print_exc()

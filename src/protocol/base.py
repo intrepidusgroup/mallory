@@ -72,6 +72,12 @@ class Protocol(Subject):
     
     def is_done(self):
         return self.done
+
+    def set_done(self, done):
+        self.done = done
+        
+    def close(self):
+        pass
         
     def setrules(self, rules):
         self.rules = rules     
@@ -455,6 +461,20 @@ class TcpProtocol(Protocol):
                 
         return d
     
+    def close(self):
+        """
+        Provide an interface to close sockets down
+        """
+        try:
+            #self.source.shutdown(socket.SHUT_RDWR)
+            self.source.close()
+            
+            #self.destination.shutdown(socket.SHUT_RDWR)
+            self.destination.close()
+        except:
+            self.log.info("Could not close the socket")
+        
+            
     def forward_s2c(self):
         """Generic server to client forwarding method. Reimplement this
         method to modify bytes that is being sent back to the client"""
