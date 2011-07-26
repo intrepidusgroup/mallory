@@ -1,66 +1,58 @@
-Requirements:
+#################################################################
+#       Requirements                                            #
+#################################################################
+
+HARDWARE:
 768 MB Recommended for optional dev packages
 512 MB RAM recommended for GUI
 256 MB RAM without GUI
+2 NICs [optional]
 
+SOFTWARE:
+Ubuntu Desktop (e.g. 10.04, 11.04)
 
-1.) Install Ubuntu 10.04 Desktop (32 or 64 bit)
+#################################################################
+#        Setup Instructions Using Install Script                #
+#################################################################
 
+The install script will take care of packages for an ubuntu 
+environment.
+ cd mallory
+ sudo ./mallory_install.sh
 
-2.) Optional, setup FreeNX: 
-sudo apt-get install python-software-properties && sudo add-apt-repository ppa:freenx-team
-sudo apt-get update
-sudo apt-get install neatx-server
-# Terminator is not required, but I like it :)
-sudo apt-get install terminator
-
+#################################################################
+#       Setup Instructions: Manually                            #
+#################################################################
 3.) Install Mercurial
 sudo apt-get install mercurial
 
-3.) CD to your desired installation directory
-mkdir mallory
-cd mallory
-
 4.) Clone the bitbucket repository
-hg clone https://jallen@bitbucket.org/diablokev87/mallory .
+hg clone https://bitbucket.org/IntrepidusGroup/mallory
 
 5.) Setup Mallory Dependencies
-sudo apt-get install python-pyasn1
-sudo apt-get install python-netfilter 
+sudo apt-get install python-pip, python-m2crypto, python-qt4
+sudo apt-get install pyro-gui, python-netfilter, python-pyasn1
+sudo apt-get install python-paramiko, python-twisted-web
+sudo apt-get install python-qt4-sql, libqtr-sql-sqlite
+sudo apt-get install sqlite3, build-essential
 sudo apt-get install libnetfilter-conntrack-dev
-sudo apt-get install python2.6-dev
-sudo apt-get install python-setuptools
-sudo easy_install pynetfilter_conntrack
-sudo apt-get install  netfilter-extensions-source
-sudo apt-get install  libnetfilter-conntrack3-dbg
+sudo apt-get install libnetfilter-conntrack3
 
-# 32 bit
-wget http://ubuntu.cs.utah.edu/ubuntu/pool/universe/libn/libnetfilter-conntrack/libnetfilter-conntrack1_0.0.99-1_i386.deb
-sudo dpkg -i libnetfilter-conntrack1_0.0.99-1_i386.deb 
+#################################################################
+#         Getting Started                                       #
+#################################################################
 
-OR
+STARTING
+* Start the mallory service
+ cd src
+ sudo python ./mallory.py
 
-# 64 bit
-wget http://ubuntu.cs.utah.edu/ubuntu/pool/universe/libn/libnetfilter-conntrack/libnetfilter-conntrack1_0.0.99-1_amd64.deb
-sudo dpkg -i libnetfilter-conntrack1_0.0.99-1_amd64.deb 
-
-
-sudo dpkg -i libnetfilter-conntrack1_0.0.99-1_i386.deb 
-sudo apt-get install python-paramiko
-sudo apt-get install python-imaging
-
-# Development Tools
-6.) Install Eclipse                                                                                    
-sudo apt-get install eclipse
-
-7.) Install Qt4 Designer (115 MB)
-apt-get install qt4-designer
-
-8.) Install KDiff3 (for visual merging)
-apt-get install kdiff3 
+* Start the mallory GUI from a new console
+ cd src
+ sudo python ./launch_gui.py
 
 
-Folder Structure:
+FOLDERS
 * ca - certificate authority files including Mallory's private key
 * certs - MiTM certs that are created on the fly
 * db - directory where mallory stores all database files
@@ -68,7 +60,23 @@ Folder Structure:
 * src - where the code lives
 * scripts - scripts used to configure mallory enviorment
 
-run mallory:
+#################################################################
+#	  Usage 	                                        #
+#################################################################
 
-cd into the src directory
-sudo python mallory.py
+The usage and setup depends on the way you've setup your
+environment. 
+
+PPTP:
+* connect the victim to the PPTP server
+* setup the interfaces so PPP0 is the interface being middled
+    and eth0 is the outbound interface
+* uncomment or add any protocols/ports you'd like to listen on
+    and click apply
+* create a new rule for your environment or at least make a 
+    debugging rule by adding the rule, renaming it, set type to
+    debug, and save the rule
+* click intercept under the streams tab to begin listening
+
+See the website for more detailed information
+https://bitbucket.org/IntrepidusGroup/mallory
