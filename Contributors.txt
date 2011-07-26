@@ -1,0 +1,15 @@
+The following people have contributed to Mallory.
+
+Developers:
+        Jeremy Allen
+        Rajendra Umadas
+        ...
+
+Documentation:
+        Jeremy Allen
+        Rajendra Umadas
+        ...
+
+
+Graphic Design and User Interaction Design:
+        ...
