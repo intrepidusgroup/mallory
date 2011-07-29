@@ -24,13 +24,11 @@ class RuleEdit(object):
         (in the MVC sense of view). Unfortunately, that is not as easy to do in
         PyQt, so we have a global namespace. This was one of the first
         components to be designed as a controller not living in guimain, thus it
-        retains a reference to the main object.
+        retains a reference to the main object (and objects use said main window
+        reference).
         """
 
         self.main = main
-
-
-
         
         # Remote protocol configuration object
         config_rules_uri = "PYROLOC://127.0.0.1:7766/config_rules"
@@ -54,9 +52,7 @@ class RuleEdit(object):
         self.main.buttonup.clicked.connect(self.handle_ruleup)
         self.main.buttonaddrule.clicked.connect(self.handle_ruleadd)
         self.main.buttondelrule.clicked.connect(self.handle_ruledel)  
-    
-    
-    
+
     def select_row(self, row):
         index = self.rulemod.index(row, 0, QtCore.QModelIndex())
         rules = self.main.listrules
@@ -72,7 +68,8 @@ class RuleEdit(object):
     
     def handle_ruleadd(self):
         rules = self.main.listrules
-        row = 0 
+        row = 0
+        
         if len(rules.selectedIndexes())>0:
             selected = rules.selectedIndexes()[0]        
             row = selected.row()
@@ -84,27 +81,6 @@ class RuleEdit(object):
         
         # Send back to Mallory server
         self.remote_rule.update_rules(self.rulemod.getRules())
-        
-        
-#    ##### See RuleGui.py for these methods
-#    def handle_ruleadd(self):
-#        self.ruleedit.handle_ruleadd()
-#        self.remote_debugger.updaterules(self.ruleedit.get_enc_rulepickle())
-#    def handle_ruledel(self):
-#        self.ruleedit.handle_ruledel()
-#        self.remote_debugger.updaterules(self.ruleedit.get_enc_rulepickle())           
-#    def handle_ruledown(self):
-#        self.ruleedit.handle_ruledown()
-#        self.remote_debugger.updaterules(self.ruleedit.get_enc_rulepickle())        
-#    def handle_ruleup(self):
-#        self.ruleedit.handle_ruleup()
-#        self.remote_debugger.updaterules(self.ruleedit.get_enc_rulepickle())        
-#    def handle_ruleactivated(self, index):
-#        self.ruleedit.handle_ruleactivated(index)        
-#    def handle_saverule(self):
-#        rules = self.ruleedit.handle_saverule()
-#        print rule       
-#        self.remote_debugger.updaterules(rules)  
                
     def handle_ruledel(self):
         rules = self.main.listrules
@@ -112,14 +88,19 @@ class RuleEdit(object):
         selrow = selected.row()
         self.rulemod.delRule(selrow)
         
-
+        self.remote_rule.update_rules(self.rulemod.getRules())
+                
+        if self.rulemod.rowCount() == 0:
+            self.main.group.setEnabled(False)
+            self.main.saverule.setEnabled(False)
+            return
+        
         if selrow == self.rulemod.rowCount():
             selrow -= 1
                     
         self.select_row(selrow)
-        self.remote_rule.update_rules(self.rulemod.getRules())
-        
             
+        
     def handle_ruleupdown(self, dir):
         rules = self.main.listrules
         selected = rules.selectedIndexes()[0]
@@ -142,18 +123,20 @@ class RuleEdit(object):
         
         index = self.rulemod.createIndex(selrow+dir, 0)        
         self.main.listrules.setCurrentIndex(index)
-        
-               
+                   
     def handle_ruledown(self):
         self.handle_ruleupdown(RULEDOWN)
         self.remote_rule.update_rules(self.rulemod.getRules())
-        
+            
     def handle_ruleup(self):
         self.handle_ruleupdown(RULEUP)
         self.remote_rule.update_rules(self.rulemod.getRules())
         
     def handle_ruleactivated(self, index):
         rule = self.rulemod.getRule(int(index.row()))
+        
+        self.main.group.setEnabled(True)
+        self.main.saverule.setEnabled(True)
         
         print "Rule: %s" % (str(rule))
         self.main.linename.setText(rule.name)
@@ -173,7 +156,7 @@ class RuleEdit(object):
         self.main.lineport.setText(rule.port)
         # temporary placement until payload is added
         try:
-           self.main.linepayload.setText(rule.payload.encode("string-escape"))
+           self.main.linepayload.setText(rule.payload)
         except:
            pass
        
@@ -188,7 +171,7 @@ class RuleEdit(object):
         elif rule.action.name == "muck":            
             self.main.radio_type_muck.toggle()
             mucks = rule.action.mucks
-            mucks = [i.encode("string-escape") for i in mucks]
+            #mucks = [i.encode("string-escape") for i in mucks]
             muckstr = "\n".join(mucks)
             self.main.textruleobj.setPlainText(muckstr)
         elif rule.action.name == "fuzz":
@@ -199,6 +182,12 @@ class RuleEdit(object):
         print "Activated %d" % (int(index.row()))         
         
     def handle_saverule(self):
+        """
+        Handle the rule save action. Take the form data and turn it into a rule.
+        
+        Next, update the rule by finding which rule is selected and replacing it
+        with the rule created from the rule form. 
+        """ 
         newrule = self.rulefromform()
         
         if newrule is None:
@@ -245,14 +234,16 @@ class RuleEdit(object):
         action = rule.Nothing()
         if self.main.radio_type_debug.isChecked():
             action = rule.Debug()
-            print "RuleEdit.rulefromform: creating debug rule"   
+            print "RuleEdit.rulefromform: creating debug rule"
+            
         elif self.main.radio_type_muck.isChecked():
             muckstr = str(self.main.textruleobj.toPlainText())
             muckarr = muckstr.split("\n")
-            muckarr = [i.decode("string-escape") for i in muckarr]           
+            #muckarr = [i.decode("string-escape") for i in muckarr]           
             action = rule.Muck(muckarr)
             
             try:
+                # Test the muck syntax by executing it against bogus data.
                 mp = muckpipe.MuckPipe("").fromlist(action.mucks)
                 mp.data = "dark and empty"
                 mp.muck()
@@ -294,8 +285,12 @@ class RuleList(QtCore.QAbstractListModel):
         self.rules = rules
         
     def getRule(self, index):
-        if index >= len(self.rules):
+        print "Rule length: %s, index:%s" % (len(self.rules), index) 
+        
+        if index >= len(self.rules) or index < 0:
+            print "[ERROR] RuleList: Invalid rule index selected."
             return None
+        
         return self.rules[index]
     
     def getRules(self):
@@ -317,7 +312,8 @@ class RuleList(QtCore.QAbstractListModel):
         if index < 0 or index >= self.rowCount():
             return
         
-        del self.rules[index]        
+        del self.rules[index]  
+              
         self.reset()
         
     def data(self, index, role):

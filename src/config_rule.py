@@ -20,6 +20,7 @@ class ConfigRules(observer.Subject, Pyro.core.ObjBase):
         
         self.log = logging.getLogger("mallorymain")
         self.config_path = "rules.ini"
+        self.log.info("ConfigRules.init: LOADING RULES.")
         self.rules = self.load_config()
         
         
@@ -100,7 +101,8 @@ class ConfigRules(observer.Subject, Pyro.core.ObjBase):
             if "action" in _rule:
                 rule_act_str = _rule["action"]
                 
-                print "Rule Action String is:%s" % (rule_act_str)
+                self.log.info("ConfigRules.load_config: Rule Action String "
+                              "is:%s" % (rule_act_str))
                 
                 if rule_act_str == "Nothing":
                     rule_action = rule.Nothing()

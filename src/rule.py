@@ -29,8 +29,6 @@ class Muck(RuleAction):
         RuleAction.__init__(self)
         self.name = "muck"
         self.mucks = mucks
-        print "Got mucks"
-        print mucks
         
     def execute(self, **kwargs):        
         if "data" in kwargs:
@@ -38,8 +36,9 @@ class Muck(RuleAction):
         else:
             return ""
         
-        for muck in self.mucks:
-            print binascii.hexlify(str(muck))
+#        for muck in self.mucks:
+#            print ("[STDOUT] Muck.execute: str:%s repr:%s hex:%s" % 
+#                   (muck, repr(muck), binascii.hexlify(muck)))
             
         self.mp = muckpipe.MuckPipe("").fromlist(self.mucks)
         

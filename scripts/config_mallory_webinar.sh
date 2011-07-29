@@ -1,4 +1,4 @@
-bridgeiface=eth1
+bridgeiface=eth0
 hostonlyiface=eth2
 vpniface=ppp0
 vpnifacetwo=ppp1

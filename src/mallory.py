@@ -164,6 +164,8 @@ class Mallory(Subject):
     """    
     def __init__(self, options):        
         Subject.__init__(self)
+        self.log = logging.getLogger("mallorymain")
+        config.logsetup(self.log)        
         self.configured_protos = []
         self.configured_plugin_managers = []
         self.protoinstances = []
@@ -175,8 +177,6 @@ class Mallory(Subject):
         self.config_rules = config_rule.ConfigRules()
         self.rpcserver = rpc.RPCServer()
         self.nftool = netfilter.NetfilterTool()
-        self.log = logging.getLogger("mallorymain")
-        config.logsetup(self.log)
                         
     def configure_protocol(self, protocol, action):
         """

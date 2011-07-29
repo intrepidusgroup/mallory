@@ -2,30 +2,36 @@
 
 # Form implementation generated from reading ui file 'gui/AboutDialog.ui'
 #
-# Created: Wed Apr 20 07:07:46 2011
-#      by: PyQt4 UI code generator 4.6
+# Created: Wed Jul 27 06:52:30 2011
+#      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
 
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    _fromUtf8 = lambda s: s
+
 class Ui_MainDialog(object):
     def setupUi(self, MainDialog):
-        MainDialog.setObjectName("MainDialog")
+        MainDialog.setObjectName(_fromUtf8("MainDialog"))
         MainDialog.resize(438, 583)
         self.verticalLayout_2 = QtGui.QVBoxLayout(MainDialog)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
         self.verticalLayout = QtGui.QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
+        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.label = QtGui.QLabel(MainDialog)
-        self.label.setPixmap(QtGui.QPixmap(":/Other/icons/mall_logo1_medium.png"))
-        self.label.setObjectName("label")
+        self.label.setText(_fromUtf8(""))
+        self.label.setPixmap(QtGui.QPixmap(_fromUtf8(":/Other/icons/mall_logo1_medium.png")))
+        self.label.setObjectName(_fromUtf8("label"))
         self.verticalLayout.addWidget(self.label)
         self.textEdit = QtGui.QTextEdit(MainDialog)
         self.textEdit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.textEdit.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.textEdit.setReadOnly(True)
-        self.textEdit.setObjectName("textEdit")
+        self.textEdit.setObjectName(_fromUtf8("textEdit"))
         self.verticalLayout.addWidget(self.textEdit)
         self.verticalLayout_2.addLayout(self.verticalLayout)
 

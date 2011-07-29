@@ -647,14 +647,19 @@ class TcpProtocol(Protocol):
         for rule in matchingrules:
             self.log.debug("Matched rule: %s" % (rule))
             
+            # Debug flag set
             if rule.action.name == "debug":
                 shoulddebug = True
+            # Muck pipe execution
             if rule.action.name == "muck":
                 string = rule.action.execute(data=string)
+                
+            # Fuzz rule execution
             if rule.action.name == "fuzz":
                 old_string = string
                 was_fuzzed, string = rule.action.execute(data=string)
         
+        # Put the old string and new string in the DB
         if was_fuzzed: 
             self.trafficdb.qfuzztcp.put((conndata.conncount, msg_cnt,
                     conndata.direction, repr(old_string), repr(string)))

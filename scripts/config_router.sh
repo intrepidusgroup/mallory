@@ -1,5 +1,5 @@
-extiface="eth7"
-serveriface="eth6"
+extiface="eth0"
+serveriface="ppp0"
 
 echo "Killing network manager"
 /etc/init.d/network-manager stop
