@@ -1,15 +1,15 @@
-The following people have contributed to Mallory.
+The following people have contributed to Mallory:
 
-Developers:
-        Jeremy Allen
-        Rajendra Umadas
-        ...
+    Jeremy Allen
+    Rajendra Umadas
+    Martin Swende
+    Adam Pridgen
+    Aaron Rhodes
+    Jason Ross
+    Mark Manning
+    Mike Walker
+    Zach Lanier 
+    
 
-Documentation:
-        Jeremy Allen
-        Rajendra Umadas
-        ...
-
-
-Graphic Design and User Interaction Design:
-        ...
+Special Mention:
+    Intrepidus Group - provided hacking time to authors.
