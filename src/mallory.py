@@ -509,8 +509,9 @@ if __name__ == '__main__':
     opts = CmdLineOpts() 
     mallory = Mallory(opts)
     
-
-    mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager())
+    if 'http_plugin_manager' in dir():
+        print "http_plugin_manager did not load, ignoring..."
+        mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager()) 
     
     # Pull in the protocol configured on the command line for use with the
     # no-transparent option when the proxy is not being used transparently
