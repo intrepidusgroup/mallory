@@ -101,11 +101,18 @@ from protocol import base, dnsp
 try:
     # These protocols have dependencies and may not be safe to import 
     from protocol import sslproto, http, ssh, https
-    from plugin_managers import http_plugin_manager
-except ImportError:
-    print "ImportError: Trouble importing protocols with dependencies. " \
+except ImportError, e:
+    print 'ImportError : "%s"' % e
+    print "Trouble importing protocols with dependencies. " \
             "Proceeding with minimal protocol support."
+    print "For support verify PIL (python-imaging) is installed"
 
+try:
+    from plugin_managers import http_plugin_manager
+except ImportError, e:
+    print 'ImportError : "%s"' % e
+    print "Could not import http_plugin_manager. " \
+            "Proceeding without support support."
 
 # Config object is global. Buyer beware.
 config = config.Config()
