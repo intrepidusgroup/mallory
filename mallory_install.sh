@@ -76,7 +76,7 @@ function phase1 {
 
   echo ${mallorydir} > ${UPDATE_DIR}/installdir
   echo "retrieving current mallory source from bitbucket"
-  /usr/bin/hg clone http://bitbucket.org/IntrepidusGroup/mallory ${mallorydir}/current
+  /usr/bin/hg clone https://bitbucket.org/IntrepidusGroup/mallory ${mallorydir}/current
 
   echo "phase2" > ${UPDATE_DIR}/.next_phase
   phase2
@@ -139,7 +139,7 @@ function update {
   rm -rf ${mallorydir}/current
 
   echo "retrieving current mallory source from bitbucket"
-  /usr/bin/hg clone http://bitbucket.org/IntrepidusGroup/mallory ${mallorydir}/current
+  /usr/bin/hg clone https://bitbucket.org/IntrepidusGroup/mallory ${mallorydir}/current
 
   echo "update" > ${UPDATE_DIR}/.next_phase
   exit 0
