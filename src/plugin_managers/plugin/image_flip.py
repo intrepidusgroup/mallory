@@ -1,5 +1,5 @@
 import config
-import Image
+from PIL import Image
 import StringIO
 from base import Base
 
@@ -20,11 +20,11 @@ class ImageFlip (Base):
                         pass
             kwargs['data'] = response
         return kwargs
-    
+
     def flip_image(self, imagein):
         outstr = ""
         outfile = StringIO.StringIO(outstr)
-        img = Image.open(StringIO.StringIO(imagein))                            
-        out = img.transpose(Image.ROTATE_180)                                                
+        img = Image.open(StringIO.StringIO(imagein))
+        out = img.transpose(Image.ROTATE_180)
         out.save(outfile, img.format)
         return outfile.getvalue()

@@ -10,7 +10,7 @@ import warnings
 import zlib
 import gzip
 import time
-import Image
+from PIL import Image
 import sys
 import StringIO
 import logging
@@ -29,8 +29,8 @@ with warnings.catch_warnings():
 #    from cStringIO import StringIO
 #except ImportError:
 #    from StringIO import StringIO
-  
-  
+
+
 HTTP_PORT = 80
 HTTPS_PORT = 443
 
@@ -167,10 +167,10 @@ class HTTP(TcpProtocol):
         self.serverPort = 80
         self.log = logging.getLogger("mallorymain")
         self.log.info("HTTP protocol handler initialized")
-        self.supports = {malloryevt.STARTS2C:True, malloryevt.STARTC2S:True}        
-        
-        
-                        
+        self.supports = {malloryevt.STARTS2C:True, malloryevt.STARTC2S:True}
+
+
+
     def forward_c2s(self, conndata):
         try:
             self.log.debug("HTTP: starting http request")
@@ -184,102 +184,102 @@ class HTTP(TcpProtocol):
             #STill need to think about blocking and non blocking problem
             if self.plugin_manager != None:
                 request = self.plugin_manager.process(event="HTTP:c2s", data=request)
-            
+
             if self.config.debug > 1:
                 self.log.debug("HTTP: c2s: Request: \r\n%s" % (repr(str(request))))
                 self.log.debug("HTTP: c2s: Request: \r\n%s" % (str(request.headers)))
-            
+
             str_request = str(request)
             self.trafficdb.qFlow.put((conndata.conncount, \
-                conndata.direction, 0, time.time(), repr(str_request))) 
+                conndata.direction, 0, time.time(), repr(str_request)))
             self.destination.sendall(str(request))
-        
+
         except:
             traceback.print_exc()
-            
+
     def forward_s2c(self, conndata):
         """
         This method is intended to interpret HTTP responses from the victim's
-        server. It encapsulates the HTTP response in an object and provides 
-        a high level interface to manipulate HTTP content. 
+        server. It encapsulates the HTTP response in an object and provides
+        a high level interface to manipulate HTTP content.
         """
         self.log.debug("HTTP: starting s2c")
         response = HTTPResponse(self.destination)
-        
-        response.begin()        
+
+        response.begin()
         responsebody = response.read()
         response.dirty_body = responsebody
-                
+
         #isimage = False
         isgzip = False
         isdeflate = False
         remove_header = []
-        
+
         # Process headers
         for header in response.msg.headers:
-                
+
             # Get rid of this to avoid having to do math
             if "Content-Length" in header:
                 remove_header.append(header)
-                
+
             # Clean up and deal with compression
             if "Content-Encoding" in header:
-                encoding = response.msg.getheader("content-encoding")  
-                
-                # Content will not be compressed          
+                encoding = response.msg.getheader("content-encoding")
+
+                # Content will not be compressed
                 if encoding == "gzip":
                     isgzip = True
                     remove_header.append(header)
                 if encoding == "deflate":
                     isdeflate = True
-                        
+
             # Content will not be chunked
             if "Transfer-Encoding" in header or "Transfer-encoding" in header:
-                
+
                 remove_header.append(header)
-    
+
         # Take out headers that are not needed
         for header in remove_header:
             response.msg.headers.remove(header)
-            
+
         remove_header = []
-                
+
         if isgzip:
             decompress = gzip.GzipFile("", "rb", 9, \
                                        StringIO.StringIO(responsebody))
             responsebody = decompress.read()
-        
+
         response.clean_body = responsebody
-        
+
         if self.plugin_manager != None:
             response = self.plugin_manager.process(event="HTTP:s2c", data=response)
-        
-       
-                
+
+
+
         # Push the response off to the victim
         str_status = responses[response.status]
-        
+
         # HTTP status line
         responseline = "HTTP/1.1 %d %s\r\n" % \
             (response.status, str_status)
         self.source.sendall(responseline)
-        
+
         # HTTP Headers
         self.source.sendall(str(response.msg) + "\r\n")
-        
+
         # Some response types will not have a body
-        if len(response.clean_body) > 0:            
+        if len(response.clean_body) > 0:
             self.source.sendall(response.clean_body)
-    
-            
+
+
         # Make sure nothing bad has happened reading the response
         assert response.will_close != 'UNKNOWN'
-        
+
         str_response = responseline + str(response.msg) + "\r\n" + responsebody
-        
+
         self.trafficdb.qFlow.put((conndata.conncount, \
                 conndata.direction, 0, time.time(), repr(str_response)))
-           
+
         self.log.debug("HTTP.forward_s2c(): cc:%s dir:%s mc:%s time:%s bytes:%d" \
             " peek:%s" % (conndata.conncount, conndata.direction,
                           1, time.time(), len(str_response), repr(str_response[0:24])))
@@ -290,11 +290,11 @@ class HTTP(TcpProtocol):
     def flip_image(self, imagein):
         outstr = ""
         outfile = StringIO.StringIO(outstr)
-        img = Image.open(StringIO.StringIO(imagein))                            
-        out = img.transpose(Image.ROTATE_180)                                                
+        img = Image.open(StringIO.StringIO(imagein))
+        out = img.transpose(Image.ROTATE_180)
         out.save(outfile, img.format)
         return outfile.getvalue()
-    
+
 class HTTPException(Exception):
     # Subclasses that define an __init__ must call Exception.__init__
     # or define self.args.  Otherwise, str() will fail.
@@ -331,7 +331,7 @@ class IncompleteRead(HTTPException):
         return 'IncompleteRead(%i bytes read%s)' % (len(self.partial), e)
     def __str__(self):
         return repr(self)
-    
+
 
 class HTTPRequest:
     def __init__(self, sock):
@@ -345,29 +345,29 @@ class HTTPRequest:
         self.request_version = (0, 0)
         self.headers = None
         self.body = ""
-        
-        
-       
-    def __str__(self):        
+
+
+
+    def __str__(self):
         request_line = "%s %s %s\r\n" \
                     % (self.command, self.path, self.request_version)
-                           
+
         request = request_line + str(self.headers)
-        
+
         if self.body:
             request += "\r\n"
             request += self.body
         else:
             request += "\r\n\r\n"
-            
+
         return request
     def toDict(self):
         return {"command" : self.command, "path":self.path, "request_version":
         self.request_version, "headers":self.headers.dict, "body": self.body}
-    
+
     def _quote_html(self, html):
         return html.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-    
+
     def send_error(self, code, message=None):
         """Send and log an error reply.
 
@@ -398,13 +398,13 @@ class HTTPRequest:
         if self.command != 'HEAD' and code >= 200 and code not in (204, 304):
             self.wfile.write(content)
 
-    
-    def begin(self):        
+
+    def begin(self):
         self.raw_requestline = self.fp.readline()
         self.parse_request()
         self.log.info("HTTPRequest: %s : %s : %s" % \
                       (self.request_version, self.command, self.path))
-        
+
     def parse_request(self):
         """Parse a request (internal).
 
@@ -457,8 +457,8 @@ class HTTPRequest:
             #    self.send_error(505,
             #              "Invalid HTTP Version (%s)" % base_version_number)
             #    return False
-            
-            
+
+
         elif len(words) == 2:
             [command, path] = words
             self.close_connection = 1
@@ -471,18 +471,18 @@ class HTTPRequest:
         else:
             self.send_error(400, "Bad request syntax (%r)" % requestline)
             return False
-        self.command, self.path, self.request_version = command, path, version        
-        
+        self.command, self.path, self.request_version = command, path, version
+
         # Examine the headers and look for a Connection directive
         self.headers = HTTPMessage(self.fp, 0)
-        
+
         # TODO: We need better support of the message body here. Currently
         # it is not really interpreted at all. This will be problematic for
-        # multi-part form posts.  
-        if self.command == "POST": 
+        # multi-part form posts.
+        if self.command == "POST":
             if self.headers["Content-Length"]:
                 self.body = self.fp.read(int(self.headers["Content-Length"]))
-        
+
 class HTTPResponse:
 
     # strict: If true, raise BadStatusLine if the status line can't be
@@ -520,7 +520,7 @@ class HTTPResponse:
         line = self.fp.readline()
         if self.debuglevel > 1:
             self.log.debug("reply: %s" % repr(line))
-            
+
         if not line:
             # Presumably, the server closed the connection before
             # sending a valid response.
@@ -802,12 +802,12 @@ class HTTPResponse:
         if self.msg is None:
             raise ResponseNotReady()
         return self.msg.items()
-  
+
     def toDict(self):
-        return {"status" : self.status, "reason":self.reason, 
-                "version": self.version, "msg":self.msg.dict, 
+        return {"status" : self.status, "reason":self.reason,
+                "version": self.version, "msg":self.msg.dict,
                 "body":self.body, "clean_body":self.clean_body, "TEST":"TEST"}
- 
+
 class LineAndFileWrapper:
     """A limited file-like object for HTTP/0.9 responses."""
 
@@ -876,7 +876,7 @@ class LineAndFileWrapper:
         else:
             return L + self._file.readlines(size)
 
-     
+
 class HTTPMessage(mimetools.Message):
 
     def addheader(self, key, value):
@@ -892,10 +892,10 @@ class HTTPMessage(mimetools.Message):
         """Add more field data from a continuation line."""
         prev = self.dict[key]
         self.dict[key] = prev + "\n " + more
-    
+
     def toDict(self):
         return self.dict
-    
+
     def readheaders(self):
         """Read header lines.
 
