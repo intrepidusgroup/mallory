@@ -2,7 +2,7 @@
 # ----------------------------------------------------------------
 # This script updates a basic installation of Ubuntu (10.10 or 11.04)
 # to the latest package revs, and installs the packages required
-# to run the current (1.0) version of the Mallory tool. 
+# to run the current (1.0) version of the Mallory tool.
 # ----------------------------------------------------------------
 # Copyright 2011 - Intrepidus Group
 # ----------------------------------------------------------------
@@ -20,6 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------
 
+set -e
 export UPDATE_DIR=${HOME}/.mallory/update
 export UPDATE_LOG=${UPDATE_DIR}/update.log
 
@@ -34,7 +35,7 @@ function print_header {
 
 function phase0 {
   # create the update directory if it doesn't exist
-  [[ ! -d ${UPDATE_DIR} ]] && mkdir -p ${UPDATE_DIR}
+  mkdir -p ${UPDATE_DIR}
   print_header
   echo "| Before running this script, please ensure that you've  |"
   echo "|  configured a network interface and that the internet  |"
@@ -58,13 +59,13 @@ function phase1 {
   sudo apt-get upgrade -y |tee -a ${UPDATE_LOG}
 
   echo "installing Mallory dependencies"
-  sudo apt-get -y install build-essential mercurial libnetfilter-conntrack-dev libnetfilter-conntrack3 |tee -a ${UPDATE_LOG}
+  sudo apt-get -y install build-essential libnetfilter-conntrack-dev libnetfilter-conntrack3 |tee -a ${UPDATE_LOG}
   if [ ! -f /usr/lib/netfilter_conntrack.so.1 ]; then
     sudo ln -s /usr/lib/libnetfilter_conntrack.so /usr/lib/libnetfilter_conntrack.so.1
   fi
-  sudo apt-get -y install python-pip python-m2crypto python-qt4 pyro-gui python-netfilter python-pyasn1 |tee -a ${UPDATE_LOG}
+  sudo apt-get -y install python-pip git python-m2crypto python-qt4 pyro-gui python-netfilter python-pyasn1 |tee -a ${UPDATE_LOG}
   sudo apt-get -y install python-paramiko python-twisted-web python-qt4-sql libqt4-sql-sqlite sqlite3 |tee -a ${UPDATE_LOG}
-  sudo easy_install pynetfilter_conntrack
+  sudo pip install pynetfilter_conntrack IPy
   echo ""
 
   echo "enter directory you'd like Mallory to be installed to"
@@ -73,10 +74,10 @@ function phase1 {
   if [ "$mallorydir" == "" ]; then
     mallorydir="${HOME}/mallory";
   fi
-
+  mkdir -p $mallorydir
   echo ${mallorydir} > ${UPDATE_DIR}/installdir
   echo "retrieving current mallory source from bitbucket"
-  /usr/bin/hg clone https://bitbucket.org/IntrepidusGroup/mallory ${mallorydir}/current
+  /usr/bin/git clone https://github.com/intrepidusgroup/mallory ${mallorydir}/current
 
   echo "phase2" > ${UPDATE_DIR}/.next_phase
   phase2
@@ -103,45 +104,8 @@ function phase2 {
 }
 
 function update {
-  print_header
-  echo "Starting Mallory Update"
-
-  if [ ! -d ${UPDATE_DIR} ]; then
-    echo "mallory update directory not found, quitting"
-    exit 1
-  fi
-
-  if [ ! -f ${UPDATE_DIR}/installdir ]; then
-    echo "mallory installation path not found"
-    exit 1
-  fi
-
-  export mallorydir=`cat ${UPDATE_DIR}/installdir`
-
-  if [ ! -d ${mallorydir} ]; then
-    echo "mallory installation directory doesn't exist"
-    exit 1
-  fi
-
-  echo "moving current install to archive"
-  if [[ -d ${mallorydir}/archive ]]; then
-    rm -rf ${mallorydir}/archive/*
-  else
-    mkdir ${mallorydir}/archive  
-  fi
-
-  # Check for current and move it
-  # NOTE: we use 'cp -R; rm' instead of 'mv' here
-  # to avoid 'Directory not empty' errors
-  if [[ -d ${mallorydir}/current ]]; then
-    cp -R ${mallorydir}/current/* ${mallorydir}/archive/
-  fi
-  rm -rf ${mallorydir}/current
-
-  echo "retrieving current mallory source from bitbucket"
-  /usr/bin/hg clone https://bitbucket.org/IntrepidusGroup/mallory ${mallorydir}/current
-
-  echo "update" > ${UPDATE_DIR}/.next_phase
+  echo 'Please cd into ${mallorydir}/current and update manually with "git pull"'
+  echo "If you want to rerun this script please clean ~/.mallory/update"
   exit 0
 }
 
@@ -159,7 +123,7 @@ if [[ -f ${UPDATE_DIR}/.next_phase ]]; then
     phase1)
       phase1
     ;;
-  
+
     phase2)
       phase2
     ;;
