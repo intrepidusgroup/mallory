@@ -63,9 +63,9 @@ function phase1 {
   if [ ! -f /usr/lib/netfilter_conntrack.so.1 ]; then
     sudo ln -s /usr/lib/libnetfilter_conntrack.so /usr/lib/libnetfilter_conntrack.so.1
   fi
-  sudo apt-get -y install python-pip git python-m2crypto python-qt4 pyro-gui python-netfilter python-pyasn1 |tee -a ${UPDATE_LOG}
+  sudo apt-get -y install python-pip git python-m2crypto python-qt4 pyro-gui python-netfilter python-pyasn1 python-pil python-ipy|tee -a ${UPDATE_LOG}
   sudo apt-get -y install python-paramiko python-twisted-web python-qt4-sql libqt4-sql-sqlite sqlite3 |tee -a ${UPDATE_LOG}
-  sudo pip install pynetfilter_conntrack IPy
+  sudo pip install pynetfilter_conntrack
   echo ""
 
   echo "enter directory you'd like Mallory to be installed to"
