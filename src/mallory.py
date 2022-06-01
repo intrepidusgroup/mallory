@@ -101,11 +101,18 @@ from protocol import base, dnsp
 try:
     # These protocols have dependencies and may not be safe to import 
     from protocol import sslproto, http, ssh, https
-    from plugin_managers import http_plugin_manager
-except ImportError:
-    print "ImportError: Trouble importing protocols with dependencies. " \
+except ImportError, e:
+    print 'ImportError : "%s"' % e
+    print "Trouble importing protocols with dependencies. " \
             "Proceeding with minimal protocol support."
+    print "For support verify PIL (python-imaging) is installed"
 
+try:
+    from plugin_managers import http_plugin_manager
+except ImportError, e:
+    print 'ImportError : "%s"' % e
+    print "Could not import http_plugin_manager. " \
+            "Proceeding without support support."
 
 # Config object is global. Buyer beware.
 config = config.Config()
@@ -509,8 +516,9 @@ if __name__ == '__main__':
     opts = CmdLineOpts() 
     mallory = Mallory(opts)
     
-
-    mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager())
+    if 'http_plugin_manager' in dir():
+        print "http_plugin_manager did not load, ignoring..."
+        mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager()) 
     
     # Pull in the protocol configured on the command line for use with the
     # no-transparent option when the proxy is not being used transparently
