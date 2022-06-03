@@ -1,6 +1,6 @@
 import config
 from PIL import Image
-import ImageChops
+from PIL import ImageChops
 import StringIO
 from base import Base
 
