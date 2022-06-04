@@ -517,14 +517,14 @@ if __name__ == '__main__':
     mallory = Mallory(opts)
     
     if 'http_plugin_manager' in dir():
-        print "http_plugin_manager did not load, ignoring..."
+        mallory.log.info("Loading http_plugin_manager...")
         mallory.add_plugin_manager(http_plugin_manager.HttpPluginManager()) 
     
     # Pull in the protocol configured on the command line for use with the
     # no-transparent option when the proxy is not being used transparently
     if opts.options.proto:
         import protocol
-        print "Proto is %s" % (opts.options.proto)
+        mallory.log.info("Proto is %s" % (opts.options.proto))
         
         modulename,protoname = opts.options.proto.split(".")
             
@@ -536,7 +536,7 @@ if __name__ == '__main__':
                              "for port %d" \
                              % (protoinstance, protoinstance.serverPort))
         except:
-            print "Invalid protocol specified at command line"
+            mallory.log.warning("Invalid protocol specified at command line")
             
         
     mallory.main()
