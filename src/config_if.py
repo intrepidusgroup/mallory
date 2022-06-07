@@ -154,11 +154,12 @@ class ConfigInterfaces(object):
                           "%s -p tcp -m tcp --to-ports 20755") %  interface)
             cmds.append( ("iptables -t nat -A PREROUTING -j REDIRECT -i "
                           "%s -p udp -m udp --to-ports 20755") %  interface)
-            
-        for cmd in cmds:
-            subprocess.call(cmd, shell=True)
-        
+
         print cmds
+        for cmd in cmds:
+            subprocess.call(cmd, shell=True) # Better to fail explicitly on error
+        
+
     def __str__(self):
         return ("ifs:%s, mitm_ifs:%s, outbound_ifs:%s" 
                     % (self.interfaces, self.mitm_interfaces, 
