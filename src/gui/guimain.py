@@ -195,7 +195,7 @@ class MalloryGui(QtGui.QMainWindow):
            
         eventcnt = 0
         while True:
-            try:
+            # try:
                 eventlist = self.remote_debugger.getdebugq()
                  
                 # Currently only handling one selection 
@@ -241,10 +241,10 @@ class MalloryGui(QtGui.QMainWindow):
                     #self.curdebugevent = next_unsent
                     self.send_cur_de(next_unsent)
                 
-            except:
-                print "[*] MalloryGui: check_for_de: exception in de check loop"
-                print sys.exc_info()
-                traceback.print_exc()
+            # except:
+            #     print "[*] MalloryGui: check_for_de: exception in de check loop"
+            #     print sys.exc_info()
+            #     traceback.print_exc()
          
 class StreamListDelegate(QtGui.QItemDelegate):
     def __init__(self, parent, model):

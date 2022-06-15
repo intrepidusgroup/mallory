@@ -268,7 +268,7 @@ class PYROAdapter(object):
 						raise ConnectionDeniedError('invalid response')
 			except socket.error:
 				Log.msg('PYROAdapter','connection failed to URI',str(URI))
-				raise ProtocolError('connection failed')
+				raise ProtocolError('Could not connect to mallory instance.')
 		finally:
 			self.lock.release()
 
