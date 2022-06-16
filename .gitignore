@@ -1,0 +1,10 @@
+# Python interpreted files
+*.pyc
+
+# Generated CA files
+src/ca/ca.cer
+src/ca/ca.key
+
+# The saved traffic and log
+db/*
+src/mallory.log

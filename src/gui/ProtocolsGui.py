@@ -177,13 +177,11 @@ class ProtocolsTableModel(QtCore.QAbstractTableModel):
                 return str(proto.serverPort)
             
             if index.column() == PROTO_DEBUG:
-                debuggable = spacing + "No" + spacing
-                
-                if proto.__class__ == "TcpProtocol":
-                    debuggable = spacing + "Yes" + spacing
-                
-                return debuggable
-            
+                if isinstance( proto, TcpProtocol ):
+                    return spacing + "Yes" + spacing
+                else:
+                    return spacing + "No" + spacing
+
             return QtCore.QVariant()
 
         # Editing Data (Not Needed)

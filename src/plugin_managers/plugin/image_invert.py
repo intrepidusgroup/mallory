@@ -1,6 +1,6 @@
 import config
-import Image
-import ImageChops
+from PIL import Image
+from PIL import ImageChops
 import StringIO
 from base import Base
 
@@ -21,11 +21,11 @@ class ImageInvert (Base):
                         pass
             kwargs['data'] = response
         return kwargs
-    
+
     def invert_image(self, imagein):
         outstr = ""
         outfile = StringIO.StringIO(outstr)
-        img = Image.open(StringIO.StringIO(imagein))                            
-        out = ImageChops.invert(img)                                               
+        img = Image.open(StringIO.StringIO(imagein))
+        out = ImageChops.invert(img)
         out.save(outfile, img.format)
         return outfile.getvalue()
